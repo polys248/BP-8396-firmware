@@ -125,7 +125,15 @@ On the unit (telnet/root, port 23 is in the allowlist) and on the backend:
 - **No tunnel** → check `ENABLED=1` in `/data/bpagent/config` and that enroll returned
   `allow_ports` incl `443`; `/data/bpagent/{allow_ports,tls_ports}` hold the server-authoritative
   set. `401/403` on hub = stale tunnel token (agent auto-re-enrolls).
-- **UI stale after update** → content-hash gating; a hard refresh or confirm `.uiver` changed.
+- **UI stale / reverted after a flash** → the served UI is in `/data/webpage/webroot`. S61
+  `deploy_webroot` treats the firmware's **bundled** UI as authoritative and redeploys whenever
+  the served `DST/.uiver` differs from the image's bundle, so this self-heals on the next boot on
+  any image carrying that fix. To force it on a unit still running the old gate (the pre-fix
+  stamp early-return could leave a stale `/data` UI), clear the markers and reboot — the runtime
+  `/data` subdir is preserved:
+  `rm -f /data/.bettapay_rootfs_uiver /data/webpage/webroot/.uiver && reboot`.
+  Confirm `webroot deployed (<hash>)` in `/data/hardening.log`. Note: a **webflash UI hotfix does
+  not survive a reboot** — the flashed image's UI wins every boot.
 - **`409` on claim** → SN already claimed by another identity; `/data/bpagent/claim_fault`
   written, no retry — investigate before wiping (device token is permanent by design).
 
