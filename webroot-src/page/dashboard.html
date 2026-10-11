@@ -102,10 +102,12 @@
             data: { PageIndex: 1, PageSize: 1 },
             success: function (rst) { if (rst && rst.result && rst.content && rst.content.TotalCount != null) document.getElementById('statPeople').textContent = Number(rst.content.TotalCount).toLocaleString(); }
         });
-        (function () {
-            var now = new Date();
-            var begin = Math.floor(new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0).getTime() / 1000);
-            var end = Math.floor(now.getTime() / 1000);
+        // Identifications "today" uses the DEVICE clock (seeded from GetDetail.SystemTime
+        // below), so the day boundary matches the device, not the operator's browser TZ.
+        function loadToday(deviceNowMs) {
+            var d = new Date(deviceNowMs);
+            var begin = Math.floor(new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0).getTime() / 1000);
+            var end = Math.floor(new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59).getTime() / 1000);
             faceAPI.AjaxPOSTJson({
                 url: '/api/Record/Identify/Search',
                 data: {
@@ -115,7 +117,7 @@
                 },
                 success: function (rst) { if (rst && rst.result && rst.content && rst.content.TotalCount != null) document.getElementById('statToday').textContent = Number(rst.content.TotalCount).toLocaleString(); }
             });
-        })();
+        }
 
         // ---- device detail -> info cards + clock seed (never hangs; best-effort) ----
         faceAPI.AjaxPOSTJson({
@@ -129,10 +131,9 @@
                     if (v === undefined || v === null || v === '') { this.style.display = 'none'; }
                     else { this.querySelector('.val').textContent = v; }
                 });
-                if (c.SystemTime) {
-                    var ts = (typeof c.SystemTime === 'number' ? c.SystemTime : parseInt(c.SystemTime, 10));
-                    if (!isNaN(ts)) { clockBase = new Date(ts * 1000); clockSyncAt = Date.now(); renderClock(); }
-                }
+                var ts = c.SystemTime ? (typeof c.SystemTime === 'number' ? c.SystemTime : parseInt(c.SystemTime, 10)) : NaN;
+                if (!isNaN(ts)) { clockBase = new Date(ts * 1000); clockSyncAt = Date.now(); renderClock(); loadToday(ts * 1000); }
+                else { loadToday(Date.now()); } // fall back to browser time only if device time missing
             }
         });
     });
