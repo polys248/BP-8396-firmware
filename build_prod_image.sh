@@ -97,7 +97,7 @@ fi
 
 # wrap as recovery.zip named by its md5 (STORED; recovery just needs the bytes)
 python3 - "$PWD/rootfs_prod.img" "$OUTDIR" "$FW_VERSION" <<'PY'
-import os,sys,json,zipfile,hashlib
+import os,sys,json,zipfile,hashlib,re
 img,outdir,ver=sys.argv[1],sys.argv[2],sys.argv[3]
 tmp=os.path.join(outdir,"_prod_tmp.zip")
 # Vendor manifest stays EXACTLY as the spec defines it (no version key inside).
@@ -109,10 +109,14 @@ with zipfile.ZipFile(tmp,"w",zipfile.ZIP_STORED) as z:
     z.writestr(".fwver",ver+"\n")
     z.write(img,"rootfs_squashfs.img")
 d=open(tmp,"rb").read(); md5=hashlib.md5(d).hexdigest()
-final=os.path.join(outdir,f"n7v9_p1-{md5}.zip"); os.replace(tmp,final)
+# Filename carries the (filesystem-safe) version then the md5 as the trailing release id,
+# so the OTA form's name fallback reads the version while md5 stays anchored as the last
+# 32 hex before .zip:  n7v9_p1-<version>-<md5>.zip
+safe=re.sub(r"[^A-Za-z0-9._-]","_",ver)
+final=os.path.join(outdir,f"n7v9_p1-{safe}-{md5}.zip"); os.replace(tmp,final)
 print(f"\nPROD recovery.zip: {os.path.basename(final)}")
 print(f"  size {len(d):,}  md5 {md5}")
-print(f"  .fwver in package = '{ver}'  (OTA form reads it; md5 = release id)")
+print(f"  version '{ver}' -> .fwver (form reads it) + filename; md5 = release id")
 PY
 
 echo
