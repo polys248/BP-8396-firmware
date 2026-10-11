@@ -13,6 +13,9 @@ httpv2.txt
 prod_fleet_token
 *fleet_token*
 *.token
+# Exported person records from replay_kit (contain biometric templates — never commit)
+replay_kit/*.json
+replay_kit/*.out
 
 # ── Vendor IP / extracted firmware (large, redistributable? no) ───────────────
 vendor/
@@ -35,6 +38,8 @@ ts-bundle/tailscale/
 .webflash.*
 
 # ── OS / tooling cruft ───────────────────────────────────────────────────────
+__pycache__/
+*.pyc
 .DS_Store
 Thumbs.db
 *.swp
