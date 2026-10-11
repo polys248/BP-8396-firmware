@@ -21,8 +21,15 @@
 >   outlive the retry queue), non-URL ⇒ base64. Avatar URLs are fine; no need to inline.
 > - **UserID-only push = device has NO record for that id** (a tombstone; `FindByUserID` miss).
 >   The device always includes the full record when it has one, so **don't call back to fetch**;
->   key off the op-code field. **Ack every push with `200 {"code":1}`** or the device re-sends the
->   whole queue indefinitely.
+>   key off the `PushType` field. **Ack every push with `200 {"Success":1}`** (the key is
+>   `Success`, not `code`) or the device re-sends the whole queue indefinitely.
+>
+> **`PushType` table (verified from the enqueue sites):** `1` = add/enroll, `2` = modify/edit,
+> `3` = delete, `4` = query/resync. Body is the full `People::ToJson` for 1/2/4; **a body-less
+> (UserID-only) push is always a delete (type 3)** — the record is gone on the device, so
+> `FindByUserID` misses. Rule: type 3 ⇒ remove/tombstone that person for that terminal; 1/2/4 ⇒
+> upsert the full record (MD5-gated); never let a body-less push overwrite a stored record.
+> (Full detail: `MSG_SERVER_PUSHPEOPLE_FOLLOWUP.md`.)
 >
 > ## ⚠ REVISION — aligned with BettaPay's multi-tenant model (2026-10-11)
 > Server-team review settled the architecture. **Do not create `org` / `org_user` tables.**
