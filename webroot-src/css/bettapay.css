@@ -1,0 +1,62 @@
+/* ============================================================================
+   BettaPay theme — loaded AFTER layui + layuimini to override the vendor blue.
+   Palette taken from bettapay.ng: dark green->blue gradient, green accents.
+   ============================================================================ */
+:root{
+  --bp-green:#2ea043;
+  --bp-green-700:#22813a;
+  --bp-teal:#1f9d7a;
+  --bp-dark:#0f3d2e;
+  --bp-dark-2:#0c3326;
+  --bp-grad:linear-gradient(135deg,#0e3b2e 0%,#12624a 55%,#164e74 100%);
+}
+
+/* ---- Admin shell: brand dark-green header + sidebar ---- */
+.layui-layout-admin .layui-header,
+.layui-layout-admin .layui-logo{ background-color:var(--bp-dark) !important; }
+.layui-bg-black,
+.layui-side.layui-bg-black,
+.layuimini-menu-left,
+.layui-side,
+.layui-nav-tree{ background-color:var(--bp-dark) !important; }
+
+/* sidebar hover / active */
+.layui-nav-tree .layui-nav-item a:hover{ background-color:var(--bp-green-700) !important; color:#fff !important; }
+.layui-nav-tree .layui-this,
+.layui-nav-tree .layui-this>a,
+.layui-nav-tree .layui-nav-child dd.layui-this a{ background-color:var(--bp-green) !important; color:#fff !important; }
+.layui-nav-tree .layui-nav-bar{ background-color:var(--bp-green) !important; }
+
+/* header nav hover */
+.layui-layout-admin .layui-header .layui-nav .layui-nav-item a:hover{ color:#d6ffe9 !important; }
+
+/* ---- Primary buttons / tabs / links -> brand green ---- */
+.layui-btn-normal{ background-color:var(--bp-green) !important; }
+.layui-btn-normal:hover{ background-color:var(--bp-green-700) !important; }
+.layui-tab-brief>.layui-tab-title .layui-this{ color:var(--bp-green) !important; }
+.layui-tab-brief>.layui-tab-title .layui-this:after{ border-bottom-color:var(--bp-green) !important; }
+.layui-form-checked[lay-skin=primary] i,
+.layui-form-checked i{ border-color:var(--bp-green) !important; background-color:var(--bp-green) !important; }
+a:hover{ color:var(--bp-green); }
+
+/* loading spinner */
+.layuimini-loader-inner{ border-top-color:var(--bp-green) !important; border-bottom-color:var(--bp-green) !important; }
+
+/* ---- BettaPay logo lockup (header + login) ---- */
+.bp-logo{ display:inline-flex; align-items:center; gap:10px; height:60px; line-height:60px; white-space:nowrap; }
+.bp-logo-mark{ flex:0 0 auto; display:block; }
+.bp-logo-text{ font-size:20px; font-weight:700; color:#fff; letter-spacing:.3px;
+  font-family:Avenir,"Helvetica Neue",Arial,Helvetica,sans-serif; }
+
+/* ============================================================================
+   Login page (body gets class="bp-login")
+   ============================================================================ */
+body.bp-login{ background:var(--bp-grad) !important; }
+body.bp-login .login-form{ border-radius:10px; box-shadow:0 12px 42px rgba(0,0,0,.28); padding:22px 24px; }
+body.bp-login .logo-title{ padding:6px 0 10px; }
+body.bp-login .logo-title .bp-logo{ height:auto; line-height:1.1; justify-content:center; }
+body.bp-login .logo-title .bp-logo-text{ color:var(--bp-dark); font-size:24px; }
+body.bp-login .bp-subtitle{ text-align:center; color:#5b6b63; font-size:13px; font-weight:600;
+  letter-spacing:.4px; margin-top:8px; }
+body.bp-login #deviceSn{ text-align:center; color:#9aa3ab; font-size:12px; font-weight:500; margin-top:2px; }
+body.bp-login .layui-btn-normal{ background-color:var(--bp-green) !important; border-color:var(--bp-green) !important; }

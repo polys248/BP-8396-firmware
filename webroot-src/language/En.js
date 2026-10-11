@@ -236,7 +236,7 @@ const EnglighLang = {
         "l15": "Basic Information",
         "l17": "Log Out And Log In",
         "l10": "Please Enter The Verification Code!",
-        "h1": "Device Backend Management Interface",
+        "h1": "BettaPay Biometric Scanner",
         "l7": "The Verification Code Cannot Be Empty",
         "l4": "Remember Password",
         "l14": "Successfully Logged Out",
@@ -2315,7 +2315,7 @@ const EnglighLang = {
         "s3": "Save successful"
     },
     "description": "English",
-    "title": "Device backend management interface",
+    "title": "BettaPay Biometric Scanner",
     "timingOpen": {
         "t3": "Are you sure to save the timer normally open parameter",
         "t4": "Save successful",

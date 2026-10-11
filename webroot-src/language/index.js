@@ -53,7 +53,7 @@ function changeLanguage(language) {
 
 function setLanguage() {
     let elements = document.querySelectorAll('[language]');
-    let languageType = localStorage.getItem('language') || 'cn';
+    let languageType = localStorage.getItem('language') || 'en';
     var language = null;
     for (let key in languageMap) {
         if (key === languageType) {
@@ -100,7 +100,7 @@ function setLanguage() {
 
 function getCurrentLanguage() {
     if (curLaguage == null) {
-        let languageType = localStorage.getItem('language') || 'cn';
+        let languageType = localStorage.getItem('language') || 'en';
         var language = null;
         for (let key in languageMap) {
             if (key === languageType) {
