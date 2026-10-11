@@ -1,6 +1,54 @@
 # BettaPay org-enrollment backend — implementation guide (server team)
 
-Self-contained build doc for the **org-wide enrollment sync** backend: schema, auth,
+> ## ⚠ REVISION — aligned with BettaPay's multi-tenant model (2026-10-11)
+> Server-team review settled the architecture. **Do not create `org` / `org_user` tables.**
+> Reuse the existing entities; only the biometric data + sync state are new:
+> - **Tenant = org.** Each scanner already belongs to one tenant via
+>   `attendance_readers.tenant_id`. Resolve tenant from the device's serial; scope every
+>   query to it (RLS + function filter).
+> - **Employee = person.** `employees` is tenant-scoped and already carries code, names,
+>   department, photo, worksite. BettaPay **already pushes employees to the scanner** via the
+>   attendance protocol's `add_people` command, **with `UserID = employee uuid`** — so each
+>   device already knows every person by that id. Identity is NOT part of this sync.
+> - **Genuinely new:** encrypted **biometric templates keyed by `(tenant_id, employee_id)`**,
+>   **per-device cursors**, and the **photo bucket**. That is all `enroll-push`/`enroll-pull`
+>   touch. Hang the biometric rows off the employee record (not a parallel roster) so that
+>   **employee termination purges templates everywhere** and **tenant offboarding shreds the
+>   tenant key**.
+> - **Auth:** reuse `authenticateDevice` (device tokens stored as **sha256**, so there's no
+>   plaintext column — don't look up by raw token); resolve tenant from `attendance_readers`;
+>   a reader whose status ≠ active → `401`.
+> - **Keys:** **per-tenant subkey** derived from the master from day one (tenant can be
+>   cryptographically shredded on offboarding).
+> - **§11 settled:** `user_key` = **employee uuid**, `Code` = employee code (both from
+>   BettaPay; no device-minted keys). Access-control = **option (a)** (identity+biometrics+
+>   expiration only; device applies a default group). **PINs not synced in v1.** Add two
+>   requirements: the feature is **gated by the tenant's attendance add-on**, and a
+>   **template purge runs on employee termination/deletion**.
+> - Backend supports both template and photo paths, so the **portability test does not block
+>   the build**.
+>
+> ### Device-agent (`bpenroll`) consequences of the above
+> - **Biometric-only sync.** The agent does **not** create persons or sync identity — the
+>   employee already exists on the device (attendance `add_people`, `UserID = employee uuid`).
+>   The agent only **attaches/updates the biometric** on that existing person, keyed by
+>   `UserID = employee uuid = user_key`.
+> - **Push** when a biometric is enrolled/changed locally: `{employee_uuid, features[], photo}`.
+> - **Pull** the tenant's biometrics; for each, find the local person by `UserID` and set its
+>   face/finger/palm feature. If the employee isn't on the device yet (attendance hasn't pushed
+>   them), **skip and retry next pull** (don't create). Tombstone / termination → remove the
+>   local biometric.
+> - **Open device-side item I'm verifying:** the exact local API to *update* an existing
+>   person's biometric (`People/Edit` vs a `People/New` upsert vs a feature-attach call) —
+>   confirming before building the import path.
+>
+> The sections below keep the crypto, edge-function shapes, wire contract, deployment and
+> tests — **read them with `org → tenant`, `org_user → employees`, `user_key → employee uuid`,
+> and the two new tables hanging off `employees`.**
+
+---
+
+Self-contained build doc for the enrollment-biometric sync backend: schema, auth,
 encryption, the two edge functions (`enroll-push`, `enroll-pull`), photo handling,
 deployment, security, and tests. Pairs with `ENROLLMENT_SYNC_SPEC.md` (device side) and
 reuses the **`device_token`** the claim flow already issues — no new trust bootstrap.
