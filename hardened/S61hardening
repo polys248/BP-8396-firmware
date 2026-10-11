@@ -42,6 +42,32 @@ deploy_webroot() {
     echo "webroot deployed ($NEWVER)" >> "$LOG" 2>/dev/null
 }
 
+# Point aio's backend client at ttproxy (loopback) so its HTTPS traffic egresses through
+# our proxy to the BettaPay backend. Without this a fresh unit keeps the vendor default in
+# /data/user.db, aio's reader-gateway keepalive never reaches BettaPay, and device-claim
+# 404-loops forever. One-time + idempotent: acts only when not already set, and backs up
+# user.db once before the first write. aio (started by S60, before us) may not re-read until
+# it reconnects or the next boot; bpagent claim retries every 60s until the keepalive lands,
+# so this converges without forcing a risky aio restart.
+repoint_aio() {
+    DB=/data/user.db
+    WANT='http://127.0.0.1:4610/functions/v1/reader-gateway'
+    command -v sqlite3 >/dev/null 2>&1 || { echo "repoint: no sqlite3" >> "$LOG" 2>/dev/null; return; }
+    [ -f "$DB" ] || { echo "repoint: no user.db yet" >> "$LOG" 2>/dev/null; return; }
+    CUR=$(sqlite3 "$DB" "SELECT value FROM sysinfo WHERE key='HTTPClient_ServerAddr';" 2>/dev/null)
+    [ "$CUR" = "$WANT" ] && return
+    cp -f "$DB" "$DB.bak.hardening.$(date +%s)" 2>/dev/null
+    if sqlite3 "$DB" "
+         UPDATE sysinfo SET value='$WANT'     WHERE key='HTTPClient_ServerAddr';
+         UPDATE sysinfo SET value='127.0.0.1' WHERE key='HTTPClient_ServerIP';
+         UPDATE sysinfo SET value='4610'      WHERE key='HTTPClient_ServerPort';
+         UPDATE sysinfo SET value='0'         WHERE key='HTTPClient_SSLType';" 2>>"$LOG"; then
+        echo "repointed aio -> ttproxy (was: $CUR)" >> "$LOG" 2>/dev/null
+    else
+        echo "repoint: sqlite update failed" >> "$LOG" 2>/dev/null
+    fi
+}
+
 start() {
     echo "=== S61hardening $(date) ===" >> "$LOG" 2>/dev/null
 
@@ -84,6 +110,9 @@ start() {
         printf 'ENABLED=0\nHUB=wss://remote.bettapay.ng\nSN=\nALLOW_PORTS=23,443,8090\nMEM_MIB=14\n# API_BASE/CLAIM_PATH/ENROLL_PATH/*_TOKEN_FIELD/TLS_PORTS have built-in defaults; override here if needed.\n' > /data/bpagent/config
         echo "created default bpagent/config (SN auto-reads sysinfo.DeviceSN)" >> "$LOG" 2>/dev/null
     fi
+
+    # (2.5) point aio's backend client at ttproxy (one-time, idempotent, backs up user.db)
+    repoint_aio
 
     # (3) launch services from the rootfs copies, guarded against double-start
     if ! pidof ttproxy >/dev/null 2>&1; then
