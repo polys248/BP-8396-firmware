@@ -33,6 +33,14 @@
         display: flex; align-items: center; justify-content: center; font-size: 19px; flex: 0 0 auto; }
     .bp-quick .qt { font-weight: 700; font-size: 15px; }
     .bp-quick .qs { font-size: 12px; color: #5C8A79; margin-top: 2px; }
+    .bp-recent { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+    .bp-rec { display: flex; align-items: center; gap: 12px; background: #fff; border: 1px solid #D1E0DB; border-radius: 10px; padding: 10px 12px; box-shadow: 0 2px 10px -2px rgba(13, 59, 42, .08); }
+    .bp-rec-pic { width: 46px; height: 46px; border-radius: 50%; overflow: hidden; flex: 0 0 auto; background: #EDF8F2; display: flex; align-items: center; justify-content: center; }
+    .bp-rec-pic img { width: 100%; height: 100%; object-fit: cover; }
+    .bp-rec-ph { color: #16A249; font-size: 18px; }
+    .bp-rec-name { font-weight: 700; color: #0D3B2A; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; }
+    .bp-rec-meta { font-size: 12px; color: #5C8A79; margin-top: 2px; }
+    .bp-recent-empty { color: #5C8A79; font-size: 13px; padding: 4px 2px; }
 </style>
 
 <div class="bp-dash">
@@ -66,6 +74,9 @@
         <div class="bp-card" data-field="DeviceName"><div class="lbl">Device Name</div><div class="val">—</div></div>
         <div class="bp-card" data-field="Manufacturer"><div class="lbl">Manufacturer</div><div class="val">—</div></div>
     </div>
+
+    <div class="bp-sec">Recent activity</div>
+    <div class="bp-recent" id="recentList"><div class="bp-recent-empty">Loading…</div></div>
 
     <div class="bp-sec">Quick actions</div>
     <div class="bp-quick">
@@ -136,5 +147,51 @@
                 else { loadToday(Date.now()); } // fall back to browser time only if device time missing
             }
         });
+
+        // ---- recent identifications (near-real-time activity feed) ----
+        function dashNow() { return clockBase ? (clockBase.getTime() + (Date.now() - clockSyncAt)) : Date.now(); }
+        function escHtml(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+        function recTime(unix, nowMs) {
+            if (!unix) return '';
+            var d = new Date(unix * 1000), n = new Date(nowMs);
+            var hm = (d.getHours() < 10 ? '0' : '') + d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes();
+            if (d.getFullYear() === n.getFullYear() && d.getMonth() === n.getMonth() && d.getDate() === n.getDate()) return hm;
+            return d.getDate() + ' ' + MO[d.getMonth()] + ' ' + hm;
+        }
+        function renderRecent(list, nowMs) {
+            var el = document.getElementById('recentList');
+            if (!el) return;
+            if (!list.length) { el.innerHTML = '<div class="bp-recent-empty">No recent identifications</div>'; return; }
+            var html = '';
+            for (var i = 0; i < list.length; i++) {
+                var r = list[i];
+                var name = (r.Name && r.Name.length) ? r.Name : (r.UserID && r.UserID !== '0' ? ('User ' + r.UserID) : 'Unknown');
+                var meta = []; if (r.Department) meta.push(r.Department); var t = recTime(r.RecordDate, nowMs); if (t) meta.push(t);
+                var pic = (r.PhotoLen > 0 && r.Photo && r.Photo.length) ? '<img src="' + r.Photo + '">' : '<span class="bp-rec-ph"><i class="fa fa-user"></i></span>';
+                html += '<div class="bp-rec"><div class="bp-rec-pic">' + pic + '</div><div><div class="bp-rec-name">' + escHtml(name) + '</div><div class="bp-rec-meta">' + escHtml(meta.join(' · ')) + '</div></div></div>';
+            }
+            el.innerHTML = html;
+        }
+        function loadRecent() {
+            var now = dashNow(), d = new Date(now);
+            var begin = Math.floor(new Date(d.getFullYear(), d.getMonth(), d.getDate() - 6, 0, 0, 0).getTime() / 1000);
+            var end = Math.floor(new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59).getTime() / 1000);
+            faceAPI.AjaxPOSTJson({
+                url: '/api/Record/Identify/Search',
+                data: {
+                    PageIndex: 1, PageSize: 8, BeginDate: begin, EndDate: end,
+                    UserID: null, Name: null, Code: null, Department: null, Job: null,
+                    IdentityCard: null, CardNum: null, RecordTypes: null, Photo: null, QRCode: null
+                },
+                success: function (rst) {
+                    if (!rst || !rst.result || !rst.content) return;
+                    var list = (rst.content.DataList || []).slice();
+                    list.sort(function (a, b) { return (b.RecordDate || 0) - (a.RecordDate || 0); });
+                    renderRecent(list.slice(0, 6), now);
+                }
+            });
+        }
+        loadRecent();
+        setInterval(function () { if (!document.hidden) loadRecent(); }, 15000);
     });
 </script>
