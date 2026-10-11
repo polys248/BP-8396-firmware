@@ -1,0 +1,68 @@
+A3-8396 hardening bundle — deploys entirely into writable /data (no rootfs
+reflash, no brick risk, fully reversible by deleting the files). Boot hook
+S60face-recg runs /data/stress_test.sh on every boot.
+
+CONTENTS (extracted with /data as current dir):
+  /data/stress_test.sh        boot hook: phone-home block + launches services
+  /data/ttproxy/ttproxy       HTTP->HTTPS proxy (aio's plain HTTP -> TLS to backend)
+  /data/ttproxy/run.sh,config
+  /data/webflash/webflash     firmware update daemon: local browser upload + OTA pull
+  /data/webflash/config       SET YOUR TOKENS HERE
+
+WHAT IT DOES
+  1. Severs China phone-home: routes 119.23.124.50, 47.92.116.62 and whatever
+     yun/wc/faceds.cc resolve to into a dead loopback route; kills any tange proc.
+  2. ttproxy: aio talks plain HTTP to 127.0.0.1:4610; ttproxy does real HTTPS to
+     your backend (fixes the Mongoose client-TLS bug).
+  3. webflash: update the firmware two ways, both ending in the proven recovery
+     flash — (a) browser upload at http://<device>:8090/, (b) OTA pull from your
+     bettapay backend (see SERVER_SPEC.md).
+
+GET IT ONTO THE DEVICE (http.server on CORNERCOMP2, in the bundle's folder):
+    python -m http.server 8080
+  On the device (root telnet):
+    cd /data
+    wget http://<CORNERCOMP2-IP>:8080/hardening-bundle.tgz -O /tmp/h.tgz
+    md5sum /tmp/h.tgz            # compare to the md5 I give you
+    tar xzf /tmp/h.tgz           # lays out /data/stress_test.sh, /data/ttproxy, /data/webflash
+    chmod 755 /data/stress_test.sh /data/ttproxy/ttproxy /data/ttproxy/run.sh /data/webflash/webflash
+
+CONFIGURE
+  vi /data/webflash/config
+    TOKEN=<long random>          # LOCAL browser-upload password (blank = disable browser upload)
+    OTA_INTERVAL=3600            # 0 disables OTA
+    DEVICE_SN=SV-8396H26031043
+  (No OTA secret goes in this file. The OTA bearer is read from the token files:
+   /data/device_token after claim, else the fleet token. For OTA on this /data-only
+   bundle, drop your fleet token at /data/fleet_token:
+       printf '%s' '<YOUR_FLEET_TOKEN>' > /data/fleet_token && chmod 600 /data/fleet_token )
+  (ttproxy/config already targets https://api.bettapay.ng; edit if needed.)
+
+POINT aio's HTTP CLIENT AT ttproxy (so it goes out over HTTPS):
+    cp /data/user.db /data/user.db.bak.$(date +%s)
+    sqlite3 /data/user.db "
+      UPDATE sysinfo SET value='http://127.0.0.1:4610/functions/v1/reader-gateway' WHERE key='HTTPClient_ServerAddr';
+      UPDATE sysinfo SET value='127.0.0.1' WHERE key='HTTPClient_ServerIP';
+      UPDATE sysinfo SET value='4610'      WHERE key='HTTPClient_ServerPort';
+      UPDATE sysinfo SET value='0'         WHERE key='HTTPClient_SSLType';"
+
+START (no reboot needed the first time):
+    /data/stress_test.sh &
+  or just  reboot
+
+VERIFY
+  cat /data/hardening.log                 # "blocked ...", "started ttproxy", "started webflash"
+  ip route | grep -E '119.23.124.50|47.92.116.62'   # should show 'dev lo'
+  netstat -ltn | grep -E '4610|8090'      # ttproxy + webflash listening
+  cat /data/webflash/webflash.log         # "ota: enabled ..." / "webflash listening"
+  # browser: http://<device-ip>:8090/  -> upload page
+  # your Supabase logs: keepalives arriving over HTTPS via ttproxy
+
+REVERT ANYTHING
+  rm -f /data/stress_test.sh              # stop all hardening at next boot
+  (restore user.db.bak to undo the aio repoint)
+
+OTA (push from bettapay): see SERVER_SPEC.md for the manifest endpoint, tables,
+and publish workflow. OTA stays dormant until a fleet token is present (baked at
+/etc/bpa/fleet_token in a prod image, or dropped at /data/fleet_token here) AND
+you publish a target version on the backend.

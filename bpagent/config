@@ -1,0 +1,7 @@
+# /data/bpagent/config -- bettapay remote-access agent
+ENABLED=0                         # set 1 to turn on
+HUB=wss://remote.bettapay.ng      # your Cloudflare Worker (wss)
+SN=SV-8396H26031043               # this unit's serial
+TOKEN=                            # per-device secret (provisioned from Supabase)
+ALLOW_PORTS=23,80,8090            # telnet, device web UI, webflash
+MEM_MIB=14                        # soft memory cap

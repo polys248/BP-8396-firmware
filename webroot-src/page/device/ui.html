@@ -1,0 +1,723 @@
+﻿<style>
+    #device_UI_div label {
+        width: 250px;
+    }
+
+    .layui-form-pane .layui-input-block {
+        margin-left: 250px;
+        left: -1px;
+    }
+
+    .divwidth {
+        width: 1850px;
+    }
+
+    .divpadding {
+        padding-right: 20px
+    }
+
+    .aligncenter {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+        /* 隐藏管理密码输入框的上下箭头 */
+    input[name="MenuPassword"]::-webkit-outer-spin-button,
+    input[name="MenuPassword"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[name="MenuPassword"] {
+        -moz-appearance: textfield; /* Firefox */
+        appearance: textfield;
+    }
+</style>
+<div class="layui-form layuimini-form  layui-form-pane page_deviceUI" id="device_UI_div" lay-filter="device_UI_div_filter">
+    <div class="layui-bg-gray" style="padding: 10px;">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.ui_MenuPassword'>管理密码</label>
+                                <div class="layui-input-inline">
+                                    <input type="password" name="MenuPassword" maxlength="8"
+                                           oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                           autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline FunctionListStrongCipher">
+                                <label class="layui-form-label" language='device.ui_StrongCipher'
+                                       data-lang="tipMsg" id="device.ui_StrongCipher_tip"
+                                       tipShow="1" tipMsg=""> 禁用弱密码</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="StrongCipher" lay-skin="switch" id="device.d402"
+                                           data-lang="lay-text" lay-text="启用|禁用" checked value="1">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="layui-form-item FunctionListComplexUserID">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.ui_UseComplexUserID'
+                                       data-lang="tipMsg" id="device.ui_UseComplexUserID_tip"
+                                       tipShow="1" tipMsg=""> 使用复杂编号</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="UseComplexUserID" lay-skin="switch" id="device.d402"
+                                           data-lang="lay-text" lay-text="启用|禁用" checked value="1">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item FunctionList_LCD">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.ui_DisplayBrightness'> 屏幕亮度</label>
+                                <div class="layui-input-inline">
+                                    <input type="number" max="10" min="1" maxlength="2" name="DisplayBrightness"
+                                           autocomplete="off" class="layui-input" lay-verify="required">
+                                </div>
+                            </div>
+                        </div> -->
+                        <div class="layui-form-item FunctionList_Face_QRCode">
+                            <!-- <div class="layui-inline FunctionListFace">
+                                <label class="layui-form-label" language='device.ui_ShowIR'> 显示红外图像</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="ShowIR" lay-skin="switch" id="device.d402"
+                                           data-lang="lay-text" lay-text="启用|禁用" checked value="1">
+                                </div>
+                            </div> -->
+
+                            <div class="layui-inline FunctionListQRCode">
+                                <label class="layui-form-label" language='device.ui_ShowQRCode'
+                                       data-lang="tipMsg" id="device.ui_ShowQRCode_tip"
+                                       tipShow="1" tipMsg=""> 识别二维码</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="UseQRCode" lay-skin="switch" id="device.d402"
+                                           data-lang="lay-text" lay-text="启用|禁用" checked value="1">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item FunctionList_FillLight">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.ui_FillLight'> ui_FillLight</label>
+                                <div class="layui-input-inline">
+                                    <select name="FillLight" required lay-verify="">
+                                        <option value="0" selected language='device.ui_FillLight_0'>常闭</option>
+                                        <option value="1" language='device.ui_FillLight_1'>常亮</option>
+                                        <option value="2" language='device.ui_FillLight_2'>自动</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-header" language='device.ui_1'>人员验证</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form-item FunctionList_LCD">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.ui_ShowPersonPhoto'>显示头像</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="ShowPersonPhoto" lay-skin="switch" id="device.d158"
+                                           data-lang="lay-text" lay-text="启用|禁用" unchecked value="1">
+                                </div>
+                            </div>
+                            <!-- <div class="layui-inline">
+                                <label class="layui-form-label" language='device.ui_ShowPersonName'>显示姓名</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="ShowPersonName" lay-skin="switch" id="device.d158"
+                                           data-lang="lay-text" lay-text="启用|禁用" unchecked value="1">
+                                </div>
+                            </div> -->
+                        </div>
+                        <div class="layui-form-item FunctionList_Voice">
+
+                            <div class="layui-inline FunctionList_TTS FunctionList_PlayPersonName">
+                                <label class="layui-form-label" language='device.ui_PlayPersonName'>播报姓名</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="PlayPersonName" lay-skin="switch" id="device.d158"
+                                           data-lang="lay-text" lay-text="启用|禁用" unchecked value="1">
+                                </div>
+                            </div>
+                            <div class="layui-inline FunctionList_Voice">
+                                <label class="layui-form-label" language='device.ui_UnregisteredWarn'
+                                       data-lang="tipMsg" id="device.ui_UnregisteredWarn_tip"
+                                       tipShow="1" tipMsg="">未注册人员提醒</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="UnregisteredWarn" lay-skin="switch" id="device.d158"
+                                           data-lang="lay-text" lay-text="启用|禁用" unchecked value="1">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item FunctionList_RecognitionButton_FastRecognition">
+                            <div class="layui-inline FunctionList_RecognitionButton">
+                                <label class="layui-form-label" language='device.ui_RecognitionButton'
+                                       data-lang="tipMsg" id="device.ui_RecognitionButton_tip"
+                                       tipShow="1" tipMsg="">点击识别</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="RecognitionButton" lay-skin="switch" id="device.d158"
+                                           data-lang="lay-text" lay-text="启用|禁用" unchecked value="1">
+                                </div>
+                            </div>
+                            <div class="layui-inline FunctionList_FastRecognition">
+                                <label class="layui-form-label" language='device.ui_UseFastRecognition'
+                                       data-lang="tipMsg" id="device.ui_UseFastRecognition_tip"
+                                       tipShow="1" tipMsg="启用快速识别时，人员验证后将不显示照片和姓名，仅播放识别成功语音！">快速识别</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="UseFastRecognition" lay-skin="switch" id="device.d158"
+                                           data-lang="lay-text" lay-text="启用|禁用" unchecked value="1">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item FunctionList_FP_Palmvein">
+                            <!-- <div class="layui-inline FunctionList_FP">
+                                <label class="layui-form-label" language='device.ui_Fingerprint'
+                                       data-lang="tipMsg" id="device.ui_Fingerprint_tip"
+                                       tipShow="1" tipMsg="启用或禁用指纹识别">指纹识别</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="UseFingerprint" lay-skin="switch" id="device.d158"
+                                           data-lang="lay-text" lay-text="启用|禁用" unchecked value="1">
+                                </div>
+                            </div> -->
+                            <div class="layui-inline FunctionList_Palmvein">
+                                <label class="layui-form-label" language='device.ui_Palmvein'
+                                       data-lang="tipMsg" id="device.ui_Palmvein_tip"
+                                       tipShow="1" tipMsg="启用或禁用掌静脉识别">掌静脉识别</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="UsePalmvein" lay-skin="switch" id="device.d158"
+                                           data-lang="lay-text" lay-text="启用|禁用" unchecked value="1">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="layui-form-item FunctionList_RequestAuthorization_WelcomeSpeech">
+                            <div class="layui-inline FunctionListSuccessRecognitionWelcomeSpeech">
+                                <label class="layui-form-label" language='device.ui_SuccessRecognitionWelcomeSpeech'>欢迎用语</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="SuccessRecognitionWelcomeSpeech" maxlength="32"
+                                           data-lang="tipMsg" id="device.ui_SuccessRecognitionWelcomeSpeech_tip"
+                                           tipShow="1" tipMsg="人员身份验证通过后播报的欢迎用语"
+                                           autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline FunctionList_RequestAuthorization">
+                                <label class="layui-form-label" language='device.ui_UseRequestAuthorization'
+                                       data-lang="tipMsg" id="device.ui_UseRequestAuthorization_tip"
+                                       tipShow="1" tipMsg="启用在线鉴权后，等待服务器响应结果，再判断是否开门">在线鉴权</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="UseRequestAuthorization" lay-skin="switch" id="device.d158"
+                                           data-lang="lay-text" lay-text="启用|禁用" unchecked value="1">
+                                </div>
+                            </div>
+                        </div> -->
+
+
+                        <!--<div class="layui-form-item ">
+        <div class="layui-inline ">
+            <label class="layui-form-label">启用指纹识别</label>
+            <div class="layui-input-inline">
+                <input type="checkbox" name="UseFingerprint" lay-skin="switch" id="device.d158"
+                       data-lang="lay-text" lay-text="启用|禁用"  unchecked value="1">
+            </div>
+        </div>
+        <div class="layui-inline ">
+            <label class="layui-form-label">启用掌静脉识别</label>
+            <div class="layui-input-inline">
+                <input type="checkbox" name="UsePalmvein" lay-skin="switch" id="device.d158"
+                       data-lang="lay-text" lay-text="启用|禁用"  unchecked value="1">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item ">
+        <div class="layui-inline ">
+            <label class="layui-form-label">启用UDP网络</label>
+            <div class="layui-input-inline">
+                <input type="checkbox" name="UseUDPNetwork" lay-skin="switch" id="device.d158"
+                       data-lang="lay-text" lay-text="启用|禁用"  unchecked value="1">
+            </div>
+        </div>
+        <div class="layui-inline ">
+            <label class="layui-form-label">启用HTTP/MQTT客户端</label>
+            <div class="layui-input-inline">
+                <input type="checkbox" name="UseHTTPClient" lay-skin="switch" id="device.d158"
+                       data-lang="lay-text" lay-text="启用|禁用"  unchecked value="1">
+            </div>
+        </div>
+    </div>-->
+
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-header" language='device.ui_Region'>区域与语言</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.ui_Language'>语言</label>
+                                <div class="layui-input-inline">
+                                    <select name="Language" required lay-verify="">
+                                        <option value="1" selected language='device.ui_language_1'>中文</option>
+                                        <option value="2" language='device.ui_language_2'></option>
+                                        <option value="3 " language='device.ui_language_3'></option>
+                                        <option value="4 " language='device.ui_language_4'></option>
+                                        <option value="5 " language='device.ui_language_5'></option>
+                                        <option value="6 " language='device.ui_language_6'></option>
+                                        <option value="7 " language='device.ui_language_7'></option>
+                                        <option value="8 " language='device.ui_language_8'></option>
+                                        <option value="9 " language='device.ui_language_9'></option>
+                                        <option value="10" language='device.ui_language_10'></option>
+                                        <option value="11" language='device.ui_language_11'></option>
+                                        <option value="12" language='device.ui_language_12'></option>
+                                        <option value="13" language='device.ui_language_13'></option>
+                                        <option value="14" language='device.ui_language_14'></option>
+                                        <option value="15" language='device.ui_language_15'></option>
+                                        <option value="16" language='device.ui_language_16'></option>
+                                        <option value="17" language='device.ui_language_17'></option>
+                                    </select>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="layui-form-item">
+
+
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.ui_UseNTP'>NTP网络校时</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="UseNTP" lay-skin="switch" id="device.d158"
+                                           data-lang="lay-text" lay-text="启用|禁用" unchecked value="1">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.ui_TimeZone'>时区</label>
+                                <div class="layui-input-inline">
+                                    <select name="UTCTimeZone" required lay-verify="">
+                                    </select>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.ui_SystemTime'>设备时间</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="SystemTime" disabled
+                                           autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-normal" style="margin: 0 0 0 10px" lay-submit lay-filter="btn-SyncTime">
+                                    <span language='DeviceInfo.d21'>刷新</span>
+                                </button>
+                            </div>
+                            <!-- <div class="layui-inline">
+                                <button class="layui-btn layui-btn-danger" style="margin: 0 0 0 10px" lay-submit lay-filter="btn-WriteTime">
+                                    <span language='device.ui_WriteTime'>校时</span>
+                                </button>
+                            </div> -->
+                        </div>
+
+
+                        <div class="layui-form-item FunctionList_Voice">
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.ui_Voice'>语音播报</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="Voice" lay-skin="switch" id="device.d158"
+                                           data-lang="lay-text" lay-text="启用|禁用" unchecked value="1">
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.ui_Volume'>音量</label>
+                                <div class="layui-input-inline">
+                                    <input type="number" max="10" min="0" maxlength="2" name="Volume"
+                                           autocomplete="off" class="layui-input" lay-verify="required">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="layui-col-md12">
+                <div class="layui-card">
+
+                    <div class="layui-card-body">
+                        <div class="layui-btn-container aligncenter">
+                            <button type="submit" class="layui-btn layui-btn-normal" lay-submit
+                                    lay-filter="data-save-btn" language='device.d224'>
+                                <i class="layui-icon"></i> 保存
+                            </button>
+                            <button type="reset" class="layui-btn layui-btn-danger" id="data-reset-btn" language='Facerecognition.f2'>
+                                <i class="layui-icon"></i> 刷新
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/jsLib/crypto-js.js"></script>
+<script>
+
+
+
+    layui.use(['form', 'element', 'faceAPI'], function () {
+        setLanguage();
+        setAllAttrVal();
+        var faceAPI = layui.faceAPI;
+        var form = layui.form;
+        var $ = layui.$;
+
+        var formdata;
+
+        function LoadData() {
+            var parameter = {
+                "UI": true,
+                "Language": true
+            };
+            faceAPI.AjaxPOSTJson({
+                data: parameter,
+                url: '/api/Device/GetDetail',
+                success: function (result) {
+                    if (result != null && result.result) {
+
+                        formdata = result.content;
+
+                        formdata.SystemTime = faceAPI.unixTimeStampToDateString(formdata.SystemTime);
+                        form.val("device_UI_div_filter", formdata);
+                    };
+                }
+            });
+
+        }
+        function IniUTCTimeZoneList() {
+            var menu_timezone = [];
+            menu_timezone[0] = "UTC-11:00";   //"Pacific/Midway";          美国中途岛
+            menu_timezone[1] = "UTC-10:00";   //"Pacific/Honolulu";        美国-檀香山、东檀香山、珍珠港、希洛、凯鲁瓦
+            menu_timezone[2] = "UTC-09:30";   //"Pacific/Marquesas";       法属波利尼西亚-泰奥海
+            menu_timezone[3] = "UTC-09:00";   //"Pacific/Gambier";         法属波利尼西亚-甘比尔群岛
+            menu_timezone[4] = "UTC-08:00";   //"Pacific/Pitcairn";        英国皮特凯恩群岛-亚当斯敦
+            menu_timezone[5] = "UTC-07:00";   //"America/Phoenix";         美国亚利桑那州-凤凰城、图森、梅萨、钱德勒、吉尔伯特
+            menu_timezone[6] = "UTC-06:00";   //"America/Regina";          加拿大萨斯喀彻温省（里贾纳、萨斯卡通、穆斯乔）
+            menu_timezone[7] = "UTC-05:00";   //"America/Bogota";          哥伦比亚-波哥大、卡利、麦德林、巴兰基亚
+            menu_timezone[8] = "UTC-04:00";   //"America/Manaus";          巴西-马瑙斯、圣塔伦、帕林廷斯
+            menu_timezone[9] = "UTC-03:30";   //"America/St_Johns";        加拿大-圣约翰斯、芒特珀尔、科纳布鲁克
+            menu_timezone[10] = "UTC-03:00";   //"America/Cayenne";         法属圭亚那-卡宴、马图林、圣洛朗-迪马罗尼
+            menu_timezone[11] = "UTC-02:00";   //"Atlantic/South_Georgia";  英国南乔治亚和南桑威奇群岛-格里特维肯
+            menu_timezone[12] = "UTC-01:00";   //"Atlantic/Cape_Verde";     佛得角-普拉亚、明德卢、埃斯帕戈斯
+            menu_timezone[13] = "UTC+00:00";   //"Atlantic/Reykjavik";      冰岛-雷克雅未克、科帕沃于尔、哈夫纳夫约杜尔
+            menu_timezone[14] = "UTC+01:00";   //"Africa/Algiers";          阿尔及利亚-阿尔及尔、奥兰、安纳巴
+            menu_timezone[15] = "UTC+02:00";   //"Africa/Bujumbura";        布隆迪-布琼布拉、基特加、恩戈齐
+            menu_timezone[16] = "UTC+03:00";   //"Africa/Nairobi";          肯尼亚-内罗毕、蒙巴萨、纳库鲁
+            menu_timezone[17] = "UTC+03:30";   //"Asia/Tehran";             伊朗-德黑兰、马什哈德、伊斯法罕
+            menu_timezone[18] = "UTC+04:00";   //"Asia/Baku";               阿塞拜疆-巴库、苏姆盖特、占贾
+            menu_timezone[19] = "UTC+04:30";   //"Asia/Kabul";              阿富汗-喀布尔、赫拉特、坎大哈
+            menu_timezone[20] = "UTC+05:00";   //"Asia/Karachi";            巴基斯坦-卡拉奇、拉合尔、费萨拉巴德
+            menu_timezone[21] = "UTC+05:30";   //"Asia/Kolkata";            印度加尔各答 孟买、德里、班加罗尔
+            menu_timezone[22] = "UTC+05:45";   //"Asia/Kathmandu";          尼泊尔-加德满都、博克拉、帕坦
+            menu_timezone[23] = "UTC+06:00";   //"Asia/Dhaka";              孟加拉国-达卡、吉大港、库尔纳
+            menu_timezone[24] = "UTC+06:30";   //"Asia/Yangon";             缅甸-仰光、曼德勒、内比都
+            menu_timezone[25] = "UTC+07:00";   //"Asia/Bangkok";            泰国-曼谷、清迈、普吉
+            menu_timezone[26] = "UTC+08:00";   //"Asia/Shanghai";           中国上海
+            menu_timezone[27] = "UTC+08:45";   //"Australia/Eucla";         澳大利亚-尤克拉、卡尔古利、拉弗顿
+            menu_timezone[28] = "UTC+09:00";   //"Asia/Tokyo";              日本-东京、横滨、大阪
+            menu_timezone[29] = "UTC+09:30";   //"Australia/Darwin";        澳大利亚-达尔文、爱丽丝泉、凯瑟琳
+            menu_timezone[30] = "UTC+10:00";   //"Pacific/Guam";            美国关岛-阿加尼亚、塔穆宁、代迪多
+            menu_timezone[31] = "UTC+10:30";   //"Australia/Lord_Howe";     澳大利亚-豪勋爵岛、悉尼、墨尔本
+            menu_timezone[32] = "UTC+11:00";   //"Asia/Srednekolymsk";      俄罗斯-斯列德涅科利姆斯克、雅库茨克、赤塔
+            menu_timezone[33] = "UTC+12:00";   //"Pacific/Tarawa";          基里巴斯-塔拉瓦、拜里基、马金
+            menu_timezone[34] = "UTC+12:45";   //"Pacific/Chatham";         新西兰-查塔姆群岛、惠灵顿、奥克兰
+            menu_timezone[35] = "UTC+13:00";   //"Pacific/Apia";            萨摩亚
+            menu_timezone[36] = "UTC+14:00";   //"Pacific/Kiritimati";      基里巴斯-圣诞岛、塔拉瓦、马金
+            //<select name="TimeZone" required lay-verify="">
+
+            //给Select填充元素
+            // 查询名称为 TimeZone 的 select 标签
+            const $select = $('select[name="UTCTimeZone"]');
+            for (var i = 0; i <= 36; i++) {
+                var sTime = menu_timezone[i];
+                const newOption = `<option value="${sTime}">${sTime}</option>`;
+                // 将新的 option 元素添加到 select 标签中
+                $select.append(newOption);
+            }
+
+        }
+
+        IniUTCTimeZoneList();
+        LoadData();
+        form.render();
+       
+
+
+        form.on('submit(data-save-btn)', function (data) {
+
+            layer.confirm(getLanguage("device.ui_SaveTips"), { icon: 3 }, function (index, layero, that) {
+                var postdata = data.field;
+
+                postdata.DisplayBrightness = Number(postdata.DisplayBrightness);
+
+                postdata.ShowIR = postdata.ShowIR == "1" ? 1 : 0;
+                postdata.UseQRCode = postdata.UseQRCode == "1" ? 1 : 0;
+                postdata.UseComplexUserID = postdata.UseComplexUserID == "1" ? 1 : 0;
+
+                postdata.UseFastRecognition = postdata.UseFastRecognition == "1" ? 1 : 0;
+                postdata.UseRequestAuthorization = postdata.UseRequestAuthorization == "1" ? 1 : 0;
+                
+                //postdata.UseFingerprint = postdata.UseFingerprint == "1" ? 1 : 0;
+                //postdata.UsePalmvein = postdata.UsePalmvein == "1" ? 1 : 0;
+                //postdata.UseUDPNetwork = postdata.UseUDPNetwork == "1" ? 1 : 0;
+                //postdata.UseHTTPClient = postdata.UseHTTPClient == "1" ? 1 : 0;
+                
+
+                postdata.FillLight = Number(postdata.FillLight);
+
+
+
+
+                postdata.ShowPersonPhoto = postdata.ShowPersonPhoto == "1" ? 1 : 0;
+                postdata.PlayPersonName = postdata.PlayPersonName == "1" ? 1 : 0;
+                postdata.RecognitionButton = postdata.RecognitionButton == "1" ? 1 : 0;
+                postdata.UnregisteredWarn = postdata.UnregisteredWarn == "1" ? 1 : 0;
+                postdata.ShowPersonName = postdata.ShowPersonName == "1" ? 1 : 0;
+                postdata.StrongCipher = postdata.StrongCipher == "1" ? 1 : 0;
+
+
+
+                postdata.Language = Number(postdata.Language);
+                postdata.UseNTP = postdata.UseNTP == "1" ? 1 : 0;
+                postdata.TimeZone = Number(postdata.TimeZone);
+                postdata.Voice = postdata.Voice == "1" ? 1 : 0;
+                postdata.Volume = Number(postdata.Volume);
+
+                postdata.UseFingerprint = postdata.UseFingerprint == "1" ? 1 : 0;
+                postdata.UsePalmvein = postdata.UsePalmvein == "1" ? 1 : 0;
+
+                layer.close(index)
+                
+                var pwdlen = postdata.MenuPassword.length;
+                if (postdata.StrongCipher == 1) {
+                    if (pwdlen == 0) {
+                        layer.alert(getLanguage("device.password_check_err1"), { icon: 2 });//管理密码不能为空
+                        return;
+                    }
+                    if (pwdlen < 6) {
+                        layer.alert(getLanguage("device.password_check_err2"), { icon: 2 });//管理密码不能少于6个字符
+                        return;
+                    }
+                }
+                else {
+                    if (pwdlen > 0 && pwdlen < 4) {
+                        layer.alert(getLanguage("device.password_check_err3"), { icon: 2 });//管理密码不能少于4个字符
+                        return;
+                    }
+                }
+
+
+                delete postdata["SystemTime"];
+                //启动遮罩层
+                var waitLayerIndex = layer.load(1, { shade: [0.5, '#FFF'] });
+                faceAPI.AjaxPOSTJson({
+                    data: postdata,
+                    url: '/api/device/UpdateParameter',
+                    success: function (result) {
+                        layer.close(waitLayerIndex)
+
+                        if (result.result == false) {
+
+                            if (result.error == "parameter error: MenuPassword is empty!") {
+                                layer.alert(getLanguage("device.password_check_err1"), { icon: 2 });//管理密码不能为空
+                                return;
+                            }
+                            if (result.error == "parameter error: MenuPassword the length must be greater than 6!") {
+                                layer.alert(getLanguage("device.password_check_err2"), { icon: 2 });//管理密码不能为空
+                                return;
+                            }
+                            if (result.error == "parameter error: MenuPassword the length must be greater than 4!") {
+                                layer.alert(getLanguage("device.password_check_err3"), { icon: 2 });//管理密码不能少于4个字符
+                                return;
+                            }
+                            if (result.error == "parameter error: MenuPassword too simple!") {
+                                layer.alert(getLanguage("device.password_check_err4"), { icon: 2 });//管理密码太简单，需要大写字母+小写字母+数字+特殊符号组合！
+                                return;
+                            }
+
+                            layer.alert(result.error, { icon: 2 });
+                        }
+                        else {
+                            formdata = data.field;
+                            layer.alert(getLanguage("Facerecognition.f4"), { icon: 1 });
+                        }
+                    }
+                });
+
+            });
+
+        });
+        $("#data-reset-btn").on('click', function () {
+            layer.confirm(getLanguage("device.ui_ReloadTips"), { icon: 3, btn: ["Yes", "No"] }, function (index, layero, that) {
+                LoadData();
+                layer.close(index)
+            });
+        });
+
+        form.on('submit(btn-SyncTime)', function (data) {
+
+            var parameter = {
+                "Language": true
+            };
+
+            faceAPI.AjaxPOSTJson({
+                url: '/api/Device/GetDetail',
+                data: parameter,
+                success: function (rst) {
+                    if (rst != null && rst.result) {
+
+                        formdata.SystemTime = faceAPI.unixTimeStampToDateString(rst.content.SystemTime);
+
+                        var _page = $('#device_UI_div');
+
+                        _page.find('input[name=SystemTime]').each((ind, em) => {
+                            var _em = $(em);
+                            _em.val(formdata.SystemTime);
+                        });
+                        form.val("device_info_div_filter", formdata);
+                    };
+                }
+            });
+        });
+
+        form.on('submit(btn-WriteTime)', function (data) {
+
+            layer.confirm(getLanguage("device.ui_WriteTimeTips"), { icon: 3 }, function (index, layero, that) {
+                // 创建一个Date对象，表示当前时间
+                const now = new Date();
+
+                // 使用getTime()方法获取毫秒级的时间戳
+                const unixTimestamp = now.getTime();
+
+                // 如果您需要秒级的时间戳，可以将毫秒时间戳除以1000，并使用Math.floor()函数取整
+                const unixTimestampInSeconds = Math.floor(unixTimestamp / 1000);
+
+                var postdata = {
+                    "SystemTime": unixTimestampInSeconds
+                };
+
+                faceAPI.AjaxPOSTJson({
+                    data: postdata,
+                    url: '/api/device/UpdateParameter',
+                    success: function (result) {
+                        if (result.result == false) {
+                            layer.alert(result.error, { icon: 2 });
+                        }
+                        else {
+                            formdata = data.field;
+                            layer.alert(getLanguage("device.ui_WriteTimeOverTips"), { icon: 1 });
+                        }
+                    }
+                });
+                layer.close(index)
+            });
+        });
+
+        faceAPI.ShowMouseTipMessageBox("device_UI_div_filter", layer);
+        faceAPI.CheckInputBox();
+
+        if (faceAPI?.DeviceFunctionList) {
+            const { Face, QRCode, RecognitionButton, FastRecognition, RequestAuthorization,
+                LCD, FillLight, TTS, Voice, ComplexUserID, SuccessRecognitionWelcomeSpeech,
+                StrongCipher, Fingerprint, Palmvein,
+                PlayPersonName
+            } = faceAPI.DeviceFunctionList;
+            console.log('[ faceAPI.DeviceFunctionList ] >', faceAPI.DeviceFunctionList)
+
+
+            if (!QRCode) {
+                faceAPI.removeElement('.FunctionListQRCode');
+            }
+            if (!Face) {
+                faceAPI.removeElement('.FunctionListFace');
+            }
+            if (!RecognitionButton) {
+                faceAPI.removeElement('.FunctionList_RecognitionButton');
+            }
+            if (!FastRecognition) {
+                faceAPI.removeElement('.FunctionList_FastRecognition');
+            }
+            if (!RequestAuthorization) {
+                faceAPI.removeElement('.FunctionList_RequestAuthorization');
+            }
+            if (!RecognitionButton && !FastRecognition) {
+                faceAPI.removeElement('.FunctionList_RecognitionButton_FastRecognition');
+            }
+            if (!LCD ) {
+                faceAPI.removeElement('.FunctionList_LCD');
+            }
+            if (!FillLight) {
+                faceAPI.removeElement('.FunctionList_FillLight');
+            }
+            if (!TTS) {
+                faceAPI.removeElement('.FunctionList_TTS');
+            }
+            if (!Voice) {
+                faceAPI.removeElement('.FunctionList_Voice');
+            }
+            if (!Face && !QRCode) {
+                faceAPI.removeElement('.FunctionList_Face_QRCode');
+            }
+            if (!ComplexUserID) {
+                faceAPI.removeElement('.FunctionListComplexUserID');
+            }
+
+            if (!SuccessRecognitionWelcomeSpeech)
+            {
+                faceAPI.removeElement('.FunctionListSuccessRecognitionWelcomeSpeech');
+            }
+            if (!RequestAuthorization && !SuccessRecognitionWelcomeSpeech) {
+                faceAPI.removeElement('.FunctionList_RequestAuthorization_WelcomeSpeech');
+            }
+            if (!StrongCipher) {
+                faceAPI.removeElement('.FunctionListStrongCipher');
+            }
+
+
+            if (!Fingerprint) {
+                faceAPI.removeElement('.FunctionList_FP');
+            }
+            if (!Palmvein) {
+                faceAPI.removeElement('.FunctionList_Palmvein');
+            }
+
+            if (!Fingerprint && !Palmvein) {
+                faceAPI.removeElement('.FunctionList_FP_Palmvein');
+            }
+
+            if (!PlayPersonName) {
+                faceAPI.removeElement('.FunctionList_PlayPersonName');
+            }
+
+            
+
+
+        }
+
+
+    });
+</script>

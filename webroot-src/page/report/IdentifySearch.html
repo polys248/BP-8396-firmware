@@ -1,0 +1,308 @@
+<div class="layuimini-main" id="IdentifyReport-search">
+    <style>
+        .searchlabel {
+            width: 140px;
+        }
+
+        .defcenter {
+            text-align: center;
+        }
+    </style>
+    <form class="layui-form layui-form-pane" lay-filter="IdentifyReport_search_div_filter">
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label searchlabel" language='Report.r95'>时间范围：</label>
+                <div class="layui-input-inline">
+                    <input type="text" maxlength="30" name="BeginDate" lay-verify="required" autocomplete="off"
+                           class="layui-input" value="2024年1月1日">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label searchlabel" language='Report.r96'>至</label>
+                <div class="layui-input-inline">
+                    <input type="text" maxlength="30" name="EndDate" lay-verify="required" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label searchlabel" language='Report.r99'>事件类型</label>
+                <div class="layui-input-block" id="RecordTypes" />
+
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label searchlabel">
+                    <span language="people.p31">用户号</span>
+                </label>
+                <div class="layui-input-inline">
+                    <input type="number"
+                           max="4294967295"
+                           min="0"
+                           maxlength="10"
+                           name="UserID"
+                           autocomplete="off"
+                           class="layui-input" />
+                </div>
+            </div>
+
+            <div class="layui-inline">
+                <label class="layui-form-label">
+                    <span language="Report.r47">现场照片</span>
+                </label>
+                <div class="layui-input-inline selectUp">
+                    <select name="Photo" required lay-verify="">
+                        <option value="" language='people.p56' selected>不查询</option>
+                        <option value="0" language='people.p114'>无</option>
+                        <option value="1" language='people.p113'>有</option>
+                    </select>
+
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+
+            <div class="layui-inline">
+                <label class="layui-form-label searchlabel">
+                    <span language="people.p32">人员姓名</span>
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" maxlength="63" name="Name" CheckBytes
+                           id="people.p33" data-lang='placeholder' placeholder="请输入人员姓名" value=""
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline FunctionList_UserCode">
+                <label class="layui-form-label searchlabel">
+                    <span language="people.UserCode">人员编号</span>
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" maxlength="63" name="Code" CheckBytes
+                           id="people.UserCode_placeholder" data-lang='placeholder' placeholder="请输入人员编号" value=""
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+        <!-- <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label searchlabel">
+                    <span language="people.p90">部门</span>
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" maxlength="63" CheckBytes name="Department" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label searchlabel">
+                    <span language="people.p16">职务</span>
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" maxlength="63" CheckBytes name="Job" value=""
+                           class="layui-input">
+                </div>
+            </div>
+        </div> -->
+        <div class="layui-form-item">
+            <!-- <div class="layui-inline">
+                <label class="layui-form-label searchlabel">
+                    <span language="people.p37">身份证</span>
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" maxlength="63" CheckBytes name="IdentityCard" value=""
+                           class="layui-input">
+                </div>
+            </div> -->
+            <div class="layui-inline FunctionList_Card">
+                <label class="layui-form-label searchlabel">
+                    <span language="people.p34">IC卡号</span>
+                </label>
+                <div class="layui-input-inline">
+                    <input type="number"
+                           max="18446744073709550000"
+                           min="0"
+                           maxlength="20"
+                           name="CardNum"
+                           value=""
+                           class="layui-input" />
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item FunctionList_QRCode">
+            <label class="layui-form-label searchlabel">
+                <span language="people.QRCode">二维码</span>
+            </label>
+            <div class="layui-input-block" style="max-width:510px">
+                <input type="text" maxlength="150" CheckBytes name="QRCode" value=""
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item defcenter">
+            <button type="submit" class="layui-btn  " lay-submit lay-filter="data-search-btn" id="btnName" language='Report.r120'>
+                搜索
+            </button>
+            <button type="reset" class="layui-btn layui-bg-bluey" id="btnreset" language='Report.r121'>重置</button>
+            <button type="submit" class="layui-btn layui-bg-orange" id="btnsearchclose">
+                <i class="layui-icon">&#x1006;</i> <span language='Report.r122'>取消</span>
+            </button>
+        </div>
+    </form>
+
+</div>
+<script>
+    setLanguage();
+    setAllAttrVal()
+    layui.use(['form', 'laydate', 'faceAPI','selectM'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.$;
+        var laydate = layui.laydate;
+        var faceAPI = layui.faceAPI;
+        var selectM = layui.selectM;
+        /**
+         * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+        form.render();
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '[name="BeginDate"]', //指定元素
+            type: 'datetime',
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '[name="EndDate"]', //指定元素
+            type: 'datetime'
+        });
+
+
+        // 当前弹出层，防止ID被覆盖
+        var parentIndex = layer.index;
+
+        //动态设置选择框
+
+
+        var eventMap = [];
+
+
+        faceAPI.IdentifyReportSearch.EnentTypeTable.forEach((item, index, arr) => {
+
+            var eventItem = {};
+            eventItem.id = index;
+            eventItem.name = item;
+            eventItem.status = 1;
+            eventMap.push(eventItem);
+
+            //console.log(eventItem); 
+        })
+
+        var eventSelected = [];
+        if (faceAPI.IdentifyReportSearch.hasOwnProperty("RecordTypes")) {
+
+            if (faceAPI.IdentifyReportSearch.RecordTypes != null) {
+                var sMaps = faceAPI.IdentifyReportSearch.RecordTypes.split(",");
+                eventSelected = sMaps;
+            }
+            
+        }
+
+        //多选标签-基本配置
+        var tagIns1 = selectM({
+            //元素容器【必填】
+            elem: '#RecordTypes'
+            //候选数据【必填】
+            , data: eventMap
+            , max: 5
+            , width: 510
+            , selected: eventSelected
+        }); 
+
+
+        
+
+        form.val("IdentifyReport_search_div_filter", faceAPI.IdentifyReportSearch);
+
+        faceAPI.IdentifyReportSearchPageResult.result = false;
+
+
+        
+
+        //监听提交
+        form.on('submit(data-search-btn)', function (data) {
+            var result = data.field;
+
+
+            result.BeginDate = dayjs(result.BeginDate,"YYYY-MM-DD HH:mm:ss").unix();
+            result.EndDate = dayjs(result.EndDate, "YYYY-MM-DD HH:mm:ss").unix();
+
+            if (result.UserID == "") result.UserID = null;
+            if (result.UserID == "0") result.UserID = null;
+            if (result.Name == "") result.Name = null;
+            if (result.Job == "") result.Job = null;
+            if (result.Department == "") result.Department = null;
+            if (result.IdentityCard == "") result.IdentityCard = null;
+            if (result.CardNum == "") result.CardNum = null;
+            if (result.CardNum == "0") result.CardNum = null;
+            if (result.RecordTypes == "") result.RecordTypes = null;
+            if (result.Photo == "") result.Photo = null;
+            if (result.QRCode == "") result.QRCode = null;
+            if (result.Code == "") result.Code = null;
+  
+            faceAPI.IdentifyReportSearchPageResult.result = true;
+            faceAPI.IdentifyReportSearchPageResult.field = result;
+            layer.close(parentIndex);
+            return false;
+        });
+
+        //重置
+        $('#btnreset').on('click', function () {
+            faceAPI.SystemReportSearch = {
+                BeginDate: dayjs().subtract(7, 'day').format("YYYY-MM-DD") + ' 00:00:00',//将 年月日时分秒 转为 时间戳
+                EndDate: dayjs().format("YYYY-MM-DD") + ' 23:59:59',
+                RecordTypes: [],
+                UserID: "",
+                Name: "",
+                Job: "",
+                Department: "",
+                IdentityCard: "",
+                CardNum: "",
+                QRCode: "",
+            }
+
+            form.val("IdentifyReport_search_div_filter", faceAPI.SystemReportSearch);
+
+            tagIns1.set([]);
+            return false;
+        });
+
+        $('#btnsearchclose').on('click', function () {
+            faceAPI.IdentifyReportSearchPageResult.result = false
+            layer.close(parentIndex);
+            return false;
+        });
+
+        //删除不支持的功能
+        if (faceAPI.DeviceFunctionList != undefined) {
+            console.log(faceAPI.DeviceFunctionList)
+
+            if (!faceAPI.DeviceFunctionList.UserCode) {
+                faceAPI.removeElement('.FunctionList_UserCode');
+            }
+            if (!faceAPI.DeviceFunctionList.QRCode) {
+                faceAPI.removeElement('.FunctionList_QRCode');
+            }
+
+            //设备不支持刷卡
+            if (!faceAPI.DeviceFunctionList.Card) {
+                faceAPI.removeElement('.FunctionList_Card');
+            }
+        }
+
+        faceAPI.CheckInputBox();
+
+    });
+</script>

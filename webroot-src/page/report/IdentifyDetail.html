@@ -1,0 +1,246 @@
+<div class="layuimini-main" id="IdentifyReport-search">
+    <style>
+        .status-black {
+            margin-left: 10px;
+            padding-left: 5px !important;
+            padding-right: 5px !important;
+            color: black;
+        }
+        .defcenter {
+            text-align: center;
+        }
+        .defDivImageBox {
+            width: 240px;
+            margin: 0 auto;
+        }
+    </style>
+    <form class="layui-form layui-form-pane" lay-filter="IdentifyReport_Detail_div_filter">
+        <div class="layui-row">
+            <div class="layui-col-md8">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label" style="width: 140px;" language='Report.RecordID'> 记录序号</label>
+                        <div class="layui-input-inline">
+                            <div class="layui-form-mid status-black" name="RecordID"></div>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label" style="width: 140px;" language='Report.r56'> 时间</label>
+                        <div class="layui-input-inline">
+                            <div class="layui-form-mid status-black" name="RecordDate"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" style="width: 140px;" language='Report.r57'> 事件</label>
+                    <div class="layui-input-block" style=" margin-left: 140px;">
+                        <div class="layui-form-mid status-black" name="RecordType"></div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label" style="width: 140px;" language='Report.r131'> 进出方向</label>
+                        <div class="layui-input-inline">
+                            <div class="layui-form-mid status-black" name="IsEntry"></div>
+                        </div>
+                    </div>
+                    <div class="layui-inline FunctionList_BodyTemp">
+                        <label class="layui-form-label" style="width: 140px;" language='Report.r45'> 体温</label>
+                        <div class="layui-input-inline">
+                            <div class="layui-form-mid status-black" name="BodyTemp"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item ">
+                    <div class="layui-inline">
+                        <label class="layui-form-label" style="width: 140px;" language='people.p31'> 用户号</label>
+                        <div class="layui-input-inline">
+                            <div class="layui-form-mid status-black" name="UserID"></div>
+                        </div>
+                    </div>
+                   
+
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label" style="width: 140px;" language='people.p32'> 人员姓名</label>
+                        <div class="layui-input-inline">
+                            <div class="layui-form-mid status-black" name="Name"></div>
+                        </div>
+                    </div>
+                    <div class="layui-inline FunctionList_UserCode">
+                        <label class="layui-form-label" style="width: 140px;" language='people.UserCode'> 人员编号</label>
+                        <div class="layui-input-inline">
+                            <div class="layui-form-mid status-black" name="Code"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+
+                    <div class="layui-inline FunctionList_Card">
+                        <label class="layui-form-label" style="width: 140px;" language='people.p34'> 卡号</label>
+                        <div class="layui-input-inline">
+                            <div class="layui-form-mid status-black" name="CardNum"></div>
+                        </div>
+                    </div>
+                    <!-- <div class="layui-inline">
+                        <label class="layui-form-label" style="width: 140px;" language='people.p37'> 身份证</label>
+                        <div class="layui-input-inline">
+                            <div class="layui-form-mid status-black" name="IdentityCard"></div>
+                        </div>
+                    </div> -->
+
+                </div>
+                <div class="layui-form-item FunctionList_QRCode">
+                    <label class="layui-form-label" style="width: 140px;" language='people.QRCode'>二维码</label>
+                    <div class="layui-input-inline">
+                        <div class="layui-form-mid status-black" name="QRCode"></div>
+                    </div>
+
+                </div>
+                <div class="layui-form-item" hidden="true" >
+                    <div class="layui-inline">
+                        <label class="layui-form-label" style="width: 140px;" language='people.p90'> 部门</label>
+                        <div class="layui-input-inline">
+                            <div class="layui-form-mid status-black" name="Department"></div>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label" style="width: 140px;" language='people.p16'> 职务</label>
+                        <div class="layui-input-inline">
+                            <div class="layui-form-mid status-black" name="Job"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+
+            <div class="layui-col-md4">
+                <div class="defDivImageBox layui-panel">
+
+                    <div class="defDivImageBox layui-panel">
+                        <div class="layui-form-item defcenter" id="ReportImage">
+                            <img id="showReportImg" src="/NoPIC.jpg" width="240">
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+
+
+
+
+        <div class="layui-form-item defcenter">
+            <button type="submit" class="layui-btn" id="btnsearchclose">
+                <i class="layui-icon">
+                    &#x1006;
+                </i><span language='Report.r63'>关闭</span>
+            </button>
+        </div>
+    </form>
+
+</div>
+<script>
+    setLanguage();
+    setAllAttrVal()
+    layui.use(['form', 'faceAPI'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.$;
+        var faceAPI = layui.faceAPI;
+        /**
+         * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+        form.render();
+
+
+        // 当前弹出层，防止ID被覆盖
+        var parentIndex = layer.index;
+
+        if (faceAPI.IdentifyReportDetail != null) {
+            var report = faceAPI.IdentifyReportDetail;
+            //console.log(report);
+            form.val("IdentifyReport_Detail_div_filter", report);
+
+
+
+            var frm = $('[lay-filter=IdentifyReport_Detail_div_filter]');
+            frm.find('div.status-black').each((ind, em) => {
+                var _em = $(em);
+                var name = _em.attr("name");
+                if (report.hasOwnProperty(name))
+                    _em.html(report[name]);
+            });
+            
+            //照片
+            if (report.PhotoLen > 0 && report.Photo.length > 0) {
+                $('#ReportImage').find('img').remove();
+                //测量一下文件尺寸
+                const img = new Image();
+                img.src = report.Photo;
+                img.onload = function () {
+                    console.log("图片尺寸：" + img.width + '*' + img.height)
+
+                    $('#ReportImage').append('<img id="showReportImg" src="' + report.Photo + '" width= "' + img.width / 2 + '"  height= "' + img.height / 2 +'" >');
+                    bindshowPeopleImgClick();
+
+
+                }
+               
+            }
+
+        }
+        //删除不支持的功能
+        if (faceAPI.DeviceFunctionList != undefined) {
+            console.log(faceAPI.DeviceFunctionList)
+
+            if (!faceAPI.DeviceFunctionList.UserCode) {
+                faceAPI.removeElement('.FunctionList_UserCode');
+            }
+            if (!faceAPI.DeviceFunctionList.QRCode) {
+                faceAPI.removeElement('.FunctionList_QRCode');
+            }
+           
+            //设备不支持刷卡
+            if (!faceAPI.DeviceFunctionList.Card) {
+                faceAPI.removeElement('.FunctionList_Card');
+            }
+            //设备不支持体温
+            if (!faceAPI.DeviceFunctionList.BodyTemp) {
+                faceAPI.removeElement('.FunctionList_BodyTemp');
+            }
+        }
+
+        $('#btnsearchclose').on('click', function () {
+            layer.close(parentIndex);
+            return false;
+        });
+
+        function bindshowPeopleImgClick() {
+            $('#showReportImg').on('click', function () {
+                var idBar = '#showReportImg'; 
+                var src = $(idBar)[0].src;
+                //debugger;
+                var width = $(idBar).width()*3;
+                var height = $(idBar).height()*3;
+              
+                parent.layer.open({
+                    type: 1,
+                    title: false,
+                    closeBtn: 1,
+                    shadeClose: true,
+                    area: [width + 'px', height + 'px'], //宽高
+                    content: '<img width= "' + width + '"  height= "' + height +'"  src="' + src + '" />'
+                });
+            });
+        }
+    });
+</script>

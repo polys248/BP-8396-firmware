@@ -1,0 +1,675 @@
+<style>
+    #device_NetworkOption_div label {
+        width: 250px;
+    }
+
+    .layui-form-pane .layui-input-block {
+        margin-left: 250px;
+        left: -1px;
+    }
+
+    .divwidth {
+        width: 1850px;
+    }
+
+    .status-black {
+        margin-left: 10px
+    }
+
+    .divpadding {
+        padding-right: 20px
+    }
+
+    .aligncenter {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+<div class="layui-form layuimini-form  layui-form-pane" id="device_NetworkOption_div" lay-filter="device_NetworkOption_div_filter">
+    <div class="layui-bg-gray" style="padding: 10px;">
+        <div class="layui-row layui-col-space15">
+
+
+            <div class="layui-col-md12">
+                <!-- Web页面 -->
+                <div class="layui-card">
+                    <div class="layui-card-header" language='device.d263'>Web页面</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form-item">
+
+                            <!-- <div class="layui-inline">
+                                <label class="layui-form-label" language='device.UseTitle'> 功能开关</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="UseWebPage" lay-skin="switch"
+                                           data-lang='lay-text' lay-text="启用|禁用" value="1" id="device.d187">
+                                </div>
+                            </div> -->
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.HTTPort'> Web页面端口 HTTP 端口</label>
+                                <div class="layui-input-inline">
+                                    <input type="number" max="65534" min="1" name="HTTPPort" maxlength="5"
+                                           autocomplete="off" class="layui-input" lay-verify="required"
+                                           id="device.d332,device.d332,device.d333"
+                                           data-lang='placeholder,lay-reqText,tipMsg'
+                                           placeholder="请输入设备监听的Web页面端口号" lay-reqText="请输入设备监听的Web页面端口号"
+                                           tipShow="1" tipMsg="设备监听的Web页面端口号，必填<br/>取值范围： 1 -- 65535">
+                                </div>
+                            </div>
+                            
+
+                        </div>
+
+                        <div class="layui-form-item FunctionListSSL">
+
+                            <div class="layui-inline FunctionListSSL">
+                                <label class="layui-form-label" language='device.d334'> 启用SSL</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="WebPageUseSSL" lay-skin="switch"
+                                           data-lang='lay-text' lay-text="启用|禁用" value="1" id="device.d189">
+                                </div>
+                            </div>
+                            <div class="layui-inline FunctionListSSL">
+                                <label class="layui-form-label" language='device.HTTSPort'> Web页面端口  HTTPS 端口</label>
+                                <div class="layui-input-inline">
+                                    <input type="number" max="65534" min="1" name="HTTPSPort" maxlength="5"
+                                           autocomplete="off" class="layui-input" 
+                                           id="device.d332,device.d332,device.d333"
+                                           data-lang='placeholder,lay-reqText,tipMsg'
+                                           placeholder="请输入设备监听的Web页面端口号" lay-reqText="请输入设备监听的Web页面端口号"
+                                           tipShow="1" tipMsg="设备监听的Web页面端口号，必填<br/>取值范围： 1 -- 65535">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 一卡通协议 -->
+                <div class="layui-card">
+                    <div class="layui-card-header" language='LocalService.OnecardProtocol'>一卡通协议</div>
+                    <div class="layui-card-body">
+                        <div class="layui-tab" lay-filter="device_NetworkServer_tab_filter">
+                            <ul class="layui-tab-title">
+                                <li class="layui-this" lay-id="ipv4" language='LocalService.IPV4'>IPV4</li>
+                                <li lay-id="ipv6" language='LocalService.IPV6'>IPV6</li>
+                                <li lay-id="password" language='LocalService.Password'>通讯密码</li>
+                            </ul>
+                            <div class="layui-tab-content" style="height: 220px;">
+                                <div lay-title="ipv4" class="layui-tab-item layui-show">
+                                    <div class="layui-form-item">
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label" language='LocalService.UseUDP'>开启UDP</label>
+                                            <div class="layui-input-inline">
+                                                <input type="checkbox" name="UseUDP" lay-skin="switch"
+                                                       data-lang='lay-text' lay-text="启用|禁用" value="1" id="LocalService.SwitchButtonTitle">
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label" language='LocalService.Port'> 端口号</label>
+                                            <div class="layui-input-inline">
+                                                <input type="number" max="65534" min="1" name="UDPPort"
+                                                       autocomplete="off" class="layui-input" maxlength="5"
+                                                       id="LocalService.UDPPort_placeholder,LocalService.UDPPort_tipMsg"
+                                                       data-lang='placeholder,tipMsg'
+                                                       placeholder="请输入设备监听的端口号"
+                                                       tipShow="1"
+                                                       tipMsg="设备监听的端口号，必填<br/>取值范围： 1 -- 65534">
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="layui-form-item">
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label" language='LocalService.UseTCP'>开启TCP</label>
+                                            <div class="layui-input-inline">
+                                                <input type="checkbox" name="UseTCP" lay-skin="switch"
+                                                       data-lang='lay-text' lay-text="启用|禁用" value="1" id="LocalService.SwitchButtonTitle">
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label" language='LocalService.Port'> 端口号</label>
+                                            <div class="layui-input-inline">
+                                                <input type="number" max="65534" min="1" name="TCPPort"
+                                                       autocomplete="off" class="layui-input" maxlength="5"
+                                                       id="LocalService.TCPPort_placeholder,LocalService.TCPPort_tipMsg"
+                                                       data-lang='placeholder,tipMsg'
+                                                       placeholder="请输入设备监听的端口号"
+                                                       tipShow="1"
+                                                       tipMsg="设备监听的端口号，必填<br/>取值范围： 1 -- 65534">
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="layui-form-item FunctionListSSL">
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label" language='LocalService.UseSSL'>开启SSL</label>
+                                            <div class="layui-input-inline">
+                                                <input type="checkbox" name="UseTCPSSL" lay-skin="switch"
+                                                       data-lang='lay-text' lay-text="启用|禁用" value="1" id="LocalService.SwitchButtonTitle">
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label" language='LocalService.Port'> 端口号</label>
+                                            <div class="layui-input-inline">
+                                                <input type="number" max="65534" min="1" name="TCPSSLPort"
+                                                       autocomplete="off" class="layui-input" maxlength="5"
+                                                       id="LocalService.SSLPort_placeholder,LocalService.SSLPort_tipMsg"
+                                                       data-lang='placeholder,tipMsg'
+                                                       placeholder="请输入设备监听的端口号"
+                                                       tipShow="1"
+                                                       tipMsg="设备监听的端口号，必填<br/>取值范围： 1 -- 65534">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div lay-title="ipv6" class="layui-tab-item">
+                                    <div class="layui-form-item">
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label" language='LocalService.UseUDP'>开启UDP</label>
+                                            <div class="layui-input-inline">
+                                                <input type="checkbox" name="UseIPV6_UDP" lay-skin="switch"
+                                                       data-lang='lay-text' lay-text="启用|禁用" value="1" id="LocalService.SwitchButtonTitle">
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label" language='LocalService.Port'> 端口号</label>
+                                            <div class="layui-input-inline">
+                                                <input type="number" max="65534" min="1" name="IPv6_UDPPort"
+                                                       autocomplete="off" class="layui-input" maxlength="5"
+                                                       id="LocalService.UDPPort_placeholder,LocalService.UDPPort_tipMsg"
+                                                       data-lang='placeholder,tipMsg'
+                                                       placeholder="请输入设备监听的端口号"
+                                                       tipShow="1"
+                                                       tipMsg="设备监听的端口号，必填<br/>取值范围： 1 -- 65534">
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="layui-form-item">
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label" language='LocalService.UseTCP'>开启TCP</label>
+                                            <div class="layui-input-inline">
+                                                <input type="checkbox" name="UseIPV6_TCP" lay-skin="switch"
+                                                       data-lang='lay-text' lay-text="启用|禁用" value="1" id="LocalService.SwitchButtonTitle">
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label" language='LocalService.Port'> 端口号</label>
+                                            <div class="layui-input-inline">
+                                                <input type="number" max="65534" min="1" name="IPv6_TCPPort"
+                                                       autocomplete="off" class="layui-input" maxlength="5"
+                                                       id="LocalService.TCPPort_placeholder,LocalService.TCPPort_tipMsg"
+                                                       data-lang='placeholder,tipMsg'
+                                                       placeholder="请输入设备监听的端口号"
+                                                       tipShow="1"
+                                                       tipMsg="设备监听的端口号，必填<br/>取值范围： 1 -- 65534">
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="layui-form-item FunctionListSSL">
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label" language='LocalService.UseSSL'>开启SSL</label>
+                                            <div class="layui-input-inline">
+                                                <input type="checkbox" name="UseIPV6_TCPSSL" lay-skin="switch"
+                                                       data-lang='lay-text' lay-text="启用|禁用" value="1" id="LocalService.SwitchButtonTitle">
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label" language='LocalService.Port'> 端口号</label>
+                                            <div class="layui-input-inline">
+                                                <input type="number" max="65534" min="1" name="IPv6_TCPSSLPort"
+                                                       autocomplete="off" class="layui-input" maxlength="5"
+                                                       id="LocalService.SSLPort_placeholder,LocalService.SSLPort_tipMsg"
+                                                       data-lang='placeholder,tipMsg'
+                                                       placeholder="请输入设备监听的端口号"
+                                                       tipShow="1"
+                                                       tipMsg="设备监听的端口号，必填<br/>取值范围： 1 -- 65534">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div lay-title="password" class="layui-tab-item" >
+
+
+                                    <div class="layui-form-item">
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label" language='LocalService.ConnPassword'> 密码</label>
+                                            <div class="layui-input-inline">
+                                                <input type="password" maxlength="8" name="ConnectPassword" OnlyNumber
+                                                       autocomplete="off" class="layui-input"
+                                                       id="LocalService.ConnPassword_placeholder,LocalService.ConnPassword_tipMsg"
+                                                       data-lang='placeholder,tipMsg'
+                                                       placeholder="请输入通讯密码"
+                                                       tipShow="1"
+                                                       tipMsg="通讯密码由4-8位数字组成">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-form-item FunctionListPacket_Encrypt">
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label"
+                                                   language='LocalService.UseDataEncryption'> 通讯加密</label>
+                                            <div class="layui-input-inline">
+                                                <select name="UseDataEncryption" required
+                                                        id="LocalService.UseDataEncryption_tipMsg"
+                                                        data-lang='tipMsg'
+                                                        tipShow="1"
+                                                        tipMsg="开启后通讯包会经过加密，提高信息安全!"
+                                                        lay-verify="">
+                                                    <option language='device.ui_network_server_tcp_disabled'
+                                                            value="0">
+                                                        禁用
+                                                    </option>
+                                                    <option value="1">RC4</option>
+                                                    <option value="2">SM4</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-form-item FunctionListPacket_Encrypt">
+                                        <label class="layui-form-label"> 加密秘钥(HEX)</label>
+                                        <div class="layui-input-block">
+                                            <input type="password" maxlength="128" name="EncryptionKey"
+                                                   autocomplete="off" class="layui-input"
+                                                   id="LocalService.EncryptionKey_placeholder,LocalService.EncryptionKey_tipMsg"
+                                                   data-lang='placeholder,tipMsg'
+                                                   placeholder="请输入RC4加密秘钥"
+                                                   tipShow="1"
+                                                   tipMsg="RC4加密秘钥由1-64个字符组成，秘钥为十六进制字符串格式!">
+                                        </div>
+
+                                    </div>
+                                    <div class="layui-form-item">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <!-- Telnet协议 -->
+                <!-- <div class="layui-card FunctionListTelnet">
+                    <div class="layui-card-header" language='device.TelnetTitle'>Telnet 协议</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.UseTitle'> 开关</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="UseTelnet" lay-skin="switch"
+                                           data-lang='lay-text' lay-text="启用|禁用" value="1" id="device.d402">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.d328'>端口号</label>
+                                <div class="layui-input-inline">
+                                    <input type="number" max="65534" min="1" name="TelnetPort" maxlength="5"
+                                           autocomplete="off" class="layui-input" lay-verify="required"
+                                           id="device.d329,device.d329,device.d330"
+                                           data-lang='placeholder,lay-reqText,tipMsg'
+                                           placeholder="请输入设备监听的Telnet端口号" lay-reqText="请输入设备监听的Telnet端口号"
+                                           tipShow="1" tipMsg="设备监听的Telnet端口号，必填<br/>取值范围： 1 -- 65534">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+
+                <!-- SSH协议 -->
+                <!-- <div class="layui-card FunctionListSSH">
+                    <div class="layui-card-header" language='device.SSHTitle'>SSH 协议</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.UseTitle'> 开关</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="UseSSH" lay-skin="switch"
+                                           data-lang='lay-text' lay-text="启用|禁用" value="1" id="device.d402">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.d328'>端口号</label>
+                                <div class="layui-input-inline">
+                                    <input type="number" max="65534" min="1" name="SSHPort" maxlength="5"
+                                           autocomplete="off" class="layui-input" 
+                                           id="device.SSHPortTip1,device.SSHPortTip1,device.SSHPortTip2"
+                                           data-lang='placeholder,lay-reqText,tipMsg'
+                                           placeholder="请输入设备监听的 SSH 端口号" lay-reqText="请输入设备监听的 SSH 端口号"
+                                           tipShow="1" tipMsg="设备监听的 SSH 端口号，必填<br/>取值范围： 1 -- 65534">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+
+                <!-- SSH 和 Telnet 登录密码 -->
+                <!-- <div class="layui-card FunctionListRootPIN">
+                    <div class="layui-card-header" language='device.SSHLoginPassword'>SSH 和 Telnet 登录密码</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.d327'> 密码</label>
+                                <div class="layui-input-inline">
+                                    <input type="password" name="SSHLoginPassword" autocomplete="off" maxlength="24"
+                                           class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+
+                <!-- RTSP视频流 -->
+                <div class="layui-card FunctionListRTSP">
+                    <div class="layui-card-header" language='device.d335'> RTSP视频流</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.UseTitle'> 开关</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="UseRTSP" lay-skin="switch"
+                                           data-lang='lay-text' lay-text="启用|禁用" value="1" id="device.d400">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-col-md12">
+                <div class="layui-card">
+
+                    <div class="layui-card-body">
+                        <div class="layui-btn-container aligncenter">
+                            <button type="submit" class="layui-btn layui-btn-normal" lay-submit
+                                    lay-filter="data-save-btn" language='device.d224'>
+                                <i class="layui-icon"></i> 保存
+                            </button>
+                            <button type="reset" class="layui-btn layui-btn-danger" id="data-reset-btn" language='timingLock.t2'>
+                                <i class="layui-icon"></i> 刷新
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'laydate', 'table', 'miniPage', 'element', 'faceAPI'], function () {
+        setLanguage();
+        setAllAttrVal();
+        var faceAPI = layui.faceAPI;
+        var form = layui.form;
+        var $ = layui.$;
+        var laydate = layui.laydate;
+        var formdata;
+        form.render();
+        function LoadData() {
+            var parameter = {
+                "Network": true,
+            };
+            faceAPI.AjaxPOSTJson({
+                data: parameter,
+                url: '/api/Device/GetDetail',
+                success: function (rst) {
+                    if (rst != null && rst.result) {
+                        formdata = rst.content;
+                        form.val("device_NetworkOption_div_filter", formdata);
+                    };
+                }
+            });
+        }
+        LoadData();
+        function CheckIsHEX(str) {
+            // 将字符串转换为大写
+            const upperCaseStr = str.toUpperCase();
+            // 使用正则表达式检查是否为有效的十六进制字符串
+            const hexPattern = /^[0-9A-F]+$/;
+            return hexPattern.test(upperCaseStr);
+        }
+        function CheckIsNumString(str) {
+            // 将字符串转换为大写
+            const upperCaseStr = str.toUpperCase();
+            // 使用正则表达式检查是否为有效的数字字符串
+            const hexPattern = /^\d+$/;
+            return hexPattern.test(upperCaseStr);
+        }
+        form.on('submit(data-save-btn)', function (data) {
+            var postdata = data.field;
+            // postdata.UseWebPage = postdata.UseWebPage == '1' ? 1 : 0;
+            postdata.HTTPPort = parseInt(postdata.HTTPPort);
+            postdata.HTTPSPort = parseInt(postdata.HTTPSPort);
+            postdata.WebPageUseSSL = postdata.WebPageUseSSL == '1' ? 1 : 0;
+
+
+            postdata.UseUDP = postdata.UseUDP == '1' ? 1 : 0;
+            postdata.UDPPort = parseInt(postdata.UDPPort);
+
+            postdata.UseTCP = postdata.UseTCP == '1' ? 1 : 0;
+            postdata.TCPPort = parseInt(postdata.TCPPort);
+
+            postdata.UseTCPSSL = postdata.UseTCPSSL == '1' ? 1 : 0;
+            postdata.TCPSSLPort = parseInt(postdata.TCPSSLPort);
+
+            postdata.UseIPV6_UDP = postdata.UseIPV6_UDP == '1' ? 1 : 0;
+            postdata.IPv6_UDPPort = parseInt(postdata.IPv6_UDPPort);
+
+            postdata.UseIPV6_TCP = postdata.UseIPV6_TCP == '1' ? 1 : 0;
+            postdata.IPv6_TCPPort = parseInt(postdata.IPv6_TCPPort);
+
+            postdata.UseIPV6_TCPSSL = postdata.UseIPV6_TCPSSL == '1' ? 1 : 0;
+            postdata.IPv6_TCPSSLPort = parseInt(postdata.IPv6_TCPSSLPort);
+
+            postdata.UseDataEncryption = parseInt(postdata.UseDataEncryption);
+            if (postdata.EncryptionKey && postdata.EncryptionKey != "") {
+                if (postdata.EncryptionKey.length < 4 || postdata.EncryptionKey.length > 128) {
+                    layer.alert(getLanguage("LocalService.EncryptionKeyPassword_err"), { icon: 2 });//加密秘钥由1-128个字符组成，请重新输入!
+                    return false;
+                }
+            }
+            if (postdata.UseRC4Encryption && (!postdata.EncryptionKey || postdata.EncryptionKey == "")) {
+                layer.alert(getLanguage("LocalService.EncryptionKeyPassword_err"), { icon: 2 });//加密秘钥由1-128个字符组成，请重新输入!
+                return false;
+            }
+
+            //检查通讯密码
+
+            if (postdata.ConnectPassword && postdata.ConnectPassword != "") {
+                postdata.ConnectPassword = postdata.ConnectPassword.toUpperCase();
+                if (postdata.ConnectPassword.length < 4 || postdata.ConnectPassword.length > 8) {
+                    layer.alert(getLanguage("LocalService.ConnectPassword_err"), { icon: 2 });//通讯密码由4-8个数字组成，请重新输入！
+                    return false;
+                }
+                if (!CheckIsNumString(postdata.ConnectPassword)) {
+                    layer.alert(getLanguage("LocalService.ConnectPassword_err"), { icon: 2 });//通讯密码由4-8个数字组成，请重新输入！
+                    return false;
+                }
+            }
+
+            if (Telnet) {
+                postdata.UseTelnet = postdata.UseTelnet == '1' ? 1 : 0;
+                postdata.TelnetPort = parseInt(postdata.TelnetPort);
+            }
+
+
+            if (SSH) {
+                postdata.UseSSH = postdata.UseSSH == '1' ? 1 : 0;
+                postdata.SSHPort = parseInt(postdata.SSHPort);
+            }
+
+            if (Telnet || SSH) {
+                if (!postdata.SSHLoginPassword || postdata.SSHLoginPassword == '')
+                    delete postdata.SSHLoginPassword;
+                else
+                    if (postdata.SSHLoginPassword.length < 4) {
+                        layer.alert(getLanguage("device.SSHLoginPassword_err"), { icon: 2 });//管理密码不能少于4个字符
+                        return false;
+                    }
+            }
+            //if (RTSP) {
+                postdata.UseRTSP = postdata.UseRTSP == '1' ? 1 : 0;
+            //    postdata.RTSPPort = parseInt(postdata.RTSPPort);
+            //}
+
+
+            var ports = [];
+            ports.push(postdata.HTTPPort);
+
+            // 检查端口号是否有效，只对有效的端口号进行重复性检查
+            if (!isNaN(postdata.HTTPSPort) && postdata.HTTPSPort > 0) {
+                var checkRet = checkPortRepetition(ports, postdata.HTTPSPort, getLanguage('device.HTTSPortRepetition'));
+                if (!checkRet) return false;
+            }
+
+            if (!isNaN(postdata.UDPPort) && postdata.UDPPort > 0) {
+                var checkRet = checkPortRepetition(ports, postdata.UDPPort, getLanguage('LocalService.IPV4UDPPortRepetition'));
+                if (!checkRet) return false;
+            }
+
+            if (!isNaN(postdata.TCPPort) && postdata.TCPPort > 0) {
+                var checkRet = checkPortRepetition(ports, postdata.TCPPort, getLanguage('LocalService.IPV4TCPPortRepetition'));
+                if (!checkRet) return false;
+            }
+            if (!isNaN(postdata.TCPSSLPort) && postdata.TCPSSLPort > 0) {
+                var checkRet = checkPortRepetition(ports, postdata.TCPSSLPort, getLanguage('LocalService.IPV4SSLPortRepetition'));
+                if (!checkRet) return false;
+            }
+
+            if (!isNaN(postdata.IPv6_UDPPort) && postdata.IPv6_UDPPort > 0) {
+                var checkRet = checkPortRepetition(ports, postdata.IPv6_UDPPort, getLanguage('LocalService.IPV6UDPPortRepetition'));
+                if (!checkRet) return false;
+            }
+
+            if (!isNaN(postdata.IPv6_TCPPort) && postdata.IPv6_TCPPort > 0) {
+                var checkRet = checkPortRepetition(ports, postdata.IPv6_TCPPort, getLanguage('LocalService.IPV6TCPPortRepetition'));
+                if (!checkRet) return false;
+            }
+            if (!isNaN(postdata.IPv6_TCPSSLPort) && postdata.IPv6_TCPSSLPort > 0) {
+                var checkRet = checkPortRepetition(ports, postdata.IPv6_TCPSSLPort, getLanguage('LocalService.IPV6SSLPortRepetition'));
+                if (!checkRet) return false;
+            }
+
+
+            if (Telnet && !isNaN(postdata.TelnetPort) && postdata.TelnetPort > 0) {
+                var checkRet = checkPortRepetition(ports, postdata.TelnetPort, getLanguage('device.TelnetPortRepetition'));
+                if (!checkRet) return false;
+            }
+            if (RTSP && !isNaN(postdata.RTSPPort) && postdata.RTSPPort > 0) {
+                var checkRet = checkPortRepetition(ports, postdata.RTSPPort, getLanguage('device.RTSPPortRepetition'));
+                if (!checkRet) return false;
+            }
+            if (SSH && !isNaN(postdata.SSHPort) && postdata.SSHPort > 0) {
+                var checkRet = checkPortRepetition(ports, postdata.SSHPort, getLanguage('device.SSHPortRepetition'));
+                if (!checkRet) return false;
+            }
+
+            layer.confirm(getLanguage('Other.o1'), { icon: 3 }, function (confirmindex, layero, that) {
+
+                //启动遮罩层
+                var waitLayerIndex = layer.load(1, { shade: [0.5, '#FFF'] });
+
+                faceAPI.AjaxPOSTJson({
+                    data: postdata,
+                    url: '/api/device/UpdateParameter',
+                    success: function (result) {
+                        layer.close(waitLayerIndex);
+
+                        if (result.result == false) {
+                            layer.alert(result.error, { icon: 2 });
+                        }
+                        else {
+                            formdata = data.field;
+                            layer.alert(getLanguage('DeviceInfo.d23'), { icon: 1 });
+                        }
+                    }
+                });
+                layer.close(confirmindex);
+                return false;
+            });
+
+            return false;
+        });
+        function checkPortRepetition(ports, newport, errtip) {
+            // Check if ports is defined and is an array
+            if (!ports || !Array.isArray(ports)) {
+                console.error('Ports parameter is not a valid array');
+                return false;
+            }
+            
+            // Check if newport is valid
+            if (newport === undefined || newport === null || isNaN(newport)) {
+                console.error('New port parameter is not valid');
+                return false;
+            }
+            
+            var length = ports.length;
+
+            for (var i = 0; i < length; i++) {
+                // Check if ports[i] is valid before comparison
+                if (ports[i] !== undefined && ports[i] !== null && !isNaN(ports[i]) && ports[i] == newport) {
+                    layer.alert(errtip, { icon: 2 });
+                    return false;
+                }
+            }
+
+            ports.push(newport);
+            return true;
+
+        }
+
+        $("#data-reset-btn").on('click', function () {
+            layer.confirm(getLanguage('Other.o2'), { icon: 3, btn: ["Yes", "No"] }, function (index, layero, that) {
+                LoadData();
+                layer.close(index)
+            });
+        });
+
+        faceAPI.ShowMouseTipMessageBox('device_NetworkOption_div_filter', layer);
+
+
+        faceAPI.CheckInputBox();
+
+
+        const { SSH, Telnet, RTSP, IPV6, SSL, Packet_Encrypt
+        } = faceAPI.DeviceFunctionList
+
+        if (!SSH) {
+            faceAPI.removeElement('.FunctionListSSH');
+        }
+        if (!Telnet) {
+            faceAPI.removeElement('.FunctionListTelnet');
+        }
+        if (!SSH && !Telnet) {
+            faceAPI.removeElement('.FunctionListRootPIN');
+        }
+
+
+        if (!RTSP) {
+            faceAPI.removeElement('.FunctionListRTSP');
+        }
+        if (!IPV6) {
+            layui.element.tabDelete('device_NetworkServer_tab_filter', 'ipv6');
+        }
+
+        if (!SSL) {
+            faceAPI.removeElement('.FunctionListSSL');
+        }
+        if (!Packet_Encrypt) {
+            faceAPI.removeElement('.FunctionListPacket_Encrypt');
+        }
+            
+        
+    });
+</script>

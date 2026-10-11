@@ -1,0 +1,1622 @@
+﻿<style>
+    .defcenter {
+        text-align: center;
+    }
+
+    .defDivImageBox {
+        width: 245px;
+        margin: 0 auto;
+    }
+
+    .layui-form-item {
+        margin-bottom: 10px;
+    }
+
+    #peopleEidt .layui-form-label {
+        width: 130px;
+    }
+
+    .status-black {
+        margin-left: 5px;
+    }
+</style>
+
+<div class="layui-form layuimini-form layui-form-pane layui-row layui-col-space16" lay-filter="people_edit_div_filter"
+    style="margin-left: 10px; margin-right: 20px">
+    <form class="layui-form layui-form-pane">
+        <div class="layui-tab layui-tab-brief" lay-filter="laytab">
+            <ul class="layui-tab-title">
+                <li lay-id="1" class="layui-this" language="people.p86">基本信息</li>
+                <li lay-id="2" language="people.QRCode">二维码</li>
+                <li lay-id="3" language="people.p87">电梯权限</li>
+                <li lay-id="4" language="people.p88">节假日</li>
+                <li lay-id="5" language="people.p89">特征信息</li>
+            </ul>
+            <div class="layui-tab-content">
+
+
+                <!--基本信息-->
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-row" style="height:380px">
+                        <div class="layui-col-md9" id="peopleEidt">
+                            <div class="layui-row grid-demo">
+
+
+                                <div class="layui-col-md12">
+                                    <div class="layui-form-item">
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label required">
+                                                <span language="people.p31">用户号</span>
+                                            </label>
+                                            <div class="layui-input-inline">
+                                                <input type="number" max="4294967295" min="1" maxlength="10"
+                                                    lay-verify="required" name="UserID" autocomplete="off"
+                                                    class="layui-input" />
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="layui-form-item">
+
+                                        <div class="layui-inline FunctionList_UserCode">
+                                            <label class="layui-form-label required">
+                                                <span language="people.UserCode">人员编号</span>
+                                            </label>
+                                            <div class="layui-input-inline">
+                                                <input type="text" maxlength="63" CheckBytes name="Code"
+                                                    id="people.UserCode_placeholder" data-lang="placeholder"
+                                                    placeholder="请输入人员编号" value="" class="layui-input" />
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label required">
+                                                <span language="people.p32">人员姓名</span>
+                                            </label>
+                                            <div class="layui-input-inline">
+                                                <input type="text" maxlength="63" CheckBytes name="Name"
+                                                    lay-verify="required" lay-reqtext="人员姓名不能为空！"
+                                                    id="people.p33,people.PeopleNameErr"
+                                                    data-lang="placeholder,lay-reqtext" placeholder="请输入人员姓名" value=""
+                                                    class="layui-input" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-form-item" hidden="true">
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label">
+                                                <span language="people.p90">部门</span>
+                                            </label>
+                                            <div class="layui-input-inline">
+                                                <input type="text" maxlength="63" CheckBytes name="Department"
+                                                    class="layui-input" />
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label">
+                                                <span language="people.p16">职务</span>
+                                            </label>
+                                            <div class="layui-input-inline">
+                                                <input type="text" maxlength="63" CheckBytes name="Job" value=""
+                                                    class="layui-input" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item" hidden="true">
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label">
+                                                <span language="people.p37">身份证信息</span>
+                                            </label>
+                                            <div class="layui-input-inline">
+                                                <input type="text" maxlength="63" CheckBytes name="IdentityCard"
+                                                    value="" class="layui-input" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item FunctionList_Card">
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label">
+                                                <span language="people.p34">IC卡号</span>
+                                            </label>
+                                            <div class="layui-input-inline">
+                                                <input type="number" max="18446744073709550000" min="0" maxlength="20"
+                                                    name="CardNum" value="" class="layui-input" />
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="layui-form-item FunctionList_Password">
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label">
+                                                <span language="people.p15">密码</span>
+                                            </label>
+                                            <div class="layui-input-inline">
+                                                <input type="password" OnlyNumber maxlength="8" autocomplete="off"
+                                                    name="Password" class="layui-input" />
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+                                <hr />
+                                <div class="layui-form-item">
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label" language="access.a78">开门时段</label>
+                                        <div class="layui-input-inline">
+                                            <select name="Timegroup" lay-verify="">
+                                                <option value="1" selected language="access.a79">
+                                                    时段1
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="layui-inline">
+                                        <label class="layui-form-label" language="access.a88">截止时间</label>
+                                        <div class="layui-input-inline">
+                                            <input type="text" maxlength="19" name="ExpirationDate"
+                                                lay-verify="required" autocomplete="off" class="layui-input" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="layui-col-md12">
+                                    <div class="layui-form-item">
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label" language="access.a80">人员角色</label>
+                                            <div class="layui-input-inline">
+                                                <select name="AccessType" lay-verify="">
+                                                    <option value="0" selected language="access.a81">
+                                                        用户
+                                                    </option>
+                                                    <option value="1" language="access.a82">
+                                                        管理员
+                                                    </option>
+                                                    <option value="2" language="access.a83">
+                                                        黑名单
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- <div class="layui-inline">
+                                            <label class="layui-form-label" language="people.p105">
+                                                常开卡
+                                            </label>
+                                            <div class="layui-input-inline">
+                                                <input type="checkbox" name="KeepOpen" lay-skin="switch"
+                                                    data-lang="lay-text" id="people.p93" lay-text="是|否" unchecked
+                                                    value="1" />
+                                            </div>
+                                        </div> -->
+                                    </div>
+
+                                    <div class="layui-form-item">
+
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label" language="people.UseOpenTimes">次数限制</label>
+                                            <div class="layui-input-inline">
+                                                <input type="checkbox" name="UseOpenTimes" lay-skin="switch"
+                                                    lay-filter="UseOpenTimes" checked data-lang='lay-text'
+                                                    lay-text="无限制|限制次数" value="1" id="people.UseOpenTimesText">
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline layui-hide" lay-filter="OpenTimes">
+                                            <label class="layui-form-label" language="people.OpenTimes">通行次数</label>
+                                            <div class="layui-input-inline">
+                                                <input type="number" max="65535" min="0" maxlength="5" name="OpenTimes"
+                                                    autocomplete="off" class="layui-input" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class="layui-col-md3">
+                            <div class="defDivImageBox layui-panel">
+                                <div class="layui-form-item defImageBox defcenter" id="peopleImage">
+                                    <img class="defImageBox" id="showPeopleImg" src="/NoPIC.jpg" width="240" />
+                                </div>
+                                <div class="layui-form-item defcenter" style="margin-bottom: 2px">
+                                    <button type="button" class="layui-btn layui-btn-xs" id="PaiZhao">
+                                        <i class="layui-icon">&#xe65d;</i>
+                                        <span language="people.p68">拍照</span>
+                                    </button>
+                                    <button type="button" class="layui-btn layui-btn-normal layui-btn-xs"
+                                        id="btnSelectImage">
+                                        <i class="layui-icon">&#xe67c;</i>
+                                        <span language="people.p29">选择</span>
+                                    </button>
+                                    <button type="button" class="layui-btn layui-btn-danger layui-btn-xs"
+                                        id="btnDeleteImage">
+                                        <i class="layui-icon">&#x1006;</i>
+                                        <span language="people.p30">删除</span>
+                                    </button>
+                                </div>
+                                <div class="layui-form-item defcenter FunctionList_Face" style="margin-bottom: 2px"
+                                    hidden="true">
+
+                                    <button type="button" class="layui-btn layui-btn-xs" id="btnEnrollUserFaceOnDevice">
+                                        <i class="layui-icon">&#xe65d;</i>
+                                        <span language="people.EnrollUserFaceOnDevice">在设备上注册</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="layui-row" hidden="true">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" language="people.Attachment"> 备注</label>
+                            <div class="layui-input-block">
+                                <input type="text" maxlength="199" CheckBytes name="Attachment" autocomplete="off"
+                                    class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!--二维码-->
+                <div class="layui-tab-item">
+                    <div class="layui-row">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" language="people.QRCode">二维码</label>
+                            <div class="layui-input-block">
+                                <input type="text" maxlength="127" name="QRCode" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-row " style="height: 350px;">
+                        <div id="qrcode" style="width: 300px; height: 300px; margin-left: 333px;" />
+
+                    </div>
+                </div>
+
+                <!--电梯权限-->
+                <div class="layui-tab-item">
+                    <table class="layui-hide" id="ID-table-Elevator" lay-filter="ID-table-Elevator"></table>
+                    <div class="layui-inline">
+                        <label class="layui-form-label" language="people.p91" style="width: 150px">已选择数量</label>
+                        <div class="layui-input-inline" style="margin-left: 10px">
+                            <div class="layui-form-mid status-black" name="elevatorCount" id="elevatorCount" autoset>
+                                0
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--节假日-->
+                <div class="layui-tab-item">
+                    <table class="layui-hide" id="ID-table-Holidays" lay-filter="ID-table-Holidays"></table>
+                    <div class="layui-inline">
+                        <label class="layui-form-label" language="people.p91" style="width: 150px">已选择数量</label>
+                        <div class="layui-input-inline" style="margin-left: 10px">
+                            <div class="layui-form-mid status-black" name="HolidaysCount" id="HolidaysCount" autoset>
+                                0
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--特征信息-->
+                <div class="layui-tab-item">
+                    <div class="layui-btn-container">
+                        <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="add" id="BtnFeatureAdd">
+                            <span language="people.p2" t="添加"></span>
+                        </button>
+                        <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delete"
+                            id="BtnFeatureDelete">
+                            <span language="people.p3" t="删除"></span>
+                        </button>
+                        <button class="layui-btn layui-btn-sm layui-btn-danger " lay-event="clear" id="BtnFeatureClear">
+                            <span language="people.FeatureClear" t="删除所有"></span>
+                        </button>
+                    </div>
+
+                    <table class="layui-hide" id="Table_feature" lay-filter="ID-table-feature"></table>
+                    <script type="text/html" id="featureTableBar">
+                        <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit"
+                           lay-event="edit">
+                            <span language="people.ShowDetail">详情</span>
+                        </a>
+                        <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete"
+                           lay-event="delete">
+                            <span language="people.p92">删除</span>
+                        </a>
+                    </script>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item defcenter">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">
+                <i class="layui-icon">&#xe605;</i>
+                <span language="people.p39">保存</span>
+            </button>
+            <button class="layui-btn layui-btn-warm" id="BtnPeopleEditCancel">
+                <i class="layui-icon">&#x1006;</i>
+                <span language="people.p40">取消</span>
+            </button>
+        </div>
+    </form>
+</div>
+<script src="/jsLib/crypto-js.js"></script>
+<script src="/jsLib/UploadImage.js"></script>
+<script src="/lib/qrcode.min.js"></script>
+<script>
+    setLanguage();
+    setAllAttrVal();
+
+
+    layui.use(
+        ["form", "upload", "table", "miniPage", "faceAPI", "slider", "laydate"],
+        function () {
+            // debugger
+            var $ = layui.jquery;
+            var form = layui.form,
+                layer = layui.layer,
+                miniPage = layui.miniPage,
+                table = layui.table;
+            var faceAPI = layui.faceAPI;
+            var imageTool = ImageUtility();
+            var laydate = layui.laydate;
+            var TimeGroups = [];
+            var parentIndex = layer.index;
+            var $el = layui.element;
+
+            var bUpdatePhoto = false;
+            var bIsNew = true;
+
+            var peopleDetail = {};
+            faceAPI.PeopleEditPageResult = {};
+            /**
+             * 初始化表单，要加上，不然刷新部分组件可能会不加载
+             */
+            form.render();
+
+            var formDataobj = {};
+
+            var peopleEdit = {
+                setParentIndex(index) {
+                    parentIndex = index;
+                },
+
+                /**
+                 * 创建时段下拉框
+                 * @param {any} name
+                 */
+                createTimeGroup: function (name) {
+                    let num = 65;
+                    // faceAPI.DeviceFunctionList.TimeGroup=10
+                    if (faceAPI?.DeviceFunctionList?.TimeGroup !== undefined) {
+                        num = Number(faceAPI.DeviceFunctionList.TimeGroup) + 1;
+                    }
+
+                    var timeGroupOptions = [];
+                    for (var i = 1; i < num; i++) {
+                        var sItem = '<option value="' + i + '"';
+                        if (i == 1) sItem += ' selected';
+                        sItem += '>' + getLanguage("access.a94") + i + '</option>';
+                        timeGroupOptions.push(sItem);
+                    }
+
+                    var selectElement = $('[name="' + name + '"]');
+                    if (selectElement.length > 0) {
+                        selectElement.html(timeGroupOptions.join(''));
+                        form.render('select');
+                    }
+                },
+
+                /**
+                 * 创建时间控件
+                 * @param {any} name
+                 */
+                createLaydate(name, value) {
+                    laydate.render({
+                        elem: '[name="' + name + '"]', //指定元素
+                        type: "datetime",
+                        format: 'yyyy-MM-dd HH:mm:ss',
+                        min: '2024-01-01',
+                        max: '2099-12-31 23:59:59',
+                        fullPanel: true
+
+                    });
+                    $('[name="' + name + '"]').attr("value", value);
+                },
+                /**
+                 * 创建表格
+                 * @param {*} elem  tableid
+                 * @param {*} title  标题
+                 * @param {*} data  数据
+                 */
+                CreateTable(elem, title, data) {
+                    table.render({
+                        elem: "#" + elem,
+                        cols: [
+                            [
+                                //标题栏
+                                { type: "checkbox", width: 60 },
+                                { field: "num", title: title },
+                            ],
+                        ],
+                        data: data,
+                        height: 430,
+                        limit: 1000, // 每页默认显示的数量
+                    });
+                    return table;
+                },
+                /**
+                 * 创建表格数据
+                 * @param {*} len
+                 * @param {*} checked
+                 * @returns
+                 */
+                CreateTableData: function (len, checked) {
+                    if (checked == undefined) checked = [];
+                    var data = [];
+                    for (var i = 1; i <= len; i++)
+                        data.push({
+                            LAY_CHECKED: checked.includes(i.toString()),
+                            num: i,
+                        });
+                    return data;
+                },
+                createfeatureTabel: function (data) {
+                    var fieldtype = getLanguage("people.p101");
+                    var fielddata = getLanguage("people.p103");
+                    var fieldnum = getLanguage("people.p102");
+                    var fieldAction = getLanguage("people.p104");
+                    var that = this;
+                    var tableId = "Table_feature";
+                    table.render({
+
+                        elem: "#Table_feature",
+                        cols: [
+                            [
+                                {
+                                    type: "checkbox",
+                                    width: 50
+                                },
+                                //标题栏
+                                { field: "name", title: fielddata },
+                                { title: fieldAction, width: 200, toolbar: "#featureTableBar" },
+                            ],
+                        ],
+                        done: function (res, curr, count) {
+                            setLanguage();
+                        },
+
+                        data: data,
+                        height: 430,
+                        limit: 60, // 每页默认显示的数量
+                    });
+
+                    $('#BtnFeatureAdd').off('click');
+                    $('#BtnFeatureAdd').on('click', function () {
+                        var content = miniPage.getHrefContent(
+                            "page/people/AddFeature.html"
+                        );
+
+                        var Features = layui.table.cache[tableId];
+
+                        faceAPI.PeopleFeatureWindowData = { Save: false, Features: Features }
+
+                        // debugger;
+                        var layerindex = layer.open({
+                            title: getLanguage("people.AddFeatureCode"),
+                            type: 1,
+                            shade: 0.2,
+                            // maxmin: true,
+                            shadeClose: true,
+                            area: ["800px", "730px"],
+
+                            content: content,
+                            end: function () {
+                                if (faceAPI.PeopleFeatureWindowData.Save) {
+                                    table.reload(tableId, { data: faceAPI.PeopleFeatureWindowData.Features });
+                                }
+
+                            },
+                        });
+                        return false;
+                    });
+                    $('#BtnFeatureDelete').off('click');
+                    $('#BtnFeatureDelete').on('click', function () {
+                        //debugger
+                        var checkStatus = table.checkStatus(tableId),
+                            data = checkStatus.data;
+                        var features = [];
+
+                        data.forEach(function (item, index) {
+
+                            features[item.type + "_" + item.num] = 1;
+                        });
+                        if (data.length == 0) {
+                            layer.alert(getLanguage('people.DeleteFeatureCodeErr'), { icon: 2 });
+                            return false;
+                        }
+
+                        var oldDatas = layui.table.cache[tableId];
+                        var oldDatesLen = oldDatas.length;
+                        for (var i = oldDatesLen - 1; i >= 0; i--) {
+                            console.log(oldDatas[i]);
+
+                            var strKey = oldDatas[i].type + "_" + oldDatas[i].num;
+
+
+                            if (features[strKey] == 1) {
+                                oldDatas.splice(i, 1);
+                            }
+
+                        }
+                        console.log("刷新表格")
+                        table.reload(tableId, { data: oldDatas });
+                        return false;
+                    });
+
+                    $('#BtnFeatureClear').off('click');
+                    $('#BtnFeatureClear').on('click', function () {
+                        table.reload(tableId, { data: [] });
+                        return false;
+                    });
+                    $('#BtnEnrollUserOnDevice').off('click');
+                    $('#BtnEnrollUserOnDevice').on('click', function () {
+                        var content = miniPage.getHrefContent(
+                            "page/people/SelectFeature.html"
+                        );
+
+
+
+                        faceAPI.PeopleFeatureWindowData = { Save: false }
+
+                        // debugger;
+                        var layerindex = layer.open({
+                            title: getLanguage("people.SelectEnrollFeature"),
+                            type: 1,
+                            shade: 0.2,
+                            // maxmin: true,
+                            shadeClose: true,
+                            area: ["580px", "450px"],
+
+                            content: content,
+                            end: function () {
+                                if (faceAPI.PeopleFeatureWindowData.Save) {
+                                    console.log(faceAPI.PeopleFeatureWindowData.type)
+                                    var sRetType = faceAPI.PeopleFeatureWindowData.type;
+                                    var iDataType = 1;
+                                    var iIndex = 1;
+                                    if (sRetType != "Face") {
+
+                                        iDataType = 2;//指纹
+                                        iIndex = 0;
+                                        if (sRetType == "Palm") {
+                                            iDataType = 3;//掌静脉
+                                            iIndex = 1;
+                                        }
+
+                                        var bFind = true;
+
+                                        //获取注册特征的索引号
+                                        var oldDatas = layui.table.cache[tableId];
+                                        var oldDatesLen = oldDatas.length;
+                                        do {
+                                            bFind = true;
+                                            for (var i = 0; i < oldDatesLen; i++) {
+
+                                                if (oldDatas[i].type == iDataType &&
+                                                    oldDatas[i].num == iIndex) {
+                                                    iIndex++;//被占用，跳过
+                                                    bFind = false;
+                                                    break;
+                                                }
+
+                                            }
+                                            if (bFind) break;
+                                        } while (true);
+                                        if (sRetType == "Palm") {
+                                            if (iIndex > 2) {
+                                                layer.alert(getLanguage("people.PalmCountError"), { icon: 2 });
+                                                return false;
+                                            }
+                                        }
+                                        if (sRetType == "FP") {
+                                            if (iIndex > 2) {
+                                                layer.alert(getLanguage("people.FingerprintCountError"), { icon: 2 });
+                                                return false;
+                                            }
+                                        }
+                                    }
+
+
+                                    //通知设备
+                                    EnrollUserMediaData(sRetType, iIndex);
+                                }
+
+                            },
+                        });
+                        return false;
+                    });
+
+
+
+
+                    table.on("tool(ID-table-feature)", function (obj) {
+                        var data = obj.data;
+
+                        if (obj.event === "edit") {
+                            //显示特征码详情
+                            that.openFeatureWindow(tableId, data);
+                        } else if (obj.event === "delete") {
+                            //删除特征码
+                            layer.alert(
+                                getLanguage("people.DeleteFeatureTip") + "[" + data.name + "]?",
+                                { icon: 3 },
+                                function (alertindex) {
+                                    var oldDatas = layui.table.cache[tableId];
+                                    var oldDatesLen = oldDatas.length;
+                                    for (var i = 0; i < oldDatesLen; i++) {
+
+                                        if (oldDatas[i].type == data.type &&
+                                            oldDatas[i].num == data.num) {
+                                            oldDatas.splice(i, 1);
+                                            break;
+                                        }
+
+                                    }
+
+                                    table.reload(tableId, { data: oldDatas });
+                                    layer.close(alertindex);
+                                }
+                            );
+                        }
+                        return false;
+                    });
+                },
+                /**
+                 *
+                 * 根据用户ID获取用户信息
+                 */
+                GetUserDetail: function () {
+                    var that = this;
+                    if (faceAPI.PeopleEditPage == undefined) {
+                        var elevatorData = this.CreateTableData(64);
+                        this.CreateTable(
+                            "ID-table-Elevator",
+                            getLanguage("people.p94"),
+                            elevatorData
+                        ); //'电梯端口'
+                        var HolidaysData = this.CreateTableData(30);
+                        this.CreateTable(
+                            "ID-table-Holidays",
+                            getLanguage("people.p95"),
+                            HolidaysData
+                        ); //'节假日序号'
+                        this.createfeatureTabel([]);
+
+                        var fromdata = {
+                            ExpirationDate: "2099-12-31 00:00:00",
+                            OpenTimes: 65535,
+                        };
+                        form.val("people_edit_div_filter", fromdata);
+
+
+                        //获取新用户ID
+                        var loadIndex = layer.load(1, { shade: [0.6, "#e2e2e2"] }); //0.1透明度的白色背景
+                        faceAPI.AjaxPOSTJson({
+                            url: "/api/People/GetNewID",
+                            success: function (result) {
+                                layer.close(loadIndex);
+                                fromdata.UserID = result.content.NewUserID;
+                                form.val("people_edit_div_filter", fromdata);
+                            },
+                        });
+                        bIsNew = true;
+
+                        return;
+                    }
+                    var loadIndex = layer.load(1, { shade: [0.6, "#e2e2e2"] }); //0.1透明度的白色背景
+                    faceAPI.AjaxPOSTJson({
+                        url: "/api/People/GetDetail",
+                        data: { UserID: faceAPI.PeopleEditPage.UserID },
+                        success: function (result) {
+                            layer.close(loadIndex);
+                            bIsNew = false;
+                            //禁止修改用户ID
+                            $('div[lay-filter="people_edit_div_filter"] input[name="UserID"]').attr('disabled', true);
+
+                            that.formBind(result);
+                        },
+                    });
+                },
+                /**
+                 *
+                 * 设置表单对象
+                 * @param {any} result
+                 */
+                formBind: function (result) {
+                    if (result.result == false) {
+                        layer.alert(result.error, { icon: 2 });
+                        layer.close(parentIndex);
+                        return;
+                    }
+
+
+                    peopleDetail = result.content;
+
+                    if (peopleDetail.ExpirationDate == 0) {
+                        peopleDetail.ExpirationDate = "2099-12-31 00:00:00";
+                    } else {
+                        if (peopleDetail.ExpirationDate > 0)
+                            peopleDetail.ExpirationDate = faceAPI.unixTimeStampToDateString(
+                                peopleDetail.ExpirationDate
+                            );
+                        else peopleDetail.ExpirationDate = "2099-12-31 00:00:00";
+                    }
+
+                    var elems = $('div[lay-filter="people_edit_div_filter"] div[lay-filter="OpenTimes"]')
+
+                    if (peopleDetail.OpenTimes >= 65535) {
+                        peopleDetail.OpenTimes = 65535;
+                        peopleDetail.UseOpenTimes = 1;
+                        elems.addClass("layui-hide");
+                    }
+                    else {
+                        peopleDetail.UseOpenTimes = 0;
+                        elems.removeClass("layui-hide");
+                    }
+
+                    //加载完毕
+                    var fromdata = peopleDetail;
+                    form.val("people_edit_div_filter", peopleDetail);
+
+                    //加载二维码
+                    if (faceAPI.DeviceFunctionList.QRCode) {
+                        makeCode(fromdata.QRCode);
+                    }
+
+                    var that = this;
+                    if (fromdata.PhotoLen != undefined && fromdata.PhotoLen > 0) {
+                        $("#peopleImage").find("img").remove();
+
+                        //测量一下文件尺寸
+                        const img = new Image();
+                        img.src = fromdata.Photo;
+                        img.onload = function () {
+                            console.log("图片尺寸：" + img.width + '*' + img.height)
+                            var url = compressAndUploadImage(img, 240, 320);
+
+                            $('#peopleImage').append('<img id="showPeopleImg" bigimg= "' + fromdata.Photo + '" src="' + url +
+                                '" width= "' + 240 + '"  height= "' + 320 + '" >');
+                            //图片预览
+                            that.previewPictureClick("showPeopleImg");
+                        }
+
+
+
+
+                    }
+
+                    //电梯权限
+                    if (faceAPI.DeviceFunctionList.Lift) {
+                        var elevatorCheckData = [];
+                        if (
+                            fromdata.Elevators != undefined &&
+                            fromdata.Elevators.length > 0
+                        ) {
+                            elevatorCheckData = fromdata.Elevators.split(",");
+                        }
+                        var elevatorData = this.CreateTableData(64, elevatorCheckData);
+                        var elevator = this.CreateTable(
+                            "ID-table-Elevator",
+                            getLanguage("people.p94"),
+                            elevatorData
+                        );
+                        this.LoadElevator(elevator, elevatorCheckData);
+                    }
+
+                    //节假日
+                    {
+                        var HolidaysCheckData = [];
+                        if (fromdata.Holidays != undefined && fromdata.Holidays.length > 0) {
+                            if (fromdata.Holidays == "*") {
+                                for (var i = 1; i <= 30; i++) HolidaysCheckData.push(i);
+                            } else {
+                                HolidaysCheckData = fromdata.Holidays.split(",");
+                            }
+                        }
+                        var HolidaysData = this.CreateTableData(32, HolidaysCheckData);
+                        var Holidays = this.CreateTable(
+                            "ID-table-Holidays",
+                            getLanguage("people.p95"),
+                            HolidaysData
+                        );
+                        this.loadHolidays(Holidays, HolidaysCheckData);
+                    }
+
+                    //加载特征码
+                    if (faceAPI.DeviceFunctionList.Face ||
+                        faceAPI.DeviceFunctionList.Fingerprint ||
+                        faceAPI.DeviceFunctionList.Palmvein) {
+                        var featureDatas = [];
+                        var featureName = getLanguage("people.p96");
+
+                        //人脸特征码
+                        if (
+                            faceAPI.DeviceFunctionList.Face &&
+                            fromdata.FaceFeature != undefined &&
+                            fromdata.FaceFeature.length > 0
+                        ) {
+                            featureDatas.push({
+                                type: 1,
+                                num: 1,
+                                name: getLanguage("people.FaceFeature"),
+                                data: fromdata.FaceFeature,
+                            });
+                        }
+
+                        //指纹特征码
+                        if (
+                            faceAPI.DeviceFunctionList.Fingerprint &&
+                            fromdata.Fingerprints != undefined &&
+                            fromdata.Fingerprints.length > 0
+                        ) {
+                            for (var i = 0; i < fromdata.Fingerprints.length; i++) {
+                                featureDatas.push({
+                                    type: 2,
+                                    num: fromdata.Fingerprints[i].Num,
+                                    name: featureName + fromdata.Fingerprints[i].Num,
+                                    data: fromdata.Fingerprints[i].Data,
+                                });
+                            }
+                        }
+
+                        //掌静脉特征码
+                        var palmName = getLanguage("people.p97");
+                        if (
+                            faceAPI.DeviceFunctionList.Palmvein &&
+                            fromdata.Palmveins != undefined &&
+                            fromdata.Palmveins.length > 0
+                        ) {
+                            for (var i = 0; i < fromdata.Palmveins.length; i++) {
+                                featureDatas.push({
+                                    type: 3,
+                                    num: fromdata.Palmveins[i].Num,
+                                    name: palmName + (fromdata.Palmveins[i].Num),
+                                    data: fromdata.Palmveins[i].Data,
+                                });
+                            }
+                        }
+
+                        this.createfeatureTabel(featureDatas);
+                    }
+
+                },
+                loadHolidays: function (Holidays, HolidaysCheckData) {
+                    var HolidaysCount = HolidaysCheckData.length;
+                    var HolidaysDiv = $("#HolidaysCount");
+                    HolidaysDiv.html(HolidaysCount); //显示已选择节假日数量
+                    var HolidaysTotaal = 32; //节假日总数量
+                    Holidays.on("checkbox(ID-table-Holidays)", function (obj) {
+                        var ch = obj.checked;
+                        if (obj.type == "all") {
+                            HolidaysCount = ch ? HolidaysTotaal : 0;
+                        } else {
+                            HolidaysCount = ch ? HolidaysCount + 1 : HolidaysCount - 1;
+                        }
+                        HolidaysDiv.html(HolidaysCount);
+                    });
+                },
+                LoadElevator: function (elevator, elevatorCheckData) {
+                    var elevatorDiv = $("#elevatorCount");
+                    var elevatorCount = elevatorCheckData.length;
+                    elevatorDiv.html(elevatorCount);
+                    elevator.on("checkbox(ID-table-Elevator)", function (obj) {
+                        var ch = obj.checked;
+                        if (obj.type == "all") {
+                            elevatorCount = ch ? 64 : 0;
+                        } else {
+                            elevatorCount = ch ? elevatorCount + 1 : elevatorCount - 1;
+                        }
+                        elevatorDiv.html(elevatorCount);
+                    });
+                },
+                /**
+                 * 创建图片上传控件
+                 * @param {any} elem
+                 */
+                createUpload: function (elem) {
+                    var that = this;
+                    var upload = layui.upload;
+                    //选择照片
+                    var uploadInst = upload.render({
+                        elem: "#" + elem, //绑定元素
+                        url: "/upload/", //上传接口
+                        auto: false,
+                        accept: "images",
+                        acceptMime: "image/jpg",
+                        choose: function (obj) {
+                            //将每次选择的文件追加到文件队列
+                            var files = obj.pushFile();
+
+                            //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
+                            obj.preview(function (index, file, result) {
+                                var _URL = window.URL || window.webkitURL;
+                                let imgbase = _URL.createObjectURL(file);
+                                window.sessionStorage.setItem("imgEdit", imgbase);
+                                var content = miniPage.getHrefContent(
+                                    "page/people/EmitImage.html"
+                                );
+                                faceAPI.PeopleEditImageResult = false;
+                                layer.open({
+                                    // title: '拍摄',
+                                    type: 1,
+                                    shadeClose: true,
+                                    title: [
+                                        getLanguage("people.p64"),
+                                        "font-size:18px; color:orange;",
+                                    ], //数组第二项可以写任意css样式；如果你不想显示标题栏，你可以title: false
+                                    area: ["540px", "760px"],
+                                    content: content,
+                                    end: function (layero, index) {
+
+                                        if (faceAPI.PeopleEditImageResult) {
+                                            bUpdatePhoto = true;
+                                            //已选择照片
+                                            peopleDetail.PhotoLen = 0;
+                                            peopleDetail.PhotoMD5 = "";
+                                            peopleDetail.Photo = "";
+
+                                            //检查人脸特征码，有人脸特征码需要删除
+
+                                            that.deleteFaceFeature();
+                                        }
+                                    },
+                                });
+
+                                setTimeout(() => {
+                                    uploadInst.config.elem.next()[0].value = "";
+                                }, 1500);
+                            });
+                        },
+                    });
+                },
+                /**
+                 *
+                 * 图片预览点击事件
+                 * @param {any} elem
+                 */
+                previewPictureClick: function (elem) {
+                    var idBar = "#" + elem;
+                    $(idBar).on("click", function () {
+                        var src = $(idBar)[0].src;
+                        var bigimg = $(idBar).attr('bigimg');
+                        if (bigimg != undefined)
+                            if (bigimg.length > 0)
+                                src = bigimg;
+
+                        //读取图片，获取图片尺寸
+                        const img = new Image();
+                        img.src = src;
+                        img.onload = function () {
+                            console.log("图片尺寸：" + img.width + '*' + img.height)
+                            var url = compressAndUploadImage(img, 500, 900);
+
+                            parent.layer.open({
+                                type: 1,
+                                title: false,
+                                closeBtn: 1,
+                                shadeClose: true,
+                                area: ["500px", "900px"], //宽高
+                                content: '<img width="500" src="' + url + '" />',
+                            });
+                        }
+
+
+
+                    });
+                },
+                /**
+                 *
+                 * 绑定表单提交事件
+                 * @param {any} elem
+                 */
+                formSubmitBind: function (elem) {
+                    var that = this;
+                    form.on("submit(" + elem + ")", function (data) {
+                        var postdata = data.field;
+
+
+                        if (postdata.Password.length > 0 && postdata.Password.length < 4) {
+                            layer.alert(getLanguage("people.PasswordError"), { icon: 2 });
+                            return false;
+                        }
+
+                        delete postdata.file;
+                        delete postdata.layTableCheckbox;
+
+                        if (postdata.CardNum == "") postdata.CardNum = "0";
+
+                        var UseOpenTimes = postdata.UseOpenTimes == "1" ? 1 : 0;
+
+                        if (UseOpenTimes == 1) {
+                            postdata.OpenTimes = 65535;
+                            delete postdata["UseOpenTimes"];
+                        }
+                        else {
+                            if (postdata.OpenTimes == "")
+                                postdata.OpenTimes = 0;
+                            else
+                                postdata.OpenTimes = Number(postdata.OpenTimes);
+                        }
+
+                        postdata.Timegroup = Number(postdata.Timegroup);
+                        postdata.AccessType = Number(postdata.AccessType);
+
+                        if (postdata.ExpirationDate == "") {
+                            postdata.ExpirationDate = 4102415940;
+                        } else {
+
+                            //将 年月日时分秒 转为 时间戳
+                            postdata.ExpirationDate = dayjs(
+                                postdata.ExpirationDate,
+                                "yyyy-MM-dd HH:mm:ss"
+                            ).unix();
+                        }
+
+                        postdata.KeepOpen = postdata.KeepOpen == 1 ? 1 : 0;
+
+                        var formData = that.getFormData(postdata);
+
+                        loadIndex = layer.load(1, { shade: [0.6, "#e2e2e2"] }); //0.1透明度的白色背景
+
+                        faceAPI.Ajax({
+                            type: "Post",
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            url: "/api/People/New",
+                            success: function (result) {
+                                layer.close(loadIndex);
+                                if (result.result == false) {
+                                    var sKey = "people.addPeople_ErrTip_" + result.errCode;
+                                    var sTip = getLanguage(sKey);
+
+                                    var RepetitionUserID = result.RepetitionUserID;
+                                    if (RepetitionUserID != undefined) {
+                                        var RepetitionUserTip = getLanguage("people.addPeople_ErrTip_RepetitionUser");
+                                        layer.alert(sTip + "<br/>" + RepetitionUserTip + RepetitionUserID, { icon: 2 });
+                                        return
+                                    }
+
+                                    if (sTip != undefined) {
+                                        layer.alert(sTip, { icon: 2 });
+                                    }
+                                    else
+                                        layer.alert("err code :" + result.errCode + "<br/>" + result.error, { icon: 2 });
+
+                                } else {
+                                    result.content = formDataobj;
+                                    faceAPI.PeopleEditPageResult = result;
+                                    layer.close(parentIndex);
+                                }
+                            },
+                        });
+
+                        return false;
+                    });
+                },
+                /**
+                 *
+                 * 获取表单数据
+                 * @param {any} postdata 需要提交的数据
+                 * @returns
+                 */
+                getFormData: function (postdata) {
+                    if (postdata.CardNum == "") postdata.CardNum = "0";
+
+                    var formData = imageTool.getFormData();
+
+                    //获取照片
+                    if (bUpdatePhoto) {
+
+                        var imgBuf = imageTool.imageBase64ToBuffer(showPeopleImg);
+
+                        // 将 Uint8Array 转换为 WordArray
+                        const wordArray = CryptoJS.lib.WordArray.create(imgBuf);
+                        postdata.PhotoMD5 = CryptoJS.MD5(wordArray).toString(
+                            CryptoJS.enc.Hex
+                        );
+                        var imgFile = imageTool.getFile(imgBuf, postdata.UserID);
+                        formData.append("Photo", imgFile);
+                        postdata.PhotoLen = imgBuf.length;
+                        postdata.Photo = imgFile.name;
+                    } else {
+                        if (peopleDetail != undefined) {
+                            postdata.Photo = peopleDetail.Photo;
+                            postdata.PhotoLen = peopleDetail.PhotoLen;
+                            postdata.PhotoMD5 = peopleDetail.PhotoMD5;
+                        }
+                    }
+
+                    //获取电梯权限
+                    if (faceAPI.DeviceFunctionList.Lift) {
+                        var elevatorData = table.checkStatus("ID-table-Elevator").data;
+                        if (elevatorData.length > 0) {
+                            var Elevators = [];
+                            for (var i = 0; i < elevatorData.length; i++)
+                                Elevators.push(elevatorData[i].num);
+
+                            postdata.Elevators = Elevators.join(",");
+                        } else {
+                            postdata.Elevators = "";
+                        }
+                    } else {
+                        postdata.Elevators = "";
+                    }
+
+                    //获取节假日
+                    var HolidaysData = table.checkStatus("ID-table-Holidays").data;
+                    if (HolidaysData.length > 0) {
+                        var Holidays = [];
+                        for (var i = 0; i < HolidaysData.length; i++)
+                            Holidays.push(HolidaysData[i].num);
+
+                        postdata.Holidays = Holidays.join(",");
+                    } else {
+                        postdata.Holidays = "";
+                    }
+
+                    //获取特征码
+                    postdata.Fingerprints = [];
+                    postdata.Palmveins = [];
+                    postdata.FaceFeature = "";
+                    if (faceAPI.DeviceFunctionList.Face ||
+                        faceAPI.DeviceFunctionList.Fingerprint ||
+                        faceAPI.DeviceFunctionList.Palmvein) {
+
+                        var oldDatas = layui.table.cache["Table_feature"];
+                        for (var i = 0; i < oldDatas.length; i++) {
+                            switch (oldDatas[i].type) {
+                                case 1: //人脸特征码
+                                    postdata.FaceFeature = oldDatas[i].data;
+                                    break;
+                                case 2: //指纹特征码
+                                    postdata.Fingerprints.push({
+                                        Num: oldDatas[i].num,
+                                        Data: oldDatas[i].data,
+                                    });
+                                    break;
+                                case 3: //掌静脉特征码
+                                    postdata.Palmveins.push({
+                                        Num: oldDatas[i].num,
+                                        Data: oldDatas[i].data,
+                                    });
+                                    break;
+                                default:
+                            }
+                        }
+                    }
+
+
+                    formDataobj = postdata;
+                    formData.append("PeopleJson", JSON.stringify(postdata));
+                    return formData;
+                },
+                /**
+                 *
+                 * 取消操作，关闭窗口事件
+                 * @param {any} elem
+                 */
+                cancelClick: function (elem) {
+                    $("#" + elem).on("click", function () {
+                        faceAPI.PeopleEditPageResult = {
+                            result: false,
+                        };
+
+                        layer.close(parentIndex);
+                        return false;
+                    });
+                },
+                /**
+                 *
+                 * 删除图片点击事件
+                 * @param {any} clickElem 触发事件的元素
+                 * @param {any} imageElem 图片元素
+                 */
+                deleteImageClick: function (clickElem, imageElem) {
+                    var that = this;
+                    $("#" + clickElem).on("click", function () {
+                        var imageId = "#" + imageElem;
+                        $(imageId).find("img").remove();
+                        $(imageId).append(
+                            '<img id="showPeopleImg" src="/NoPIC.jpg" width="240">'
+                        );
+                        bUpdatePhoto = false;
+                        peopleDetail.PhotoLen = 0;
+                        peopleDetail.PhotoMD5 = "";
+                        peopleDetail.Photo = "";
+
+                        //检查人脸特征码，有人脸特征码需要删除
+
+                        that.deleteFaceFeature();
+
+                        return false;
+                    });
+                },
+                //删除人脸特征码
+                deleteFaceFeature: function () {
+                    var tableId = "Table_feature";
+                    var oldDatas = layui.table.cache[tableId];
+                    var oldDatesLen = oldDatas.length;
+                    for (var i = oldDatesLen - 1; i >= 0; i--) {
+
+                        var item = oldDatas[i];
+
+                        if (item.type == 1) { //人脸特征码
+                            oldDatas.splice(i, 1);
+                        }
+                    }
+                    table.reload(tableId, { data: oldDatas });
+                },
+
+                /**
+                 * 拍照窗口
+                 * @param {any} elem
+                 */
+                takePictureClick: function (elem) {
+                    $("#" + elem).on("click", function () {
+                        var content = miniPage.getHrefContent("page/people/Addimage.html");
+                        // imageStatus = "path";
+                        faceAPI.PeopleAddPageResult = false;
+                        var index = layer.open({
+                            // title: '拍摄',
+                            type: 1,
+                            shadeClose: true,
+                            title: [
+                                getLanguage("people.p63"),
+                                "font-size:18px; color:orange;",
+                            ], //数组第二项可以写任意css样式；如果你不想显示标题栏，你可以title: false
+                            area: ["680px", "630px"],
+                            content: content,
+                            end: function (layero, index) {
+                                var rst = faceAPI.PeopleAddPageResult;
+
+                                if (rst) {
+                                    //已拍照
+                                    bUpdatePhoto = true;
+                                    peopleDetail.PhotoLen = 0;
+                                    peopleDetail.PhotoMD5 = "";
+                                    peopleDetail.Photo = "";
+
+                                }
+                            },
+                        });
+                    });
+                },
+                // 打开特征码窗口
+                openFeatureWindow: function (tableId, data) {
+                    var content = miniPage.getHrefContent(
+                        "page/people/FeatureDetail.html"
+                    );
+                    faceAPI.PeopleFeatureWindowData = data;
+                    // debugger;
+                    var layerindex = layer.open({
+                        title: getLanguage("people.p83"),
+                        type: 1,
+                        shade: 0.2,
+                        // maxmin: true,
+                        shadeClose: true,
+                        area: ["680px", "650px"],
+
+                        content: content,
+                        end: function () {
+                            if (faceAPI.PeopleFeatureWindowData.Save) {
+
+                                var newFeaturedata = faceAPI.PeopleFeatureWindowData;
+                                var oldDatas = layui.table.cache[tableId];
+                                var oldDatesLen = oldDatas.length;
+                                for (var i = 0; i < oldDatesLen; i++) {
+
+                                    if (oldDatas[i].type == newFeaturedata.type &&
+                                        oldDatas[i].num == newFeaturedata.num) {
+                                        oldDatas[i].data = newFeaturedata.data;
+                                        break;
+                                    }
+
+                                }
+
+                                table.reload(tableId, { data: oldDatas });
+                            }
+
+                        },
+                    });
+                },
+            };
+
+            var parentIndex = layer.index;
+
+            peopleEdit.setParentIndex(parentIndex);
+            //创建开门时段下拉框
+            peopleEdit.createTimeGroup("Timegroup");
+
+            //时间控件
+            peopleEdit.createLaydate(
+                "ExpirationDate",
+                dayjs().add(1, "Year").format("YYYY-MM-DD") + " 23:59:59"
+            );
+
+            ////加载人员信息
+            peopleEdit.GetUserDetail();
+
+            ////图片上传控件
+            peopleEdit.createUpload("btnSelectImage");
+
+            ////图片预览
+            peopleEdit.previewPictureClick("showPeopleImg");
+
+            ////绑定提交事件
+            peopleEdit.formSubmitBind("saveBtn");
+            ////取消操作，关闭窗口
+            peopleEdit.cancelClick("BtnPeopleEditCancel");
+
+            ////删除照片
+            peopleEdit.deleteImageClick("btnDeleteImage", "peopleImage");
+
+            if (window.location.protocol == "https:") {
+                peopleEdit.takePictureClick("PaiZhao");
+            } else {
+                // http 删除拍照按钮
+                const element = document.getElementById("PaiZhao");
+                if (element) {
+                    element.parentNode.removeChild(element);
+                }
+            }
+
+            form.on('switch(UseOpenTimes)', function (data) {
+
+
+                var elem = data.elem;
+                var elemName = elem.name;
+                var models = form.val("people_edit_div_filter");
+
+                models.UseOpenTimes = models.UseOpenTimes == "1" ? 1 : 0;
+
+                var elems = $('div[lay-filter="people_edit_div_filter"] div[lay-filter="OpenTimes"]')
+
+                if (models.UseOpenTimes == 1) {
+                    elems.addClass("layui-hide");
+
+                }
+                else {
+                    elems.removeClass("layui-hide");
+                }
+
+
+
+                form.render();
+
+
+                return false;
+            });
+
+
+            faceAPI.CheckInputBox();
+
+            var qrcode = new QRCode(document.getElementById("qrcode"), {
+                width: 300,
+                height: 300
+            });
+
+            $('input[name="QRCode"]').
+                on("blur", function (e) {
+                    var inputbox = event.currentTarget;
+                    faceAPI.CheckInputBoxTextBytes(inputbox);
+                    makeCode(inputbox.value);
+                }).
+                on("input", function (e) {
+                    var inputbox = event.currentTarget;
+                    faceAPI.CheckInputBoxTextBytes(inputbox);
+                    makeCode(inputbox.value);
+                }).
+                on("keydown", function (e) {
+                    if (e.keyCode == 13) {
+                        var inputbox = event.currentTarget;
+                        faceAPI.CheckInputBoxTextBytes(inputbox);
+                        makeCode(inputbox.value);
+                    }
+                });
+
+            function makeCode(QRCodevalue) {
+                if (QRCodevalue.length > 0) {
+                    qrcode.makeCode(QRCodevalue);
+                }
+                else {
+                    var qrcodeimg = $("#qrcode img");
+                    qrcodeimg.attr("src", "");
+                }
+
+
+            }
+
+
+            //
+            // faceAPI.DeviceFunctionList.Lift=false;
+            //console.log('[ layui ] >', layui)
+            //删除不支持的功能
+            if (faceAPI.DeviceFunctionList != undefined) {
+                console.log(faceAPI.DeviceFunctionList)
+
+                if (!faceAPI.DeviceFunctionList.UserCode) {
+                    faceAPI.removeElement('.FunctionList_UserCode');
+                }
+                if (!faceAPI.DeviceFunctionList.QRCode) {
+                    $el.tabDelete('laytab', '2');
+                }
+                if (!faceAPI.DeviceFunctionList.Lift) {
+                    $el.tabDelete('laytab', '3');
+                }
+                //设备不支持节假日
+                if (!faceAPI.DeviceFunctionList.Holiday) {
+                    $el.tabDelete('laytab', '4');
+                }
+                //设备不支持刷卡
+                if (!faceAPI.DeviceFunctionList.Card) {
+                    faceAPI.removeElement('.FunctionList_Card');
+                }
+                //设备不支持密码
+                if (!faceAPI.DeviceFunctionList.Password) {
+                    faceAPI.removeElement('.FunctionList_Password');
+                }
+                //设备不支持人脸
+                if (!faceAPI.DeviceFunctionList.Face) {
+                    faceAPI.removeElement('.FunctionList_Face');
+                }
+
+                //设备不支持特征码
+                if (!faceAPI.DeviceFunctionList.Face &&
+                    !faceAPI.DeviceFunctionList.Fingerprint &&
+                    !faceAPI.DeviceFunctionList.Palmvein) {
+                    $el.tabDelete('laytab', '5');
+                }
+            }
+
+
+
+            function resizeImage(img, maxWidth, maxHeight) {
+                let width = img.width;
+                let height = img.height;
+
+                // 计算宽高比
+                var aspectRatio1 = maxWidth / width;
+                var aspectRatio2 = maxHeight / height;
+
+                if (aspectRatio1 > aspectRatio2) {
+                    aspectRatio1 = aspectRatio2
+                }
+                height = Math.round(height * aspectRatio1);
+                width = Math.round(width * aspectRatio1);
+
+                return { width, height };
+            }
+
+            function compressAndUploadImage(img, maxWidth, maxHeight) {
+
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                const newSize = resizeImage(img, maxWidth, maxHeight);
+
+                canvas.width = maxWidth;
+                canvas.height = maxHeight;
+                // 设置背景色
+                ctx.fillStyle = '#FFFFFF'; // 你可以将颜色值改为你需要的背景色
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // 计算图像居中的位置
+                const offsetX = (maxWidth - newSize.width) / 2;
+                const offsetY = (maxHeight - newSize.height) / 2;
+
+                ctx.drawImage(img, offsetX, offsetY, newSize.width, newSize.height);
+                //console.log('图片最终尺寸:', newSize);
+                // 返回压缩后的图片
+                const previewUrl = canvas.toDataURL('image/jpeg', 1);
+
+                return previewUrl;
+            }
+
+            //绑定人脸录入按钮
+            $("#btnEnrollUserFaceOnDevice").on("click", btnEnrollUserFaceOnDevice_click);
+            $("#btnEnrollUserCardOnDevice").on("click", btnEnrollUserCardOnDevice_click);
+            $("#btnEnrollUserPINOnDevice").on("click", btnEnrollUserPINOnDevice_click);
+
+            function btnEnrollUserFaceOnDevice_click() {
+
+                EnrollUserMediaData("Face", 1);
+
+            }
+
+            function btnEnrollUserCardOnDevice_click() {
+                EnrollUserMediaData("Card", 1);
+
+            }
+            function btnEnrollUserPINOnDevice_click() {
+                EnrollUserMediaData("PIN", 1);
+
+            }
+
+            function EnrollUserMediaData(type, index) {
+                if (bIsNew) {
+                    layer.alert(getLanguage("people.EnrollUserMediaDataTip"), { icon: 1 });
+                    return;
+                }
+                var postdata =
+                {
+                    "UserID": peopleDetail.UserID,
+                    "EnrollType": type,
+                    "EnrollIndex": index
+                }
+
+                //获取新用户ID
+                var loadIndex = layer.load(1, { shade: [0.6, "#e2e2e2"] }); //0.1透明度的白色背景
+                faceAPI.AjaxPOSTJson({
+                    url: "/api/People/EnrollUserMediaData",
+                    data: postdata,
+                    success: function (result) {
+                        layer.close(loadIndex);
+                        console.log(result);
+                        if (result.result) {
+                            var regResult = result.content.Result;
+                            if (regResult == 1) {
+                                layer.alert(getLanguage("people.EnrollUserMediaDataSuccess"), {
+                                    icon: 1,
+                                    end: function () {
+                                        console.log("重新加载人员信息");
+                                        peopleEdit.GetUserDetail();
+                                        return;
+                                    }
+                                });
+                            }
+
+                            if (regResult == 2) {
+                                layer.alert(getLanguage("people.EnrollUserMediaDataFail"), {
+                                    icon: 2,
+                                    end: function () {
+                                        //console.log("EnrollUserMediaDataFail 弹框12313123");
+                                        return;
+                                    }
+                                });
+
+                            }
+                            if (regResult == 3) {
+                                layer.alert(getLanguage("people.EnrollUserMediaDataRepetition") + result.content.Repetition, {
+                                    icon: 2,
+                                    end: function () {
+                                        //console.log("EnrollUserMediaDataRepetition 弹框12313123");
+                                        return;
+                                    }
+                                });
+                            }
+
+                        }
+                        else {
+                            layer.alert(getLanguage("people.EnrollUserMediaDataFail") + '<br>' + result.error, { icon: 2 });
+                        }
+
+                    },
+                });
+            }
+        }
+    );
+</script>

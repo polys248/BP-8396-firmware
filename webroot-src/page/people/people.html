@@ -1,0 +1,587 @@
+﻿<div class="layuimini-container layuimini-page-anim" divname="admin">
+    <style>
+        .auto-wrap {
+            word-wrap: break-word; /* 或者使用 overflow-wrap: break-word; */
+            white-space: normal;
+            word-break: break-all;
+        }
+    </style>
+    <div class="layuimini-main">
+
+        <script type="text/html" id="PeoplePageToolbar">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="search">
+                    <i class="layui-icon"></i> <span language="people.p1" t="查询"></span>
+                </button>
+                <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="add">
+                    <span language="people.p2" t="添加"></span>
+                </button>
+                <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delete">
+                    <span language="people.p3" t="删除"></span>
+                </button>
+                <button class="layui-btn layui-btn-sm layui-btn-danger " lay-event="clear">
+                    <span language="people.p6" t="删除所有人员"></span>
+                </button>
+                <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="refresh">
+                    <span language="people.p4" t="刷新"></span>
+                </button>
+            </div>
+        </script>
+
+        <table class="layui-hide" id="PeoplePage" lay-filter="PeoplePageTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">
+                <span language="people.p7">编辑</span>
+            </a>
+            <!--<a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="fingerprint">
+                <span language="people.p74">指纹</span>
+            </a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="palmvein">
+                <span language="people.p75">掌静脉</span>
+            </a>-->
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">
+                <span language="people.p8">删除</span>
+            </a>
+        </script>
+
+    </div>
+</div>
+<!-- <script src="./people.js"></script> -->
+<script>
+
+    function formatCardNum(d) {
+        var sBuf = [];
+        //debugger
+        if (d.hasOwnProperty("photo") == true) {
+            if (d.photo.length > 0) {
+                sBuf.push(
+                    `<i class="PeopleAccessKey" typeTitle="${getLanguage(
+                        "people.p14"
+                    )}" type="image" value = "${d.photo}">
+      <svg t="1690358148845" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3418" width="20" height="20"><path d="M725.333333 721.066667l-38.4-38.4H379.733333l-38.4 38.4V768h384v-46.933333z m85.333334-38.4v170.666666H256v-170.666666h4.266667l85.333333-85.333334h375.466667l89.6 85.333334z m-85.333334-320c0 106.666667-85.333333 192-192 192S341.333333 469.333333 341.333333 362.666667 426.666667 170.666667 533.333333 170.666667 725.333333 256 725.333333 362.666667z m-85.333333 0C640 302.933333 593.066667 256 533.333333 256S426.666667 302.933333 426.666667 362.666667s46.933333 106.666667 106.666666 106.666666S640 422.4 640 362.666667z" fill="#444444" p-id="3419"></path></svg>
+      </i>`
+                );
+            }
+        }
+        if (d.hasOwnProperty("Password") == true)
+            if (d.Password.length > 0) {
+                sBuf.push(
+                    `<i class="PeopleAccessKey" typeTitle="${getLanguage(
+                        "people.p15"
+                    )}" type="text" value = "${d.Password
+                    }"><svg t="1690358607999" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4410" width="20" height="20"><path d="M204.8 390.4A19.2 19.2 0 0 0 185.6 409.6v409.6c0 10.5984 8.6016 19.2 19.2 19.2h614.4a19.2 19.2 0 0 0 19.2-19.2V409.6A19.2 19.2 0 0 0 819.2 390.4H204.8z m96-64V204.8c0-45.9264 37.2736-83.2 83.2-83.2h256c45.9264 0 83.2 37.2736 83.2 83.2v121.6H819.2c45.9264 0 83.2 37.2736 83.2 83.2v409.6c0 45.9264-37.2736 83.2-83.2 83.2H204.8A83.2 83.2 0 0 1 121.6 819.2V409.6c0-45.9264 37.2736-83.2 83.2-83.2h96z m64 0h294.4V204.8a19.2 19.2 0 0 0-19.2-19.2h-256A19.2 19.2 0 0 0 364.8 204.8v121.6z" fill="#5A5A68" p-id="4411"></path><path d="M358.4 646.4a32 32 0 1 1 0-64h307.2a32 32 0 1 1 0 64H358.4z" fill="#5A5A68" p-id="4412"></path></svg></i>
+        `
+                );
+            }
+        if (Number(d.CardNum) > 0) {
+            sBuf.push(
+                `<i class="PeopleAccessKey"  typeTitle="${getLanguage(
+                    "people.p13"
+                )}"  type="text"  value = "${d.CardNum
+                }"><svg t="1690359465156" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="13056" width="20" height="20"><path d="M143.4 410.5h735.5v40H143.4zM713.4 649.5h124.5v40H713.4zM713.4 569.5h124.5v40H713.4z" fill="#B3BAC3" p-id="13057"></path><path d="M902 254H122c-8.8 0-16 7.2-16 16v484c0 8.8 7.2 16 16 16h780c8.8 0 16-7.2 16-16V270c0-8.8-7.2-16-16-16z m-24 476H146V294h732v436z" fill="#3C3F44" p-id="13058"></path></svg></i>
+      `
+            );
+        }
+        if (d.hasOwnProperty("QRCode") == true && layui.faceAPI.DeviceFunctionList?.QRCode)
+            if (d.QRCode.length > 0) {
+                sBuf.push(
+                    `<i class="PeopleAccessKey" typeTitle="${getLanguage(
+                        "people.QRCode"
+                    )}" type="text" value="${d.QRCode
+                    }" ><svg t="1718246413256" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2743" width="20" height="20"><path d="M224 416.096V224l192-0.096 0.096 192.096L224 416.096zM416.096 160H223.904A64 64 0 0 0 160 223.904v192.192A64 64 0 0 0 223.904 480h192.192A64 64 0 0 0 480 416.096V223.904A64 64 0 0 0 416.096 160zM224 800.096V608l192-0.096 0.096 192.096L224 800.096zM416.096 544H223.904A64 64 0 0 0 160 607.904v192.192A64 64 0 0 0 223.904 864h192.192A64 64 0 0 0 480 800.096v-192.192A64 64 0 0 0 416.096 544zM608 416.096V224l192-0.096 0.096 192.096-192.096 0.096zM800.096 160h-192.192A64 64 0 0 0 544 223.904v192.192A64 64 0 0 0 607.904 480h192.192A64 64 0 0 0 864 416.096V223.904A64 64 0 0 0 800.096 160zM704 608a32 32 0 0 0-32 32v192a32 32 0 0 0 64 0v-192a32 32 0 0 0-32-32M576 608a32 32 0 0 0-32 32v192a32 32 0 0 0 64 0v-192a32 32 0 0 0-32-32M832 544a32 32 0 0 0-32 32v256a32 32 0 0 0 64 0v-256a32 32 0 0 0-32-32" fill="#3E3A39" p-id="2744"></path></svg></i>
+        `
+                );
+            }
+
+        if (d.Palmprint > 0) {
+            sBuf.push(
+                `<i class="PeopleAccessKey" typeTitle="${getLanguage(
+                    "people.p106"
+                )}" type="text" value="${d.Palmprint
+                }"  ><svg t="1690359198068" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9113" width="20" height="20"><path d="M273.493333 533.333333a46.506667 46.506667 0 0 1 64 0l51.2 50.986667a25.386667 25.386667 0 0 0 36.053334 2.346667 24.32 24.32 0 0 0 2.346666-2.346667c8.533333-4.266667 4.266667-29.653333 4.266667-42.666667L405.333333 333.013333a33.92 33.92 0 0 1 24.32-41.6h5.546667a33.92 33.92 0 0 1 34.133333 33.28l29.866667 161.706667c0 4.266667 4.266667 8.533333 4.266667 0l8.533333-213.333333a38.613333 38.613333 0 0 1 38.4-34.133334 33.92 33.92 0 0 1 29.653333 34.133334v213.333333h4.266667l29.866667-170.666667c4.266667-17.066667 21.333333-34.133333 38.4-29.866666A34.133333 34.133333 0 0 1 682.666667 323.413333v5.546667l-29.866667 195.84h4.266667l42.666666-106.666667a29.866667 29.866667 0 0 1 34.773334-23.893333 26.24 26.24 0 0 1 7.893333 2.56 34.133333 34.133333 0 0 1 21.333333 42.666667l-72.32 234.666666a153.813333 153.813333 0 0 1-144.853333 106.666667 204.586667 204.586667 0 0 1-119.253333-42.666667 1282.133333 1282.133333 0 0 1-153.386667-149.333333 42.666667 42.666667 0 0 1 0-55.253333z m38.4-405.333333H179.84A55.68 55.68 0 0 0 128 179.84v132.053333a38.4 38.4 0 0 0 34.133333 33.92 38.4 38.4 0 0 0 34.133334-33.92V196.906667h114.986666a38.4 38.4 0 0 0 33.92-34.133334A38.4 38.4 0 0 0 311.893333 128z m0 698.453333H196.906667v-114.346666a38.4 38.4 0 0 0-34.133334-33.92A38.4 38.4 0 0 0 128 712.106667v128A55.68 55.68 0 0 0 179.84 896h132.053333a34.133333 34.133333 0 0 0 0-68.266667z m583.466667 17.066667v-131.413333a34.133333 34.133333 0 0 0-68.266667 0v114.986666h-114.986666a34.133333 34.133333 0 0 0 0 68.266667h132.053333a59.733333 59.733333 0 0 0 51.84-51.2zM839.893333 128h-128a38.4 38.4 0 0 0-33.92 34.133333 38.4 38.4 0 0 0 33.92 34.133334h114.986667v114.986666a34.133333 34.133333 0 0 0 68.266667 0V179.84A55.68 55.68 0 0 0 839.893333 128z" fill="#409EFF" p-id="9114"></path></svg></i>
+      `
+            );
+        }
+        if (d.Fingerprint > 0) {
+            sBuf.push(
+                `<i class="PeopleAccessKey" typeTitle="${getLanguage(
+                    "people.p107"
+                )}" type="text" value="${d.Fingerprint}" >
+      <svg t="1690359248243" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10200" width="20" height="20"><path d="M292.5 899.7l-4.9-33.8c100.6-14.7 189.6-72.8 243.5-158.9l29 17.9C500.9 819.7 403 883.6 292.5 899.7z m285.2-210.4l-30.8-14.5c21.6-45.7 32.7-95.7 32.5-146.3h34.1c0.2 55.6-12 110.5-35.8 160.8z m206.6-7.4h-34.1V528.5c0.2-51.6-16.5-101.9-47.6-143.1l27.3-20.4c35.5 47.1 54.7 104.6 54.5 163.6l-0.1 153.3zM673.6 353.5c-90.3-83.7-229.5-85-321.3-2.9l-22.8-25.4c104.9-93.8 264-92.4 367.2 3.3l-23.1 25zM273 545.3h-34.2v-16.8c-0.2-59 19-116.5 54.5-163.7l27.3 20.4c-31.1 41.2-47.9 91.5-47.7 143.1l0.1 17z m0 0" fill="#2A5082" p-id="10201"></path><path d="M613.8 528.6h-34.4c-0.1-29.2-18.8-55.1-46.4-64.4-27.7-9.3-58.2 0-75.9 23.2L429.9 467c26.4-35.2 72.4-49.5 114.1-35.6 41.7 13.9 69.9 53 69.9 97v0.2zM238.8 733v-34c94.1 0 170.4-76.3 170.5-170.4v-17.1h34.1v17c-0.1 112.9-91.7 204.4-204.6 204.5z m545.5 51.5c-31.7 0-62-12.7-84.4-35.1-22.4-22.4-34.9-52.8-34.9-84.5V528.5c0-33.2-10.8-65.4-30.7-91.9l27.3-20.4c24.4 32.4 37.6 71.9 37.5 112.5V665c0 47.1 38.2 85.2 85.2 85.2v34.3zM603.6 405.8c-26.5-20-58.8-30.7-92-30.7-20.9 0.1-41.4 5.2-59.9 14.9L435 360.3c23.6-12.5 49.8-19 76.5-19.2 40.6-0.1 80.2 13.1 112.6 37.5l-20.5 27.2z m0 0"
+      fill="#2A5082" p-id="10202"></path><path d="M238.8 647.9v-34.1c22.6 0 44.3-9 60.3-25s25-37.7 25-60.3c0.7-49.4 20.8-96.5 56-131.2l24.4 23.8c-28.9 28.3-45.5 66.9-46.2 107.3-0.1 66-53.6 119.5-119.5 119.5z m508 229.9c-55.7-11.4-100.2-45-140.1-105.6l28.5-18.7c35 53.2 71.5 81.2 118.5 90.9l-6.9 33.4z m-368.5 80.6l-6.2-33.5c42.5-7.8 87-29 132.9-63.6 33.1-25 79.3-23.2 110.3 4.4 22.4 19.8 47.4 36.5 74.1 49.7l-14.9 30.7c-29.5-14.6-57-33-81.7-54.7-18.9-16.9-47.1-18.1-67.3-2.8-49.9 37.7-99.4 61.3-147.2 69.8zM449 727.7l-24.8-23.4c45-47.4 70.1-110.4 70-175.8v-17.1h34.5v17c0 74.3-28.5 145.6-79.7 199.3z m-210.2 90.6v-33.8c53.5 0.2 105.7-16.6 149.1-47.9l19.9 27.7c-49.3 35.3-108.4 54.2-169 54z m0 0" fill="#2A5082" p-id="10203"></path><path d="M51.4 153.6H17.3V0.2h153.4v34.1H51.4v119.3z m954.5 0h-34.1V34.3H852.4V0.2h153.4v153.4z m-835.2 869.2H17.3V869.4h34.1v119.3h119.3v34.1z m835.2 0H852.4v-34.1h119.3V869.4h34.1v153.4z m0 0" fill="#BCC0C4" p-id="10204"></path><path d="M757.7 318c-83.7-99.7-219.8-138.2-343.3-97l-10.2-32.5c136.5-45.3 286.8-2.7 379.3 107.4L757.7 318z m-492.2 0l-25.9-22.2c30.8-36.7 68.4-67.1 110.9-89.4l15.4 30.4c-38.4 20.3-72.5 47.9-100.4 81.2z m0 0" fill="#2A5082" p-id="10205"></path><path d="M707.9 169.6c-122.4-66.9-270.4-66.9-392.8 0l-16.4-30.2c132.6-72.5 293-72.5 425.6 0l-16.4 30.2z m0 0" fill="#2A5082" p-id="10206"></path></svg></i>
+      `
+            );
+        }
+
+        return sBuf.join(" ");
+    }
+
+    layui.use(['form', 'table', 'miniPage', 'element', 'faceAPI'], function () {
+
+        setLanguage();
+        setAllAttrVal()
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            miniPage = layui.miniPage;
+        var faceAPI = layui.faceAPI;
+        form.render();
+        var openWH = miniPage.getOpenWidthHeight();
+
+        var AccessTypeMap = [];
+        AccessTypeMap[0] = getLanguage('people.p108');// "普通人员",
+        AccessTypeMap[1] = getLanguage('people.p109');// "管理员",
+        AccessTypeMap[2] = getLanguage('people.p110');// "黑名单"
+
+        var OpenTimesMap = [];
+        OpenTimesMap[0] = getLanguage('people.OpenTimes_NULL');// "无",
+        OpenTimesMap[65535] = getLanguage('people.OpenTimes_Max');// "无限制",
+
+        //获取是否需要因此编号列
+        var showPeopleCode = false;
+        if (faceAPI?.DeviceFunctionList) {
+            const { UserCode } = faceAPI.DeviceFunctionList;
+            console.log('[ faceAPI.DeviceFunctionList ] >', faceAPI.DeviceFunctionList)
+
+            if (UserCode) {
+                showPeopleCode = true;
+            }
+        }
+
+        var PeopletableCurPage = 0;
+        var Peopletable = table.render({
+            elem: '#PeoplePage',
+            //**************************异步请求开始***********************
+            url: 'api/People/Search',
+            method: 'post',
+            contentType: "application/json",
+            headers: {
+                // token: 'sasasas',
+                Authorization: "Bearer " + faceAPI.GetJWTToken()
+            }, //增加Token验证头
+            request: {
+                pageName: 'PageIndex', //页码的参数名称，默认：page
+                limitName: 'PageSize' //每页数据量的参数名，默认：limit
+            },
+            parseData: function (res) { //res 即为原始返回的数据
+                if (res.result == true) {
+                    var data = res.content;
+                    var ret = {
+                        "code": 0, //解析接口状态
+                        "msg": "", //解析提示文本
+                        "count": data.TotalCount, //解析数据长度
+                        "data": data.DataList //解析数据列表
+                    };
+                    return ret;
+
+                } else {
+                    return {
+                        "code": 0, //解析接口状态
+                        "msg": '', //解析提示文本
+                        "count": 0, //解析数据长度
+                        "data": [] //解析数据列表
+                    };
+                }
+
+            },
+            //**************************异步请求结束***********************
+
+            toolbar: '#PeoplePageToolbar',
+            defaultToolbar: ['filter', 'exports', 'print', {
+                title: getLanguage('people.p9'),
+                layEvent: 'LAYTABLE_TIPS',
+                icon: 'layui-icon-tips'
+            }],
+            cols: [
+                [{
+                    type: "checkbox",
+                    width: 50
+                },
+                //{ field: 'id', width: 70, title: 'ID', sort: true },
+                {
+                    field: 'UserID',
+                    width: 140,
+                    title: getLanguage('people.p10'),
+                    sort: true
+                },
+                {
+                    field: 'Code',
+                    width: 160,
+                    title: getLanguage('people.UserCode'),
+                    sort: true,
+                    hide: !showPeopleCode,
+                },
+                {
+                    field: 'Name',
+                    width: 160,
+                    title: getLanguage('people.p11'),
+                    sort: true
+                },
+                { //人员识别凭证
+                    field: 'CardNum',
+                    width: 150,
+                    title: getLanguage('people.p12'),
+                    sort: false,
+                    templet: formatCardNum
+                },
+                {
+                    field: 'Department',
+                    title: getLanguage('people.p90'),
+                    width: 160,
+                    sort: true,
+                    hide: true
+                },
+                {
+                    field: 'Job',
+                    title: getLanguage('people.p16'),
+                    width: 160,
+                    sort: true,
+                    hide: true
+                },
+                {
+                    field: 'AccessType',//身份
+                    title: getLanguage('people.AccessType'),
+                    width: 150,
+                    sort: true,
+                    templet: function (d) {
+                        return AccessTypeMap[d.AccessType];
+                    }
+                },
+                {
+                    field: 'ExpirationDate',//截止日期
+                    title: getLanguage('people.ExpirationDate'),
+                    width: 160,
+                    sort: true,
+                    templet: function (d) {
+                        var strDate = faceAPI.unixTimeStampToDateString(d.ExpirationDate);
+                        return strDate.substr(0, strDate.length - 3);
+                    }
+                },
+                {
+                    field: 'Timegroup',//开门时段
+                    title: getLanguage('people.Timegroup'),
+                    width: 120,
+                    sort: true
+                },
+                {
+                    field: 'OpenTimes',//开门次数
+                    title: getLanguage('people.OpenTimes'),
+                    width: 135,
+                    sort: true,
+                    templet: function (d) {
+                        if (d.OpenTimes == 0)
+                            return OpenTimesMap[0];
+                        if (d.OpenTimes == 65535)
+                            return OpenTimesMap[65535];
+
+                        return d.OpenTimes;
+                    }
+                },
+                {
+                    fixed: 'right',
+                    title: getLanguage('people.p18'),
+
+                    toolbar: '#currentTableBar',
+                    align: "center"
+                }
+                ]
+            ],
+            limits: [100, 200, 300, 400, 500],
+            limit: 100,
+            page: true,
+            height: openWH[1] - 50,
+            skin: 'line',
+            done: function (res, curr, count) {
+                PeopletableCurPage = curr;
+                //绑定事件
+                if (res.count > 0) {
+                    //lay-filter="PeoplePageTableFilter"
+                    bindPeopleAccessKey();
+                }
+                setLanguage();
+                setAllAttrVal();
+            }
+        });
+
+        function bindPeopleAccessKey() {
+            $("[lay-id=PeoplePage] i.PeopleAccessKey").mouseenter(AccessKey_mouseenter);
+            $("[lay-id=PeoplePage] i.PeopleAccessKey").mouseleave(() => {
+                if (iMouseenter_TipIndex > 0)
+                    layer.close(iMouseenter_TipIndex);
+            });
+        }
+
+        faceAPI.PeopleSearchPageResult = {};
+        /**
+         * toolbar事件监听
+         */
+        table.on('toolbar(PeoplePageTableFilter)', function (obj) {
+            if (obj.event === 'add') { // 监听添加操作
+                openEdit(undefined);
+
+            } else if (obj.event === 'delete') { // 监听删除操作
+                var checkStatus = table.checkStatus('PeoplePage'),
+                    data = checkStatus.data;
+                var UserIDs = [];
+                //console.log(data);
+                var name = '';
+                data.forEach(function (item, index) {
+
+                    UserIDs.push(item.UserID);
+                    name += item.Name + ",";
+                });
+                if (UserIDs.length == 0) {
+                    layer.alert(getLanguage('people.p20'), { icon: 2 });
+                    return;
+                }
+                name = name.substr(0, name.length - 1);
+                layer.confirm(getLanguage('people.p27') + '[' + name + ']?', { icon: 3 }, function (
+                    index) {
+
+                    deletePeople(UserIDs);
+
+                    layer.close(index);
+                });
+                // deletePeople(UserIDs);
+            } else if (obj.event === 'search') { // 查询操作1
+                var content = miniPage.getHrefContent('page/people/search.html');
+                var openWH = miniPage.getOpenWidthHeight();
+
+                var index = layer.open({
+                    title: getLanguage('people.p21'),
+                    type: 1,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['990px', '450px'],
+
+                    content: content,
+                    end: function (layero, index) {
+                        //console.log("PeopleSearchPageResult=", faceAPI.PeopleSearchPageResult);
+                        var rst = faceAPI.PeopleSearchPageResult;
+                        if (rst != null && rst.result) {
+                            PeopletableCurPage = 1;
+                            refreshTable(false);
+                        };
+                    }
+                });
+
+            } else if (obj.event == 'refresh') {
+                //执行搜索重载
+                refreshTable(true);
+            }
+            else if (obj.event == 'clear') {
+                ClearPeople();
+            }
+
+        });
+
+        function ClearPeople() {
+            var layerindex = layer.confirm(getLanguage('people.p23'), {
+                btn: [getLanguage('people.p24'), getLanguage('people.p25')], //按钮 删除和取消
+                icon: 3
+            }, function () { //删除
+                // debugger
+                var CheckPasswordcontent = miniPage.getHrefContent(
+                    "page/user/CheckPassword.html"
+                );
+                faceAPI.CheckPasswordResult = false;
+
+                // debugger;
+                layer.open({
+                    title: getLanguage("user.checkPassword"),
+                    type: 1,
+                    shade: 0.4,
+                    area: ["500px", "200px"],
+                    content: CheckPasswordcontent,
+                    end: function () {
+
+                        if (faceAPI.CheckPasswordResult) {
+                            deletePeople([]);
+                        }
+
+                    },
+                });
+
+
+                layer.close(layerindex);
+            });
+
+        }
+
+
+        function refreshTable(bIni) {
+
+            if (bIni) {
+                faceAPI.PeopleSearchPageResult = {};
+                faceAPI.PeopleSearchPageResult.field = {
+                    CardNum: null,
+                    UserID: null,
+                    Code: null,
+                    Name: null,
+                    IdentityCard: null,
+                    Department: null,
+                    Photo: null,
+                    AccessType: null,
+                    Fingerprint: null,
+                    Palmprint: null,
+                };
+                PeopletableCurPage = 1;
+            }
+
+
+            // console.log("where=", faceAPI.PeopleSearchPageResult.field);
+            Peopletable.reload({
+                page: {
+                    curr: PeopletableCurPage
+                },
+                where: faceAPI.PeopleSearchPageResult.field
+            });
+
+        }
+
+
+        table.on('tool(PeoplePageTableFilter)', function (obj) {
+            var data = obj.data;
+            // debugger
+            if (obj.event === 'edit') {
+
+                openEdit(data);
+
+                return false;
+            } else if (obj.event === 'delete') {
+
+                layer.confirm(getLanguage('people.p27') + '[' + data.Name + ']?', { icon: 3 }, function (
+                    index) {
+                    var UserIDs = [];
+                    UserIDs.push(data.UserID);
+                    deletePeople(UserIDs);
+
+                    layer.close(index);
+                });
+            }
+        });
+
+        function deletePeople(UserIDs) {
+            faceAPI.AjaxPOSTJson({
+                data: {
+                    UserIDs: UserIDs,
+                    DeleteALL: UserIDs.length == 0 ? 1 : 0
+                },
+                url: '/api/People/Delete',
+                success: function (result) {
+                    if (result.result == false) {
+                        layer.alert(result.error, {
+                            icon: 2
+                        });
+                    } else {
+                        //刷新页面
+                        refreshTable(false);
+                    }
+                }
+            });
+        }
+
+        function openEdit(data) {
+            var content = miniPage.getHrefContent('page/people/edit.html');
+
+            faceAPI.PeopleEditPage = data; //向layer页面传值，传值主要代码
+            faceAPI.PeopleEditPageResult = null;
+            var index = layer.open({
+                title: getLanguage('people.p26'),
+                type: 1,
+                //shade: 0.2,
+                //maxmin: true,
+                //shadeClose: true,
+                area: ['1050px', '800px'],
+                btn: [],
+                content: content,
+                end: function (layero, index) {
+                    var tableId = "PeoplePage";
+                    var rst = faceAPI.PeopleEditPageResult;
+                    if (rst != null && rst.result) {
+                        var user = rst.content;
+
+                        if (data == undefined) {
+                            faceAPI.PeopleSearchPageResult = {};
+                            faceAPI.PeopleSearchPageResult.field = {
+                                UserID: user.UserID
+                            };
+                            PeopletableCurPage = 1;
+                            refreshTable(false);
+                        }
+                        else {
+                            refreshTable(false);
+                        }
+
+                    };
+
+                }
+            });
+
+        }
+        table.on('sort(PeoplePageTableFilter)', function (obj) {
+            bindPeopleAccessKey();
+
+        });
+
+        // 在线离线状态显示提示框
+        var iMouseenter_TipIndex = 0;
+
+        function AccessKey_mouseenter() {
+            var that = this;
+            if (iMouseenter_TipIndex > 0)
+                layer.close(iMouseenter_TipIndex);
+            var spn = $(that);
+            var sType = spn.attr("type");
+            var stypeTitle = spn.attr("typeTitle");
+            var sValue = spn.attr("value");
+            var sHtml = ''; //'<div class="layui-card">';
+            //sHtml = sHtml + '<div class="layui-card-header">' + stypeTitle + '</div>';
+            //sHtml = sHtml + '<div class="layui-card-body">';
+
+
+
+
+
+
+            var par = {};
+            //debugger;
+            if (sType == "text") {
+                par = {
+                    area: ['240px', '160px']
+                };
+                sHtml = '<div class="auto-wrap"><h2>' + stypeTitle + '</h2>' + '<h3>' + sValue + '</h3></div>';
+                iMouseenter_TipIndex = layer.tips(sHtml, that, par);
+            } else {
+                //测量一下文件尺寸
+                const img = new Image();
+                img.src = sValue;
+                img.onload = function () {
+                    //console.log("图片尺寸：" + img.width + '*' + img.height)
+
+                    par = {
+                        area: [(img.width / 2 + 30) + 'px', (img.height / 2 + 30) + 'px']
+                    };
+                    sHtml = '<img id="showPeopleImg" src="' + sValue +
+                        '" width="' + img.width / 2 + '" height = "' + img.height / 2 + '"/>';
+
+                    iMouseenter_TipIndex = layer.tips(sHtml, that, par);
+
+
+                }
+            }
+
+
+            //sHtml = sHtml + '</div></div>';
+
+            //console.log(sHtml);
+
+        }
+
+
+    });
+
+
+</script>

@@ -1,0 +1,123 @@
+﻿
+<style>
+    #admin-holidayedit label {
+        width: 150px;
+        background-color: #dddddd;
+    }
+
+
+    .defcenter {
+        text-align: center;
+    }
+</style>
+<div class="layuimini-main" id="admin-holidayedit">
+
+    <div class="layui-form layuimini-form " lay-filter="holiday_edit_div_filter">
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span language="Holiday.h1">节假日序号</span>
+            </label>
+            <div class="layui-input-inline">
+                <!--<input type="number" max="30" min="1" lay-reqText="请输入节假日序号" name="num" ay-verify="required" autocomplete="off" class="layui-input">-->
+                <input type="number" name="Num" disabled class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">
+                <span language="Holiday.h2">节假日日期</span>
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" lay-verify="required" maxlength="10"   value="" class="layui-input" name="Date" TimeFormat_YYYYMMDD>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span  language="Holiday.h3">节假日管控范围</span>
+            </label>
+            <div class="layui-input-inline">
+                <select name="Type">
+                    <option value="1"  language="Holiday.h7" selected>全天</option>
+                    <option value="2"  language="Holiday.h6">上午 00:00-12:00</option>
+                    <option value="3"  language="Holiday.h5">下午(12:00-23:59)</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span language="Holiday.h4">是否每年循环</span>
+            </label>
+            <div class="layui-input-inline">
+                <input type="checkbox" name="Cycle" lay-skin="switch" value="1">
+            </div>
+        </div>
+
+        <div class="layui-form-item defcenter">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveHoliday">
+                <i class="layui-icon">&#xe605;</i>
+                <span language="people.p39">保存</span>
+            </button>
+            <button class="layui-btn layui-btn-warm" id="BtnPeopleEditCancel">
+                <i class="layui-icon">&#x1006;</i>
+                <span language="people.p40">取消</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'faceAPI', 'laydate'], function () {
+        setLanguage();
+        setAllAttrVal();
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.$,
+            laydate = layui.laydate,
+            faceAPI = layui.faceAPI;
+        var holiday = faceAPI.holiday;
+        var parentIndex = layer.index;
+        /**
+        * 初始化表单，要加上，不然刷新部分组件可能会不加载
+        */
+        form.render();
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '[name="Date"]', //指定元素
+            type: "date",
+            format: 'yyyy-MM-dd',
+            min: '2024-01-01',
+            max: '2099-12-31'
+        });
+        faceAPI.holidayResult = false;
+
+        //加载表单数据
+        if (holiday != undefined) {
+            form.val("holiday_edit_div_filter", holiday);
+            $("#num").attr("disabled", "disabled");
+        }
+
+        //保存按钮事件
+        form.on('submit(saveHoliday)', function (data) {
+
+            faceAPI.holiday = data.field
+            faceAPI.holiday.Cycle = data.field.Cycle == "1" ? 1 : 0;
+            faceAPI.holiday.Num = Number(faceAPI.holiday.Num);
+            faceAPI.holiday.Type = Number(faceAPI.holiday.Type);
+
+            faceAPI.holidayResult = true;
+            layer.close(parentIndex);
+
+            return false;
+        });
+
+
+        //取消操作，关闭窗口
+        $('#BtnPeopleEditCancel').on('click', function () {
+            faceAPI.holidayResult = false;
+            layer.close(parentIndex);
+
+        });
+
+        faceAPI.CheckInputBox();
+    });
+</script>

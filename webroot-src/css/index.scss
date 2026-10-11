@@ -1,0 +1,51 @@
+// 登录↓
+.login-form {
+  position: relative;
+}
+
+.langSet {
+  position: relative;
+  height: 20px;
+}
+
+ul.layui-nav.layui-layout-right.languageChange {
+  background-color: rgb(255, 255, 255);
+  position: absolute;
+  bottom: -0px !important;
+  top: -10px;
+  color: #0f0f0f;
+  left: 0;
+  right: auto;
+
+  .layui-nav-item {
+    line-height: 40px;
+  }
+
+  .layui-nav-child {
+    top: 45px;
+  }
+
+  #languageStatus {
+    color: #0f0f0f;
+  }
+
+  .layui-nav-more {
+    color: #0f0f0f;
+  }
+}
+
+.Fcard_Menu {
+   
+    .layui-nav .menu-li .layui-nav-more {
+      top: 19px;
+      width: 18px;
+
+      &::before {
+        font-size: 15px;
+      }
+    }
+  
+
+}
+
+// 登录↑

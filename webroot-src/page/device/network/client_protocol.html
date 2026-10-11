@@ -1,0 +1,1473 @@
+<style>
+    #device_NetworkServer_div label {
+        width: 250px;
+    }
+
+    .layui-form-pane .layui-input-block {
+        margin-left: 250px;
+        left: -1px;
+    }
+
+
+
+    .status-black {
+        margin-left: 10px
+    }
+
+    .aligncenter {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+<div class="layui-form layuimini-form  layui-form-pane page_device_NetworkServer" id="device_NetworkServer_div"
+    lay-filter="device_NetworkServer_div_filter">
+    <div class="layui-bg-gray" style="padding: 10px;">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+
+                    <div class="layui-card-body">
+                        <div class="divwidth">
+                            <div class="layui-tab" lay-filter="device_NetworkServer_tab_filter">
+                                <ul class="layui-tab-title">
+                                    <li class="layui-this" lay-id="tcp" language='device.OnecardCloud'>TCP/UDP</li>
+                                    <li lay-id="http">HTTP</li>
+                                    <li lay-id="mqtt">MQTT</li>
+                                    <li lay-id="websocket">Websocket</li>
+                                    <li lay-id="yzw" language='device.yzw'>云筑网</li>
+                                    <li lay-id="LUNBANG_QRCode" language='device.LunBang_QRCodeCloud'>伦邦二维码一体机平台</li>
+                                    <li lay-id="CMCCCommunityDeviceProtocol" language='device.CMCCCommunityDeviceProtocol'>中国移动和社区</li>
+                                    <li lay-id="cert" language='device.clientcert'>客户端证书</li>
+
+                                </ul>
+                                <div class="layui-tab-content">
+                                    <!-- TCP/UDP 协议服务器配置 -->
+                                    <div lay-title="tcp/udp" class="layui-tab-item layui-show">
+                                        <div class="layui-form-item">
+
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" language='device.d1772'> 协议类型</label>
+                                                <div class="layui-input-inline">
+                                                    <select name="OnecardCloudServerProtocol" required lay-verify="">
+                                                        <option language='device.ui_network_server_tcp_disabled'
+                                                                value="0">
+                                                            禁用
+                                                        </option>
+                                                        <option value="1">UDP</option>
+                                                        <option value="2">TCP</option>
+                                                        <option class="FunctionListSSL" value="3">SSL</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" language='device.d177'> 服务器地址</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" maxlength="100" name="ServerAddress"
+                                                       autocomplete="off" class="layui-input"
+                                                       id="device.d178,device.d179,device.d180"
+                                                       data-lang='placeholder,lay-reqText,tipMsg' placeholder="请输入服务器地址"
+                                                       lay-reqText="请输入服务器地址" tipShow="1"
+                                                       tipMsg="服务器地址，最长100个字符，必填<br/>示例：http://192.168.1.86:4610/FaceAPI">
+                                            </div>
+
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" language='device.ServerIPAddr'>
+                                                服务器IP
+                                            </label>
+                                            <div class="layui-input-block">
+                                                <input type="text" maxlength="39" name="ServerIP" autocomplete="off"
+                                                       class="layui-input"
+                                                       id="device.ServerIPAddr_placeholder,device.ServerIPAddr_tipMsg"
+                                                       data-lang='placeholder,tipMsg' placeholder="请输入IP地址： 192.168.1.50"
+                                                       tipShow="1" tipMsg="服务器IP地址，最长19个字符，必填<br/>示例：192.168.1.50">
+                                            </div>
+
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" language='device.d1771'> 服务器端口</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="number" max="65534" min="1" name="ServerPort"
+                                                           maxlength="5" autocomplet * * * e="off" class="layui-input">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" language='device.d181'> 保活包间隔(秒)</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="number" max="65535" min="1" name="KeepaliveTime"
+                                                           maxlength="5" autocomplete="off" class="layui-input"
+                                                           id="device.d182,device.d183,device.d184"
+                                                           data-lang='placeholder,lay-reqText,tipMsg'
+                                                           placeholder="请输入保活包发包间隔" lay-reqText="请输入保活包发包间隔" tipShow="1"
+                                                           tipMsg="保活包发包间隔，必填<br/>取值范围： 1 -- 65535，单位：秒">
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" language='device.PushOfflineMessage'
+                                                       data-lang="tipMsg" id="device.PushOfflineMessage_tip" tipShow="1"
+                                                       tipMsg=""> 推送离线记录</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="checkbox" name="PushOfflineMessage" lay-skin="switch"
+                                                           data-lang='lay-text' lay-text="启用|禁用" value="1"
+                                                           id="device.d401">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" language='device.ClientStatus'>
+                                                    连接状态
+                                                </label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" name="OnecardCloudStatus" autocomplete="off"
+                                                           class="layui-input" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <!-- http协议   -->
+                                    <div lay-title="http" class="layui-tab-item">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" language='device.d204'>开关</label>
+                                            <div class="layui-input-inline">
+                                                <input type="checkbox" name="UseHTTPClient" lay-skin="switch"
+                                                       data-lang='lay-text' lay-text="启用|禁用" value="1" id="device.d401">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item HTTPClient_V">
+
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" language='device.d1772'> 协议类型</label>
+                                                <div class="layui-input-inline">
+                                                    <select class="HTTPClient_ProtocolType"
+                                                            name="HTTPClient_ProtocolType" required lay-verify="">
+                                                        <option class="HTTPClient_V1"
+                                                                language='device.HTTPClient_ProtocolType_1' value="100"
+                                                                selected>
+                                                            V1.0
+                                                        </option>
+                                                        <option class="HTTPClient_V2"
+                                                                language='device.HTTPClient_ProtocolType_2' value="200">
+                                                            V2.0
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" language='device.d177'> 服务器地址</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" maxlength="100" name="HTTPClient_ServerAddr"
+                                                       autocomplete="off" class="layui-input"
+                                                       id="device.d178,device.d179,device.http_server_addr"
+                                                       data-lang='placeholder,lay-reqText,tipMsg' placeholder="请输入服务器地址"
+                                                       lay-reqText="请输入服务器地址" tipShow="1"
+                                                       tipMsg="服务器地址，最长100个字符，必填<br/>示例：http://192.168.1.86:4610/FaceAPI">
+                                            </div>
+
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" language='device.d181'> 保活包间隔(秒)</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="number" max="65535" min="1"
+                                                           name="HTTPClient_KeepaliveTime" maxlength="5" autocomplete="off"
+                                                           class="layui-input" id="device.d182,device.d183,device.d184"
+                                                           data-lang='placeholder,lay-reqText,tipMsg'
+                                                           placeholder="请输入保活包发包间隔" lay-reqText="请输入保活包发包间隔" tipShow="1"
+                                                           tipMsg="保活包发包间隔，必填<br/>取值范围： 1 -- 65535，单位：秒">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" language='device.d267'> GZIP压缩传输</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="checkbox" name="HTTPClient_UseGZIP" lay-skin="switch"
+                                                           data-lang='lay-text' lay-text="启用|禁用" value="1"
+                                                           id="device.d402">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" language='device.ClientStatus'>
+                                                    连接状态
+                                                </label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" name="HTTPClientStatus" autocomplete="off"
+                                                           class="layui-input" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <!-- MQTT协议  -->
+                                    <div lay-title="mqtt" class="layui-tab-item">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" language='device.d204'>开关</label>
+                                            <div class="layui-input-inline">
+                                                <input type="checkbox" name="UseMQTTClient" lay-skin="switch"
+                                                       data-lang='lay-text' lay-text="启用|禁用" value="1" id="device.d401">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item FunctionListSSL">
+                                            <label class="layui-form-label" language='device.d334'>启用SSL</label>
+                                            <div class="layui-input-inline">
+                                                <input type="checkbox" name="UseMQTTSSL" lay-skin="switch"
+                                                       data-lang='lay-text' lay-text="启用|禁用" value="1" id="device.d401">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" language='device.d177'> 服务器地址</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" maxlength="100" name="MQTTServerAddr"
+                                                       autocomplete="off" class="layui-input"
+                                                       id="device.d178,device.d179,device.d180"
+                                                       data-lang='placeholder,lay-reqText,tipMsg' placeholder="请输入服务器地址"
+                                                       lay-reqText="请输入服务器地址" tipShow="1"
+                                                       tipMsg="服务器地址，最长100个字符，必填<br/>示例：http://192.168.1.86:4610/FaceAPI">
+                                            </div>
+
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" language='device.d259'> 端口号</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="number" max="65534" min="1" name="MQTTPort"
+                                                           autocomplete="off" class="layui-input" maxlength="5"
+                                                           id="device.mqtt_port_tip1,device.mqtt_port_tip2,device.mqtt_port_tip3"
+                                                           data-lang='placeholder,lay-reqText,tipMsg'
+                                                           placeholder="请输入MQTT服务器的监听端口号" lay-reqText="请输入MQTT服务器的监听端口号"
+                                                           tipShow="1"
+                                                           tipMsg="请输入MQTT服务器的监听端口号<br/>取值范围： 1 -- 65534 <br/>默认值：1883<br/>启用SSL后默认值:8883">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" language='device.mqtt_clientid'>
+                                                客户端ID
+                                            </label>
+                                            <div class="layui-input-block">
+                                                <input type="text" maxlength="100" name="MQTTClientID"
+                                                       autocomplete="off" class="layui-input"
+                                                       id="device.mqtt_clientid_tip1,device.mqtt_clientid_tip2,device.mqtt_clientid_tip3"
+                                                       data-lang='placeholder,lay-reqText,tipMsg' placeholder="请输入客户端ID"
+                                                       lay-reqText="请输入用于在MQTT服务器中进行唯一表示的客户端ID" tipShow="1"
+                                                       tipMsg="请输入用于在MQTT服务器中进行唯一表示的客户端ID<br>最长100个字符<br>客户端是设备在服务器上的唯一身份标识，可使用{SN}来表示使用设备SN">
+                                            </div>
+
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" language='device.mqtt_user'> 用户名</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" maxlength="100" name="MQTTLoginName"
+                                                       autocomplete="off" class="layui-input"
+                                                       id="device.mqtt_user_tip1,device.mqtt_user_tip2,device.mqtt_user_tip3"
+                                                       data-lang='placeholder,lay-reqText,tipMsg'
+                                                       placeholder="请输入用于登录MQTT服务器的用户名" lay-reqText="请输入用于登录MQTT服务器的用户名"
+                                                       tipShow="1" tipMsg="请输入用于登录MQTT服务器的用户名，最长100个字符">
+                                            </div>
+
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" language='device.mqtt_pwd'> 密码</label>
+                                            <div class="layui-input-block">
+                                                <input type="password" maxlength="100" name="MQTTLoginPassword"
+                                                       autocomplete="off" class="layui-input"
+                                                       id="device.mqtt_pwd_tip1,device.mqtt_pwd_tip2,device.mqtt_pwd_tip3"
+                                                       data-lang='placeholder,lay-reqText,tipMsg'
+                                                       placeholder="请输入用于登录MQTT服务器的用户密码" lay-reqText="请输入用于登录MQTT服务器的用户密码"
+                                                       tipShow="1" tipMsg="请输入用于登录MQTT服务器的用户密码，最长100个字符">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" language='device.mqtt_publish'>
+                                                消息发布主题
+                                            </label>
+                                            <div class="layui-input-block">
+                                                <input type="text" maxlength="100" name="MQTTPublishTopic"
+                                                       autocomplete="off" class="layui-input"
+                                                       id="device.mqtt_publish_tip1,device.mqtt_publish_tip2,device.mqtt_publish_tip3"
+                                                       data-lang='placeholder,lay-reqText,tipMsg'
+                                                       placeholder="请输入设备发送消息到MQTT服务器时使用的发布主题"
+                                                       lay-reqText="请输入设备发送消息到MQTT服务器时使用的发布主题" tipShow="1"
+                                                       tipMsg="请输入设备发送消息到MQTT服务器时使用的发布主题，最长100个字符">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" language='device.mqtt_subscribe'>
+                                                订阅主题
+                                            </label>
+                                            <div class="layui-input-block">
+                                                <input type="text" maxlength="100" name="MQTTSubscribeTopic"
+                                                       autocomplete="off" class="layui-input"
+                                                       id="device.mqtt_subscribe_tip1,device.mqtt_subscribe_tip2,device.mqtt_subscribe_tip3"
+                                                       data-lang='placeholder,lay-reqText,tipMsg'
+                                                       placeholder="请输入设备需要订阅的主题，用来接收服务器消息"
+                                                       lay-reqText="请输入设备需要订阅的主题，用来接收服务器消息" tipShow="1"
+                                                       tipMsg="请输入设备需要订阅的主题，用来接收服务器消息，最长100个字符">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" language='device.d181'> 保活包间隔(秒)</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="number" max="65535" min="1" name="MQTT_KeepaliveTime"
+                                                           maxlength="5" autocomplete="off" class="layui-input"
+                                                           id="device.d182,device.d183,device.d184"
+                                                           data-lang='placeholder,lay-reqText,tipMsg'
+                                                           placeholder="请输入保活包发包间隔" lay-reqText="请输入保活包发包间隔" tipShow="1"
+                                                           tipMsg="保活包发包间隔，必填<br/>取值范围： 1 -- 65535，单位：秒">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" language='device.d267'> GZIP压缩传输</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="checkbox" name="MQTT_UseGZIP" lay-skin="switch"
+                                                           data-lang='lay-text' lay-text="启用|禁用" value="1"
+                                                           id="device.d402">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" language='device.ClientStatus'>
+                                                    连接状态
+                                                </label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" name="MQTTClientStatus" autocomplete="off"
+                                                           class="layui-input" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+
+
+
+                                    <!--WebsocketClient 协议兼容协议-->
+                                    <div lay-title="websocket" class="layui-tab-item">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" language='device.d204'>开关</label>
+                                            <div class="layui-input-inline">
+                                                <input type="checkbox" name="UseWebsocketClient" lay-skin="switch"
+                                                       data-lang='lay-text' lay-text="启用|禁用" value="1" id="device.d401">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item Websocket_V">
+
+                                            <!-- <div class="layui-inline">
+                                                <label class="layui-form-label" language='device.d1772'> 协议类型</label>
+                                                <div class="layui-input-inline">
+                                                    <select name="WebsocketClient_ProtocolType" required lay-verify="">
+                                                        <option class="Websocket_V1"
+                                                                language='device.WebsocketClient_ProtocolType_1' value="100"
+                                                                selected>
+                                                            V1.0
+                                                        </option>
+                                                        <option class="Websocket_V2"
+                                                                language='device.WebsocketClient_ProtocolType_2'
+                                                                value="200">
+                                                            V2.0
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div> -->
+
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" language='device.d177'> 服务器地址</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" maxlength="100" name="WebsocketClient_ServerAddr"
+                                                       autocomplete="off" class="layui-input"
+                                                       id="device.d178,device.d179,device.websocket_server_addr"
+                                                       data-lang='placeholder,lay-reqText,tipMsg' placeholder="请输入服务器地址"
+                                                       lay-reqText="请输入服务器地址" tipShow="1"
+                                                       tipMsg="服务器地址，最长100个字符，必填<br/>示例：http://192.168.1.86:4610/FaceAPI">
+                                            </div>
+
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" language='device.d181'> 保活包间隔(秒)</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="number" max="65535" min="1"
+                                                           name="WebsocketClient_KeepaliveTime" maxlength="5"
+                                                           autocomplete="off" class="layui-input"
+                                                           id="device.d182,device.d183,device.d184"
+                                                           data-lang='placeholder,lay-reqText,tipMsg'
+                                                           placeholder="请输入保活包发包间隔" lay-reqText="请输入保活包发包间隔" tipShow="1"
+                                                           tipMsg="保活包发包间隔，必填<br/>取值范围： 1 -- 65535，单位：秒">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" language='device.d267'> GZIP压缩传输</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="checkbox" name="WebsocketClient_UseGZIP"
+                                                           lay-skin="switch" data-lang='lay-text' lay-text="启用|禁用"
+                                                           value="1" id="device.d402">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" language='device.ClientStatus'>
+                                                    连接状态
+                                                </label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" name="WebsocketClientStatus" autocomplete="off"
+                                                           class="layui-input" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+                                    <!--云筑网协议-->
+                                    <div lay-title="http_yzw" class="layui-tab-item">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" language='device.d204'>开关</label>
+                                            <div class="layui-input-inline">
+                                                <input type="checkbox" name="UseYZW" lay-skin="switch"
+                                                       data-lang='lay-text' lay-text="启用|禁用" value="1" id="device.d401">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" language='device.d177'> 服务器地址</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" maxlength="100" name="YZWAddr" autocomplete="off"
+                                                       class="layui-input"
+                                                       id="device.d178,device.d179,device.http_server_addr"
+                                                       data-lang='placeholder,lay-reqText,tipMsg' placeholder="请输入服务器地址"
+                                                       lay-reqText="请输入服务器地址" tipShow="1"
+                                                       tipMsg="服务器地址，最长100个字符，必填<br/>示例：http://192.168.1.86:4610/FaceAPI">
+                                            </div>
+
+                                        </div>
+
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" language='device.YZW_NotUploadRecord'>
+                                                    禁止上传打卡记录(休闲区)
+                                                </label>
+                                                <div class="layui-input-inline">
+                                                    <input type="checkbox" name="YZW_NotUploadRecord" lay-skin="switch"
+                                                           data-lang='lay-text' lay-text="启用|禁用" value="1"
+                                                           id="device.d402">
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label"
+                                                       language='device.YZW_NotUploadUserPhoto'> 禁止更新工人近照</label>
+                                                <div class="layui-input-inline">
+                                                    <input type="checkbox" name="YZW_NotUploadUserPhoto"
+                                                           lay-skin="switch" data-lang='lay-text' lay-text="启用|禁用"
+                                                           value="1" id="device.d402">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" language='device.ClientStatus'>
+                                                    连接状态
+                                                </label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" name="YZWClientStatus" autocomplete="off"
+                                                           class="layui-input" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--伦邦二维码一体机平台-->
+                                    <div lay-title="LUNBANG_QRCode" class="layui-tab-item">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" language='device.d204'>开关</label>
+                                            <div class="layui-input-inline">
+                                                <input type="checkbox" name="UseLUNBANG_QRCode" lay-skin="switch"
+                                                       data-lang='lay-text' lay-text="启用|禁用" value="1" id="device.d401">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" language='device.d177'> 服务器地址</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" maxlength="100" name="LUNBANG_QRCode_Addr"
+                                                       autocomplete="off" class="layui-input"
+                                                       id="device.d178,device.d179,device.http_server_addr"
+                                                       data-lang='placeholder,lay-reqText,tipMsg' placeholder="请输入服务器地址"
+                                                       lay-reqText="请输入服务器地址" tipShow="1"
+                                                       tipMsg="服务器地址，最长100个字符，必填<br/>示例：http://192.168.1.86:4610/FaceAPI">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label"> SN</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" maxlength="100" name="LUNBANG_QRCode_DeviceSN"
+                                                       autocomplete="off" class="layui-input">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" language='device.DeviceName'> 设备名称</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" maxlength="100" name="LUNBANG_QRCode_DeviceName"
+                                                       autocomplete="off" class="layui-input">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" language='device.DeviceLocation'>
+                                                设备位置
+                                            </label>
+                                            <div class="layui-input-block">
+                                                <input type="text" maxlength="100" name="LUNBANG_QRCode_Location"
+                                                       autocomplete="off" class="layui-input">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" language='device.DeviceLongitude'>
+                                                    经度
+                                                </label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" maxlength="30" name="LUNBANG_QRCode_Longitude"
+                                                           autocomplete="off" class="layui-input">
+                                                </div>
+                                            </div>
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" language='device.DeviceLatitude'>
+                                                    纬度
+                                                </label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" maxlength="30" name="LUNBANG_QRCode_Latitude"
+                                                           autocomplete="off" class="layui-input">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" language='device.DeviceRemark'> 备注</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" maxlength="100" name="LUNBANG_QRCode_Remark"
+                                                       autocomplete="off" class="layui-input">
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <!--中国移动和社区-->
+                                    <div lay-title="CMCCCommunityDeviceProtocol" class="layui-tab-item">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" language='device.d204'>开关</label>
+                                            <div class="layui-input-inline">
+                                                <input type="checkbox" name="UseCMCCCommunityDeviceProtocol" lay-skin="switch"
+                                                       data-lang='lay-text' lay-text="启用|禁用" value="1" id="device.d401">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label" language='device.d177'> 服务器地址</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" maxlength="100" name="CMCCCommunityDeviceProtocolHTTPServerAddr"
+                                                       autocomplete="off" class="layui-input"
+                                                       id="device.d178,device.d179,device.http_server_addr"
+                                                       data-lang='placeholder,lay-reqText,tipMsg' placeholder="请输入服务器地址"
+                                                       lay-reqText="请输入服务器地址" tipShow="1"
+                                                       tipMsg="服务器地址，最长100个字符，必填<br/>示例：http://192.168.1.86:4610/FaceAPI">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-inline">
+                                                <label class="layui-form-label" language='device.ClientStatus'>
+                                                    连接状态
+                                                </label>
+                                                <div class="layui-input-inline">
+                                                    <input type="text" name="CMCCCommunityClientStatus" autocomplete="off"
+                                                           class="layui-input" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <!-- 客户端证书  -->
+                                    <div lay-title="clientcert" class="layui-tab-item">
+                                        <div class="layui-Card">
+                                            <div class="layui-Card-header" language='device.clientcert_pem'>
+                                                客户端证书(PEM格式)
+                                            </div>
+                                            <div class="layui-Card-body">
+                                                <textarea name="ClientCert" style="width: 650px; height: 400px;"
+                                                          tipShow="1"
+                                                          id="device.clientcert_pem_tip1,device.clientcert_pem_tip2"
+                                                          data-lang='placeholder,tipMsg' placeholder="请输入客户端证书(PEM格式)"
+                                                          tipMsg="设备在使用SSL协议连接服务器后发送到服务器进行身份验证的证书，可为空。证书需要已 -----BEGIN CERTIFICATE----- 开头和结尾。"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-Card">
+                                            <div class="layui-Card-header" language='device.clientcert_key'>
+                                                客户端证书私钥(PEM格式)
+                                            </div>
+                                            <div class="layui-Card-body">
+                                                <textarea name="ClientCertKey" style="width: 650px; height: 450px;"
+                                                          tipShow="1"
+                                                          id="device.clientcert_key_tip1,device.clientcert_key_tip2"
+                                                          data-lang='placeholder,tipMsg' placeholder="请输入客户端证书的私钥(PEM格式)"
+                                                          tipMsg="设备在使用SSL协议连接服务器后发送到服务器进行身份验证的证书，可为空。<br/> 证书私钥需要 -----BEGIN PRIVATE KEY----- 开头和结尾。<br/> 配置客户端证书私钥后，必须配置客户端证书。"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="layui-Card">
+                                            <div class="layui-Card-header" language='device.cacert_pem'>
+                                                服务器的CA证书(PEM格式)
+                                            </div>
+                                            <div class="layui-Card-body">
+                                                <textarea name="CACert" style="width: 650px; height: 400px;" tipShow="1"
+                                                          id="device.catcert_tip1,device.catcert_tip2"
+                                                          data-lang='placeholder,tipMsg' placeholder="请输入服务器CA证书(PEM格式)"
+                                                          tipMsg="设备在使用SSL协议连接服务器后会使用此CA证书验证服务器的证书有效性，如果验证失败或证书过期，则拒绝连接。<br>可为空,为空时则不验证服务器证书。<br/> 证书私钥需要 -----BEGIN CERTIFICATE----- 开头和结尾。"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md12">
+            <div class="layui-card">
+
+                <div class="layui-card-body">
+                    <div class="layui-btn-container aligncenter">
+                        <button type="submit" class="layui-btn layui-btn-normal" lay-submit lay-filter="data-save-btn"
+                            language='device.d224'>
+                            <i class="layui-icon"></i> 保存
+                        </button>
+                        <button type="reset" class="layui-btn layui-btn-danger" id="data-reset-btn" language='Sever.s1'>
+                            <i class="layui-icon"></i> 刷新
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+
+
+    layui.use(['form', 'laydate', 'table', 'miniPage', 'element', 'faceAPI'], function () {
+        setLanguage();
+        setAllAttrVal();
+        var element = layui.element;
+        var faceAPI = layui.faceAPI;
+        var form = layui.form;
+        var $ = layui.$;
+        var laydate = layui.laydate;
+        var formdata;
+
+        form.render();
+        // ⭐ 新增：监听所有协议开关的 change 事件，实现即时互斥
+  // 监听所有协议开关的 change 事件，实现即时互斥
+        $(document).on('change', 'input[name="UseHTTPClient"], input[name="UseMQTTClient"], input[name="UseWebsocketClient"], input[name="UseYZW"], input[name="UseLUNBANG_QRCode"], input[name="UseCMCCCommunityDeviceProtocol"]', function() {
+            var $this = $(this);
+            var currentName = $this.attr('name');
+            var currentFormData = formdata || {};
+
+            // 如果当前开关是被打开的状态
+            if($this.prop('checked')) {
+                var switchNames = [
+                    "UseHTTPClient",
+                    "UseMQTTClient",
+                    "UseWebsocketClient",
+                    "UseYZW",
+                    "UseLUNBANG_QRCode",
+                    "UseCMCCCommunityDeviceProtocol"
+                ];
+
+                var hasOtherClosed = false;
+
+                switchNames.forEach(function(name) {
+                    if(name !== currentName) {
+                        var $el = $(`input[name="${name}"]`);
+                        if($el.prop('checked')) {
+                            hasOtherClosed = true;
+                        }
+                        $el.prop('checked', false);
+                        // 同步更新formdata
+                        currentFormData[name] = 0;
+                    }
+                });
+
+                // TCP/UDP 是独立下拉，开启其他协议时同样将其重置为禁用，保证互斥
+                var $tcpSelect = $("select[name='OnecardCloudServerProtocol']");
+                if($tcpSelect.val() != 0){
+                    hasOtherClosed = true;
+                    $tcpSelect.val(0);
+                    currentFormData.OnecardCloudServerProtocol = 0;
+                }
+
+                // 更新当前开关对应的formdata
+                currentFormData[currentName] = 1;
+
+                if(hasOtherClosed) {
+                    var tipText = getLanguage("device.switch_protocol_tip");
+                    if(!tipText || tipText == "device.switch_protocol_tip"){
+                        tipText = "已切换到当前协议，其他协议已自动关闭";
+                    }
+                    layer.msg(tipText, {
+                        icon: 0,
+                        time: 2000
+                    });
+                }
+
+                // 使用form.val更新数据源
+                form.val("device_NetworkServer_div_filter", currentFormData);
+                form.render('checkbox,select');
+            }
+        });
+
+          // ⭐⭐⭐ TCP/UDP 下拉框的 change 事件（放在上面事件之后）
+        var $tcpSelect = $("select[name='OnecardCloudServerProtocol']");
+        $tcpSelect.off('change').on('change', function() {
+            var val = $(this).val();
+            var currentFormData = formdata || {};
+            
+            if(val != 0) {
+                // 启用 TCP/UDP 时，关闭其他所有协议开关
+                var switchNames = [
+                    "UseHTTPClient",
+                    "UseMQTTClient",
+                    "UseWebsocketClient",
+                    "UseYZW",
+                    "UseLUNBANG_QRCode",
+                    "UseCMCCCommunityDeviceProtocol"
+                ];
+                var hasOtherClosed = false;
+                switchNames.forEach(function(name) {
+                    var $el = $(`input[name="${name}"]`);
+                    if($el.prop('checked')) {
+                        hasOtherClosed = true;
+                    }
+                    $el.prop('checked', false);
+                    // 同步更新formdata
+                    currentFormData[name] = 0;
+                });
+                // 更新TCP协议值
+                currentFormData.OnecardCloudServerProtocol = parseInt(val);
+                
+                if(hasOtherClosed) {
+                    var tipText = getLanguage("device.switch_protocol_tip");
+                    if(!tipText || tipText == "device.switch_protocol_tip"){
+                        tipText = "已切换到TCP/UDP协议，其他协议已自动关闭";
+                    }
+                    layer.msg(tipText, {
+                        icon: 0,
+                        time: 2000
+                    });
+                }
+                
+                // 使用form.val更新数据源
+                form.val("device_NetworkServer_div_filter", currentFormData);
+                form.render('checkbox');
+            }
+        });
+
+        function LoadData() {
+            var parameter = {
+                "NetworkServer": true,
+            };
+            faceAPI.AjaxPOSTJson({
+                data: parameter,
+                url: '/api/Device/GetDetail',
+                success: function (rst) {
+                    if (rst != null && rst.result) {
+                        formdata = rst.content;
+
+                        //获取状态
+                        //一卡通云服务连接状态
+                        // 0--已禁用;1 -- UDP 无连接；2--TCP 未连接；3--TCP 已连接；
+                        var OnecardCloudStatusMap = [];
+                        OnecardCloudStatusMap[0] = getLanguage("device.OnecardCloudStatus_0");
+                        OnecardCloudStatusMap[1] = getLanguage("device.OnecardCloudStatus_1");
+                        OnecardCloudStatusMap[2] = getLanguage("device.OnecardCloudStatus_2");
+                        OnecardCloudStatusMap[3] = getLanguage("device.OnecardCloudStatus_3");
+
+                        formdata.OnecardCloudStatus = OnecardCloudStatusMap[formdata.OnecardCloudStatus];
+
+                        //HTTPClient连接状态
+                        //  0--已禁用;1--已连接；2--连接失败； 3--服务器响应错误; 4--服务器拒绝连接
+                        var HTTPClientStatusMap = [];
+                        HTTPClientStatusMap[0] = getLanguage("device.HTTPClientStatus_0");
+                        HTTPClientStatusMap[1] = getLanguage("device.HTTPClientStatus_1");
+                        HTTPClientStatusMap[2] = getLanguage("device.HTTPClientStatus_2");
+                        HTTPClientStatusMap[3] = getLanguage("device.HTTPClientStatus_3");
+                        HTTPClientStatusMap[4] = getLanguage("device.HTTPClientStatus_4");
+
+                        formdata.HTTPClientStatus = HTTPClientStatusMap[formdata.HTTPClientStatus];
+
+                        //MQTTClient连接状态，
+                        //  0--已禁用;1--已连接；2--连接失败； 3--MQTT CONNECT 握手失败 ; 4 -- Subscribe 订阅主题失败
+                        var MQTTClientStatusMap = [];
+                        MQTTClientStatusMap[0] = getLanguage("device.HTTPClientStatus_0");
+                        MQTTClientStatusMap[1] = getLanguage("device.HTTPClientStatus_1");
+                        MQTTClientStatusMap[2] = getLanguage("device.HTTPClientStatus_2");
+                        MQTTClientStatusMap[3] = getLanguage("device.MQTTClientStatus_3");
+                        MQTTClientStatusMap[4] = getLanguage("device.MQTTClientStatus_4");
+
+                        formdata.MQTTClientStatus = MQTTClientStatusMap[formdata.MQTTClientStatus];
+
+                        //云筑网协议连接状态，
+                        // 0--已禁用;1--TCP 已连接； 2--连接失败；3--服务器响应错误；4--SN未登记
+                        var YZWClientStatusMap = [];
+                        YZWClientStatusMap[0] = getLanguage("device.HTTPClientStatus_0");
+                        YZWClientStatusMap[1] = getLanguage("device.HTTPClientStatus_1");
+                        YZWClientStatusMap[2] = getLanguage("device.HTTPClientStatus_2");
+                        YZWClientStatusMap[3] = getLanguage("device.HTTPClientStatus_3");
+                        YZWClientStatusMap[4] = getLanguage("device.YZWClientStatus_4");
+
+                        formdata.YZWClientStatus = YZWClientStatusMap[formdata.YZWClientStatus];
+
+
+
+                        //移动和小区客户端状态，
+                        // 0--已禁用;1--MQTT 已连接；
+                        // 2--HTTP连接失败；3--HTTP服务器响应错误；4--SN未登记；
+                        // 5--MQTT 连接失败；6--MQTT 拒绝连接;
+                        // 10--HTTP连接中；11--MQTT连接中
+                        var CMCCCommunityClientStatusMap = [];
+
+                        CMCCCommunityClientStatusMap[0] = getLanguage("device.CMCCClientStatus_Invalid");//已禁用",
+                        CMCCCommunityClientStatusMap[1] = getLanguage("device.CMCCClientStatus_MQTTConnected");//MQTT 已连接",
+                        CMCCCommunityClientStatusMap[10] = getLanguage("device.CMCCClientStatus_HTTPConnecting");//HTTP连接中",
+                        CMCCCommunityClientStatusMap[11] = getLanguage("device.CMCCClientStatus_MQTTConnecting");//MQTT连接中",
+                        CMCCCommunityClientStatusMap[2] = getLanguage("device.CMCCClientStatus_HTTPConnectTimeout");//HTTP连接失败",
+                        CMCCCommunityClientStatusMap[3] = getLanguage("device.CMCCClientStatus_HTTPResponseError");//HTTP服务器响应错误",
+                        CMCCCommunityClientStatusMap[4] = getLanguage("device.CMCCClientStatus_SNNotExist");//SN未登记",
+                        CMCCCommunityClientStatusMap[5] = getLanguage("device.CMCCClientStatus_MQTTConnectTimeout");//MQTT 连接失败",
+                        CMCCCommunityClientStatusMap[6] = getLanguage("device.CMCCClientStatus_MQTTConnectFail");//MQTT 拒绝连接",
+                        CMCCCommunityClientStatusMap[7] = getLanguage("device.CMCCClientStatus_MQTTClosed");//MQTT已断开连接",
+                        CMCCCommunityClientStatusMap[8] = getLanguage("device.CMCCClientStatus_MQTTSubscribeFail");//MQTT 订阅主题失败",
+
+                        formdata.CMCCCommunityClientStatus = CMCCCommunityClientStatusMap[formdata.CMCCCommunityClientStatus];
+
+
+
+                        form.val("device_NetworkServer_div_filter", formdata);
+
+                        if (formdata.UseMQTTClient == 1) {
+                            element.tabChange('device_NetworkServer_tab_filter', "mqtt");
+                        }
+                        if (formdata.UseWebsocketClient == 1) {
+                            element.tabChange('device_NetworkServer_tab_filter', "websocket");
+                        }
+                        if (formdata.UseHTTPClient == 1) {
+                            element.tabChange('device_NetworkServer_tab_filter', "http");
+                        }
+                        if (formdata.UseYZW == 1) {
+                            element.tabChange('device_NetworkServer_tab_filter', "yzw");
+                        }
+
+
+                    };
+                }
+            });
+        }
+        LoadData();
+        element.on('tab(device_NetworkServer_tab_filter)', function(data){
+            // 仅切换 Tab 视图，不修改任何协议开关/下拉状态。
+            // 协议互斥只在用户主动“开启”某个协议时生效（见上方开关 change 事件、TCP/UDP 下拉 change 事件），
+            // 避免仅仅浏览其他 Tab 就把已开启的协议自动关闭。
+        });
+
+        form.on('submit(data-save-btn)', function (data) {
+            var postdata = data.field;
+            var iServerCount = 0;
+            //检查UDP/TCP参数
+            {
+                postdata.OnecardCloudServerProtocol = Number(postdata.OnecardCloudServerProtocol);
+                postdata.ServerPort = faceAPI.CheckNumberValue(postdata.ServerPort, 1, 65535, 9003);
+                postdata.KeepaliveTime = faceAPI.CheckNumberValue(postdata.KeepaliveTime, 1, 65535, 30);
+                postdata.PushOfflineMessage = postdata.PushOfflineMessage == '1' ? 1 : 0;
+                if (postdata.OnecardCloudServerProtocol != 0) {
+                    iServerCount++;
+
+                    if (postdata.ServerAddress == "" && postdata.ServerIP == "") {
+                        layer.alert(getLanguage("device.OnecardCloudServerAddrNULL"), { icon: 2 });
+                        return 0;
+                    }
+
+                    if (postdata.ServerAddress != "") {
+                        //检查TCP参数是否合法
+                        if (!CheckAddr(postdata.ServerAddress,
+                            ["http://", "https://", "ftp://", "file://", "ws://", "wss://"],
+                            false, 'tcp',
+                            getLanguage("device.d178"),
+                            getLanguage("device.d180")
+                        )) {
+                            return 0;
+                        }
+                    }
+                    if (postdata.ServerIP != "") {
+                        //检查TCP参数是否合法
+                        if (!CheckIP(postdata.ServerIP)) {
+                            layer.alert(getLanguage("device.OnecardCloudServerIPError"), { icon: 2 });
+                            return 0;
+                        }
+                    }
+                }
+            }
+
+
+            //检查HTTP参数
+            {
+                postdata.UseHTTPClient = postdata.UseHTTPClient == '1' ? 1 : 0;
+                if (postdata.UseHTTPClient == 1) {
+                    iServerCount++;
+                    //检查HTTP服务器是否合法
+                    if (!CheckAddr(postdata.HTTPClient_ServerAddr,
+                        ["http://", "https://"], true, 'http',
+                        getLanguage("device.d178"),
+                        getLanguage("device.http_server_addr")
+                    )) {
+                        return 0;
+                    }
+                }
+                postdata.HTTPClient_KeepaliveTime = faceAPI.CheckNumberValue(postdata.HTTPClient_KeepaliveTime, 1, 65535, 30);
+                postdata.HTTPClient_ProtocolType = Number(postdata.HTTPClient_ProtocolType);
+                postdata.HTTPClient_UseGZIP = postdata.HTTPClient_UseGZIP == '1' ? 1 : 0;
+            }
+
+            //检查 MQTT 参数
+            {
+                postdata.UseMQTTClient = postdata.UseMQTTClient == '1' ? 1 : 0;
+                postdata.UseMQTTSSL = postdata.UseMQTTSSL == '1' ? 1 : 0;
+                postdata.MQTT_UseGZIP = postdata.MQTT_UseGZIP == '1' ? 1 : 0;
+                if (postdata.UseMQTTClient == 1) {
+                    iServerCount++;
+                    //检查HTTP服务器是否合法
+                    if (!CheckAddr(postdata.MQTTServerAddr,
+                        ["http://", "https://", "ftp://", "file://", "ws://", "wss://"],
+                        false, 'mqtt',
+                        getLanguage("device.d178"),
+                        getLanguage("device.d180")
+                    )) {
+                        return 0;
+                    }
+
+
+                    //MQTT 客户端ID
+                    if (postdata.MQTTClientID.length == 0) {
+                        element.tabChange('device_NetworkServer_tab_filter', 'mqtt');
+                        layer.alert(getLanguage("device.mqtt_clientid_tip1"), { icon: 2 });
+                        return 0;
+                    }
+                    //MQTT 用户名
+                    if (postdata.MQTTLoginName.length == 0) {
+                        element.tabChange('device_NetworkServer_tab_filter', 'mqtt');
+                        layer.alert(getLanguage("device.mqtt_user_tip1"), { icon: 2 });
+                        return 0;
+                    }
+                    //MQTT 登录密码
+                    if (postdata.MQTTLoginPassword.length == 0) {
+                        element.tabChange('device_NetworkServer_tab_filter', 'mqtt');
+                        layer.alert(getLanguage("device.mqtt_pwd_tip1"), { icon: 2 });
+                        return 0;
+                    }
+
+                    //MQTT 设备发送数据使用的Topic
+                    if (postdata.MQTTPublishTopic.length == 0) {
+                        element.tabChange('device_NetworkServer_tab_filter', 'mqtt');
+                        layer.alert(getLanguage("device.mqtt_publish_tip1"), { icon: 2 });
+                        return 0;
+                    }
+                    //MQTT 设备接收数据需要订阅的Topic
+                    if (postdata.MQTTSubscribeTopic.length == 0) {
+                        element.tabChange('device_NetworkServer_tab_filter', 'mqtt');
+                        layer.alert(getLanguage("device.mqtt_subscribe_tip1"), { icon: 2 });
+                        return 0;
+                    }
+                }
+
+                if (postdata.UseMQTTSSL == 1)
+                    postdata.MQTTPort = faceAPI.CheckNumberValue(postdata.MQTTPort, 1, 65535, 8883);// <br/>默认值：1883<br/>启用SSL后默认值:8883
+                else
+                    postdata.MQTTPort = faceAPI.CheckNumberValue(postdata.MQTTPort, 1, 65535, 1883);
+
+                postdata.MQTT_KeepaliveTime = faceAPI.CheckNumberValue(postdata.MQTT_KeepaliveTime, 1, 65535, 30);
+
+            }
+
+            //检查 WebsocketClient 参数
+            {
+                postdata.UseWebsocketClient = postdata.UseWebsocketClient == '1' ? 1 : 0;
+                if (postdata.UseWebsocketClient == 1) {
+                    iServerCount++;
+                    if (!CheckAddr(postdata.WebsocketClient_ServerAddr,
+                        ["ws://", "wss://"], true, 'websocket',
+                        getLanguage("device.d178"),
+                        getLanguage("device.websocket_server_addr")
+                    )) {
+                        return 0;
+                    }
+                }
+                postdata.WebsocketClient_KeepaliveTime = faceAPI.CheckNumberValue(postdata.WebsocketClient_KeepaliveTime, 1, 65535, 30);
+                postdata.WebsocketClient_UseGZIP = postdata.WebsocketClient_UseGZIP == '1' ? 1 : 0;
+                postdata.WebsocketClient_ProtocolType = Number(postdata.WebsocketClient_ProtocolType);
+
+            }
+
+            //检查 云筑网  参数
+            {
+                postdata.UseYZW = postdata.UseYZW == '1' ? 1 : 0;
+                postdata.YZW_NotUploadRecord = postdata.YZW_NotUploadRecord == '1' ? 1 : 0;
+                postdata.YZW_NotUploadUserPhoto = postdata.YZW_NotUploadUserPhoto == '1' ? 1 : 0;
+
+                if (postdata.UseYZW == 1) {
+                    iServerCount++;
+
+                    if (!CheckAddr(postdata.YZWAddr,
+                        ["http://", "https://"], true, 'yzw',
+                        getLanguage("device.d178"),
+                        getLanguage("device.http_server_addr")
+                    )) {
+                        return 0;
+                    }
+
+                }
+
+            }
+
+            //检查 伦邦二维码一体机平台  参数
+            {
+                postdata.UseLUNBANG_QRCode = postdata.UseLUNBANG_QRCode == '1' ? 1 : 0;
+                if (postdata.UseLUNBANG_QRCode == 1) {
+                    iServerCount++;
+                    if (!CheckAddr(postdata.LUNBANG_QRCode_Addr,
+                        ["http://", "https://"], true, 'LUNBANG_QRCode',
+                        getLanguage("device.d178"),
+                        getLanguage("device.http_server_addr")
+                    )) {
+                        return 0;
+                    }
+                    if (postdata.LUNBANG_QRCode_DeviceSN.length == 0) {
+                        layer.alert(getLanguage("device.LUNBANG_QRCode_DeviceSN_Error"), { icon: 2 });
+                        return 0;
+                    }
+                    if (postdata.LUNBANG_QRCode_DeviceName.length == 0) {
+                        layer.alert(getLanguage("device.LUNBANG_QRCode_DeviceName_Error"), { icon: 2 });
+                        return 0;
+                    }
+
+                }
+            }
+
+            //中国移动和小区协议
+            {
+                //是否启用移动和小区设备协议  1--启用；0--禁用；
+                postdata.UseCMCCCommunityDeviceProtocol = postdata.UseCMCCCommunityDeviceProtocol == '1' ? 1 : 0;
+                //移动和小区设备协议 HTTP服务器地址  格式 http://iot2.facedata.vip:20889
+                if (postdata.UseCMCCCommunityDeviceProtocol == 1) {
+                    iServerCount++;
+                    if (!CheckAddr(postdata.CMCCCommunityDeviceProtocolHTTPServerAddr,
+                        ["http://", "https://"], true, 'CMCCCommunityDeviceProtocol',
+                        getLanguage("device.d178"),
+                        getLanguage("device.http_server_addr")
+                    )) {
+                        return 0;
+                    }
+                }
+            }
+
+            //检查证书是否合法
+            {
+
+                if (postdata.ClientCert == undefined) {
+                    postdata.ClientCert = "";
+                    postdata.ClientCertKey = "";
+                    postdata.CACert = "";
+                }
+
+                if (!CheckCertString(postdata.ClientCert, false, "device.clientcert_pem_err")) {
+                    return 0;
+                }
+
+                if (!CheckCertString(postdata.ClientCertKey, true, "device.clientcert_key_err")) {
+                    return 0;
+                }
+                if (!CheckCertString(postdata.CACert, false, "device.catcert_err")) {
+                    return 0;
+                }
+
+                postdata.ClientCert = postdata.ClientCert.trim();
+                postdata.ClientCertKey = postdata.ClientCertKey.trim();
+                postdata.CACert = postdata.CACert.trim();
+            }
+
+
+            // 同时启用了多个协议：询问用户是否只保存当前 tab 开启的协议
+            if (iServerCount > 1) {
+                var activeTabId = $('.layui-tab[lay-filter="device_NetworkServer_tab_filter"] > .layui-tab-title > li.layui-this').attr('lay-id');
+
+                // tab 与协议字段映射
+                var tabFieldMap = {
+                    'tcp': 'OnecardCloudServerProtocol',
+                    'http': 'UseHTTPClient',
+                    'mqtt': 'UseMQTTClient',
+                    'websocket': 'UseWebsocketClient',
+                    'yzw': 'UseYZW',
+                    'LUNBANG_QRCode': 'UseLUNBANG_QRCode',
+                    'CMCCCommunityDeviceProtocol': 'UseCMCCCommunityDeviceProtocol'
+                };
+
+                // 所有协议字段（TCP 为下拉，其余为开关）
+                var allProtocolFields = ['OnecardCloudServerProtocol', 'UseHTTPClient', 'UseMQTTClient', 'UseWebsocketClient', 'UseYZW', 'UseLUNBANG_QRCode', 'UseCMCCCommunityDeviceProtocol'];
+
+                // 确定要保留的协议：优先当前 tab 对应的协议；若当前 tab 无协议或未开启，则按固定顺序取第一个已开启的
+                var keepField = tabFieldMap[activeTabId];
+                if (!keepField || postdata[keepField] == undefined || postdata[keepField] == 0) {
+                    keepField = '';
+                    for (var i = 0; i < allProtocolFields.length; i++) {
+                        var f = allProtocolFields[i];
+                        if (postdata[f] != undefined && postdata[f] != 0) {
+                            keepField = f;
+                            break;
+                        }
+                    }
+                }
+                if (!keepField) {
+                    layer.alert(getLanguage("device.server_count_limit"), { icon: 2 });
+                    return 0;
+                }
+
+                layer.confirm(getLanguage("device.server_count_limit_confirm"), { icon: 3, btn: ["Yes", "No"] }, function (index, layero, that) {
+                    layer.close(index);
+
+                    // 关闭除保留协议外的所有协议
+                    for (var i = 0; i < allProtocolFields.length; i++) {
+                        var f = allProtocolFields[i];
+                        if (f != keepField) {
+                            postdata[f] = 0;
+                        }
+                    }
+
+                    // 同步界面与 formdata
+                    var syncData = formdata || {};
+                    for (var i = 0; i < allProtocolFields.length; i++) {
+                        var f = allProtocolFields[i];
+                        syncData[f] = postdata[f];
+                    }
+                    form.val("device_NetworkServer_div_filter", syncData);
+                    form.render('checkbox,select');
+
+                    // 继续走原有保存确认流程
+                    doConfirmSave();
+                });
+                return 0;
+            }
+
+            // 原有的保存确认流程
+            function doConfirmSave() {
+                layer.confirm(getLanguage("Sever.s2"), { icon: 3, btn: ["Yes", "No"] }, function (index, layero, that) {
+
+                    //启动遮罩层
+                    var waitLayerIndex = layer.load(1, { shade: [0.5, '#FFF'] });
+
+                    faceAPI.AjaxPOSTJson({
+                        data: postdata,
+                        url: '/api/device/UpdateParameter',
+                        success: function (result) {
+                            layer.close(waitLayerIndex);
+
+                            if (result.result == false) {
+                                layer.alert(result.error, { icon: 2 });
+                            }
+                            else {
+                                formdata = data.field;
+                                layer.alert(getLanguage("Sever.s3"), { icon: 1 });
+                            }
+                        }
+                    });
+                    layer.close(index);
+                });
+            }
+            doConfirmSave();
+
+            return 0;
+
+        });
+
+        function CheckAddr(sAddr, startsWithList, allow, tabLabel, reqText, tipText) {
+
+            //检查服务器是否合法
+            if (sAddr.length == 0) {
+                element.tabChange('device_NetworkServer_tab_filter', tabLabel);
+                layer.alert(reqText, { icon: 2 });
+                return false;
+            }
+            var lowerAddr = sAddr.toLowerCase();
+
+            var iSize = startsWithList.length;
+            var include = false;
+            for (var i = 0; i < iSize; i++) {
+                var b1 = lowerAddr.startsWith(startsWithList[i]);
+                if (!allow) {
+                    if (b1) {
+                        element.tabChange('device_NetworkServer_tab_filter', tabLabel);
+                        layer.alert(tipText, { icon: 2 });
+                        return false;
+                    }
+                }
+                if (b1 && allow) {
+                    include = true;
+                    break;
+                }
+
+            }
+
+            if (allow && !include) {
+                element.tabChange('device_NetworkServer_tab_filter', tabLabel);
+                layer.alert(tipText, { icon: 2 });
+                return false;
+            }
+
+
+            return true;
+        }
+        function isValidIPv4(ip) {
+            // 将 IP 地址按点号分割成数组
+            const parts = ip.split('.');
+            // IPv4 地址应该由 4 部分组成
+            if (parts.length !== 4) {
+                return false;
+            }
+            for (let part of parts) {
+                // 检查每一部分是否为有效的数字
+                if (!/^\d+$/.test(part)) {
+                    return false;
+                }
+                const num = parseInt(part, 10);
+                // 检查数字是否在 0 到 255 之间
+                if (num < 0 || num > 255) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        function isValidIPv6(ip) {
+            // 检查是否包含非法字符
+            const validChars = '0123456789abcdefABCDEF:';
+            for (let char of ip) {
+                if (!validChars.includes(char)) {
+                    return false;
+                }
+            }
+            // 检查是否包含过多的冒号
+            const colonCount = (ip.match(/:/g) || []).length;
+            if (colonCount < 2 || colonCount > 7) {
+                return false;
+            }
+            // 处理压缩格式
+            if (ip.includes('::')) {
+                if ((ip.match(/::/g) || []).length > 1) {
+                    return false;
+                }
+                const parts = ip.split('::');
+                let partCount = 0;
+                for (let part of parts) {
+                    if (part !== '') {
+                        partCount += part.split(':').length;
+                    }
+                }
+                if (partCount > 7) {
+                    return false;
+                }
+            } else {
+                const parts = ip.split(':');
+                if (parts.length !== 8) {
+                    return false;
+                }
+                for (let part of parts) {
+                    if (part.length > 4 || part.length === 0) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        function CheckIP(sIP) {
+            if (sIP == "255.255.255.255") return false;
+
+            //检查是否IPv4
+            var isIPv4 = isValidIPv4(sIP);
+
+            if (isIPv4) {
+                return true;
+            }
+
+            var isIPv6 = isValidIPv6(sIP);
+            return isIPv6;
+        }
+
+
+
+        $("#data-reset-btn").on('click', function () {
+            layer.confirm(getLanguage("Sever.s3"), { icon: 3, btn: ["Yes", "No"] }, function (index, layero, that) {
+                LoadData();
+                layer.close(index);
+            });
+        });
+        faceAPI.ShowMouseTipMessageBox('device_NetworkServer_div_filter', layer);
+        faceAPI.CheckInputBox();
+
+
+        //检查证书是否合法
+        function CheckCertString(certString, isKey, tip) {
+
+            if (certString.length == 0) {
+                return true;//允许为空
+            }
+            certString = certString.trim();
+            var sMask = "-----BEGIN CERTIFICATE-----";
+            var sEndMask = "-----END CERTIFICATE-----";
+            if (isKey) {
+                sMask = "-----BEGIN";
+                sEndMask = "PRIVATE KEY-----";
+            }
+
+
+            var b1 = certString.startsWith(sMask);
+            var b2 = certString.endsWith(sEndMask);
+            if (!b1 || !b2) {
+                layer.alert(getLanguage(tip), { icon: 2 });
+                return false;
+            }
+            return true;
+        }
+
+        if (faceAPI?.DeviceFunctionList) {
+            // faceAPI.DeviceFunctionList.HTTPClient_V1=false;
+            // faceAPI.DeviceFunctionList.HTTPClient_V2=false;
+            // faceAPI.DeviceFunctionList.MQTT=false;
+            // faceAPI.DeviceFunctionList.YZW=false;
+            // faceAPI.DeviceFunctionList.WebsocketServer=true;
+            // faceAPI.DeviceFunctionList.Websocket_V1=false;
+            // faceAPI.DeviceFunctionList.Websocket_V2=false;
+            const { HTTPClient_V1, HTTPClient_V2,
+                MQTT,
+                Websocket_V1, Websocket_V2, WebsocketServer,
+                YZW, LUNBANG_QRCode,
+                ClientCert,
+                SSL,
+                CMCCCommunityDeviceProtocol
+            } = faceAPI.DeviceFunctionList
+            console.log('[ faceAPI.DeviceFunctionList ] >', faceAPI.DeviceFunctionList)
+            if (!MQTT) {
+                // faceAPI.removeElement();
+                layui.element.tabDelete('device_NetworkServer_tab_filter', 'mqtt');
+
+            }
+            if (!YZW) {
+                // faceAPI.removeElement();
+                layui.element.tabDelete('device_NetworkServer_tab_filter', 'yzw');
+            }
+
+            let languageType = localStorage.getItem('language') || 'cn';
+            //如果当前语言为为英文则禁用云筑网协议
+            if (languageType == "en") {
+                layui.element.tabDelete('device_NetworkServer_tab_filter', 'yzw');
+            }
+
+            if (!WebsocketServer) {
+                layui.element.tabDelete('device_NetworkServer_tab_filter', 'websocket');
+            }
+
+
+
+
+            if (!HTTPClient_V1 && !HTTPClient_V2) {
+                layui.element.tabDelete('device_NetworkServer_tab_filter', 'http');
+            }
+            else {
+                if (!HTTPClient_V1) {
+                    faceAPI.removeElement('.HTTPClient_V1');
+                }
+                if (!HTTPClient_V2) {
+                    faceAPI.removeElement('.HTTPClient_V2');
+                }
+            }
+
+
+
+            if (!Websocket_V1 && !Websocket_V2) {
+                layui.element.tabDelete('device_NetworkServer_tab_filter', 'websocket');
+            }
+            else {
+                if (!Websocket_V1) {
+                    faceAPI.removeElement('.Websocket_V1');
+                    $('option.Websocket_V1').remove();
+                }
+                if (!Websocket_V2) {
+                    faceAPI.removeElement('.Websocket_V2');
+                    $('option.Websocket_V2').remove();
+                }
+            }
+            if (!LUNBANG_QRCode) {
+                layui.element.tabDelete('device_NetworkServer_tab_filter', 'LUNBANG_QRCode');
+            }
+            if (!CMCCCommunityDeviceProtocol) {
+                layui.element.tabDelete('device_NetworkServer_tab_filter', 'CMCCCommunityDeviceProtocol');
+            }
+
+            if (!SSL) {
+                layui.element.tabDelete('device_NetworkServer_tab_filter', 'cert');
+                //debugger
+                faceAPI.removeElement('.FunctionListSSL');
+                //jquery
+                $('option.FunctionListSSL').remove();
+            }
+            else {
+                if (!ClientCert) {
+                    layui.element.tabDelete('device_NetworkServer_tab_filter', 'cert');
+                }
+            }
+
+            form.render();
+
+
+        }
+
+
+
+
+    });
+</script>

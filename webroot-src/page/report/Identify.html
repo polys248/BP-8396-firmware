@@ -1,0 +1,531 @@
+﻿
+<div class="layuimini-container layuimini-page-anim" divname="IdentifyReport">
+    <div class="layuimini-main">
+
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="search">
+                    <i class="layui-icon"> </i>
+                    <span language='people.p1' t="查询"></span>
+                </button>
+
+                <button class="layui-btn layui-btn-sm " lay-event="refresh" language='Report.r2' t="刷新">
+                </button>
+                <button class="layui-btn layui-btn-sm layui-bg-red" lay-event="ClearRecord" language='Report.r174' t="删除所有记录">
+                </button>
+            </div>
+        </script>
+
+        <table class="layui-hide" id="IdentifyReportPage" lay-filter="IdentifyReportPageTableFilter"> </table>
+
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">
+                <span language='Report.r4'>详情</span>
+            </a>
+        </script>
+    </div>
+</div>
+
+<script>
+
+
+    layui.use(['form', 'table', 'miniPage', 'element', 'faceAPI'], function () {
+        setLanguage();
+        setAllAttrVal();
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            miniPage = layui.miniPage;
+        var faceAPI = layui.faceAPI;
+        var openWH = miniPage.getOpenWidthHeight();
+        form.render();
+        IniSearchPar();
+        var pageWidth = openWH[0];
+
+        var EnentTypeTable = [];
+        EnentTypeTable[1] = getLanguage('Report.EnentType_Identify_01');//刷卡验证
+        EnentTypeTable[2] = getLanguage('Report.EnentType_Identify_02');//指纹验证
+        EnentTypeTable[3] = getLanguage('Report.EnentType_Identify_03');//人脸验证
+        EnentTypeTable[4] = getLanguage('Report.EnentType_Identify_04');//刷卡 + 指纹] = getLanguage('Report.r00');//
+        EnentTypeTable[5] = getLanguage('Report.EnentType_Identify_05');//人脸 + 指纹
+        EnentTypeTable[6] = getLanguage('Report.EnentType_Identify_06');//刷卡 + 人脸
+        EnentTypeTable[7] = getLanguage('Report.EnentType_Identify_07');//刷卡 + 密码
+        EnentTypeTable[8] = getLanguage('Report.EnentType_Identify_08');//人脸 + 密码
+        EnentTypeTable[9] = getLanguage('Report.EnentType_Identify_09');//指纹 + 密码
+        EnentTypeTable[10] = getLanguage('Report.EnentType_Identify_10');//密码验证   用户号加密码
+        EnentTypeTable[11] = getLanguage('Report.EnentType_Identify_11');//刷卡 + 指纹 + 密码
+        EnentTypeTable[12] = getLanguage('Report.EnentType_Identify_12');//刷卡 + 人脸 + 密码
+        EnentTypeTable[13] = getLanguage('Report.EnentType_Identify_13');//指纹 + 人脸 + 密码
+        EnentTypeTable[14] = getLanguage('Report.EnentType_Identify_14');//刷卡 + 指纹 + 人脸
+        EnentTypeTable[15] = getLanguage('Report.EnentType_Identify_15');//重复验证
+        EnentTypeTable[16] = getLanguage('Report.EnentType_Identify_16');//有效期过期
+        EnentTypeTable[17] = getLanguage('Report.EnentType_Identify_17');//开门时段过期
+        EnentTypeTable[18] = getLanguage('Report.EnentType_Identify_18');//节假日时不能开门
+        EnentTypeTable[19] = getLanguage('Report.EnentType_Identify_19');//未注册用户
+        EnentTypeTable[20] = getLanguage('Report.EnentType_Identify_20');//探测锁定
+        EnentTypeTable[21] = getLanguage('Report.EnentType_Identify_21');//有效次数已用尽
+        EnentTypeTable[22] = getLanguage('Report.EnentType_Identify_22');//锁定时验证，禁止开门
+        EnentTypeTable[23] = getLanguage('Report.EnentType_Identify_23');//挂失卡
+        EnentTypeTable[24] = getLanguage('Report.EnentType_Identify_24');//黑名单卡
+        EnentTypeTable[25] = getLanguage('Report.EnentType_Identify_25');//免验证开门 -- 按指纹时用户号为0，刷卡时用户号是卡号
+        EnentTypeTable[26] = getLanguage('Report.EnentType_Identify_26');//禁止刷卡验证  --  【权限认证方式】中禁用刷卡时
+        EnentTypeTable[27] = getLanguage('Report.EnentType_Identify_27');//禁止指纹验证  --  【权限认证方式】中禁用指纹时
+        EnentTypeTable[28] = getLanguage('Report.EnentType_Identify_28');//控制器已过期
+        EnentTypeTable[29] = getLanguage('Report.EnentType_Identify_29');//验证通过—有效期即将过期
+        EnentTypeTable[30] = getLanguage('Report.EnentType_Identify_30');//体温异常，拒绝进入
+        EnentTypeTable[31] = getLanguage('Report.EnentType_Identify_31');//访客密码开门
+        EnentTypeTable[32] = getLanguage('Report.EnentType_Identify_32');//动态二维码扫码开门
+        EnentTypeTable[33] = getLanguage('Report.EnentType_Identify_33');//在设备菜单中新增人员
+        EnentTypeTable[34] = getLanguage('Report.EnentType_Identify_34');//在设备菜单中修改人员
+        EnentTypeTable[35] = getLanguage('Report.EnentType_Identify_35');//在设备菜单中删除人员
+        EnentTypeTable[36] = getLanguage('Report.EnentType_Identify_36');//掌静脉识别
+        EnentTypeTable[37] = getLanguage('Report.EnentType_Identify_37');//刷卡 + 掌静脉 + 人脸
+        EnentTypeTable[38] = getLanguage('Report.EnentType_Identify_38');//掌静脉 + 密码
+        EnentTypeTable[39] = getLanguage('Report.EnentType_Identify_39');//刷卡 + 掌静脉
+        EnentTypeTable[40] = getLanguage('Report.EnentType_Identify_40');//人脸 + 掌静脉
+        EnentTypeTable[41] = getLanguage('Report.EnentType_Identify_41');//刷卡 + 掌静脉 + 密码
+        EnentTypeTable[42] = getLanguage('Report.EnentType_Identify_42');//掌静脉 + 人脸 + 密码
+        EnentTypeTable[43] = getLanguage('Report.EnentType_Identify_43');//指纹 + 掌静脉 + 人脸
+        EnentTypeTable[44] = getLanguage('Report.EnentType_Identify_44');//组合验证--等待下一个人员
+        EnentTypeTable[45] = getLanguage('Report.EnentType_Identify_45');//组合验证失败
+        EnentTypeTable[46] = getLanguage('Report.EnentType_Identify_46');//组合验证完成
+        EnentTypeTable[47] = getLanguage('Report.EnentType_Identify_47');//人证比对
+        EnentTypeTable[48] = getLanguage('Report.EnentType_Identify_48');//未注册卡
+        EnentTypeTable[49] = getLanguage('Report.EnentType_Identify_49');//未注册二维码
+
+        var IsEntryMap = [];
+        IsEntryMap[0] = getLanguage('Report.r133')//出
+        IsEntryMap[1] = getLanguage('Report.r132')//进
+
+        var BodyTempNull = getLanguage('Report.r46')//无
+        var PhotoNull = getLanguage('Report.r48')//无
+
+        var TableCurPage = 0;
+        //获取是否需要因此编号列
+        var showPeopleCode = false;
+        if (faceAPI?.DeviceFunctionList) {
+            const { UserCode, BodyTemp } = faceAPI.DeviceFunctionList;
+            console.log('[ faceAPI.DeviceFunctionList ] >', faceAPI.DeviceFunctionList)
+
+            if (UserCode) {
+                showPeopleCode = true;
+            }
+            if (BodyTemp) {
+                showBodyTemp = true;
+            }
+        }
+        //  debugger;
+        table.render({
+            elem: '#IdentifyReportPage',
+            //**************************异步请求开始***********************
+            url: 'api/Record/Identify/Search',
+            method: 'post',
+            where: faceAPI.IdentifyReportSearchPageResult.field,
+            contentType: 'application/json',
+            headers: {
+                //  'Content-Type': 'application/json',
+                Authorization: "Bearer " + faceAPI.GetJWTToken()
+            }, //增加Token验证头
+            request: {
+                pageName: 'PageIndex', //页码的参数名称，默认：page
+                limitName: 'PageSize' //每页数据量的参数名，默认：limit
+            },
+            parseData: function (res) { //res 即为原始返回的数据
+                if (res.result == true) {
+                    var data = res.content;
+                    var ret = {
+                        "code": 0, //解析接口状态
+                        "msg": "", //解析提示文本
+                        "count": data.TotalCount, //解析数据长度
+                        "data": data.DataList //解析数据列表
+                    };
+                    return ret;
+
+                } else {
+                    return {
+                        "code": 0, //解析接口状态
+                        "msg": '', //解析提示文本
+                        "count": 0, //解析数据长度
+                        "data": [] //解析数据列表
+                    };
+                }
+
+
+            }, //**************************异步请求结束***********************
+
+            toolbar: '#toolbarDemo',
+            defaultToolbar: ['filter', 'exports', 'print', {
+                title: getLanguage('Report.r35'),
+                layEvent: 'LAYTABLE_TIPS',
+                icon: 'layui-icon-tips'
+            }],
+            cols: [
+                [
+                    {
+                        field: 'UserID',
+                        width: 140,
+                        title: getLanguage('people.p10'),
+                        sort: true,
+                        templet: function (d) {
+                            // debugger
+                            if (d.UserID == "0")
+                                return '-'
+                            return d.UserID
+                        }
+                    },
+                    {
+                        field: 'Code',
+                        width: 160,
+                        title: getLanguage('people.UserCode'),
+                        sort: true,
+                        hide: !showPeopleCode,
+                    },
+                    {
+                        field: 'Name',
+                        width: 160,
+                        title: getLanguage('people.p11'),
+                        sort: true
+                    },
+                    {
+                        field: 'Department',
+                        title: getLanguage('people.p90'),
+                        width: 160,
+                        sort: true,
+                        hide: true
+                    },
+                    {
+                        field: 'Job',
+                        title: getLanguage('people.p16'),
+                        width: 160,
+                        sort: true,
+                        hide: true
+                    },
+                    {
+                        field: 'CardNum',
+                        width: 130,
+                        title: getLanguage('Report.r40'),
+                        sort: true,
+                        templet: function (d) {
+                            if (d.CardNum == "0")
+                                return "";
+                            else
+                                return d.CardNum;
+                        }
+                    },
+                    {
+                        field: 'QRCode',
+                        width: 200,
+                        title: getLanguage('Report.QRCode'),
+                        hide: pageWidth>1920?false:true,
+                    },
+                    {
+                        field: 'RecordDate',
+                        width: 180,
+                        title: getLanguage('Report.r36'),
+                        sort: true,
+                        templet: function (d) {
+                            var strDate = faceAPI.unixTimeStampToDateString(d.RecordDate);
+                            return strDate;
+                        }
+                    },
+                    { //打卡事件
+                        field: 'RecordType',
+                        title: getLanguage('Report.r42'),
+                        sort: true,
+                        templet: function (d) {
+                            var sTip = EnentTypeTable[d.RecordType];
+
+                            return sTip;
+                        }
+                    },
+                    { //进出方向
+                        field: 'IsEntry',
+                        width: 120,
+                        title: getLanguage('Report.r131'),
+                        sort: true,
+                        templet: function (d) {
+
+                            if (d.IsEntry == 1)
+                                return IsEntryMap[1];//进
+                            else
+                                return IsEntryMap[0];//出
+                        }
+                    },
+                    {
+                        field: 'BodyTemp',
+                        width: 120,
+                        title: getLanguage('Report.r45'),//体温
+                        sort: true,
+                        hide: pageWidth > 1920 && !showBodyTemp ? false : true,
+                        templet: function (d) {
+                            if (d.BodyTemp > 0) {
+                                return d.BodyTemp + '℃';
+                            } else
+                                return BodyTempNull;
+
+                        }
+                    },
+                    {
+                        field: '',
+                        width: 120,
+                        title: getLanguage('Report.r47'),//现场照片
+                        sort: true,
+                        templet: function (d) {
+                            if (d.PhotoLen > 0 && d.Photo.length > 0) {
+                                var strBuf = `<i class="RecordPhotoKey" typeTitle="${getLanguage('Report.r47')}" type="image" value = "` + d.Photo + '"><svg t="1690358148845" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3418" width="20" height="20"><path d="M725.333333 721.066667l-38.4-38.4H379.733333l-38.4 38.4V768h384v-46.933333z m85.333334-38.4v170.666666H256v-170.666666h4.266667l85.333333-85.333334h375.466667l89.6 85.333334z m-85.333334-320c0 106.666667-85.333333 192-192 192S341.333333 469.333333 341.333333 362.666667 426.666667 170.666667 533.333333 170.666667 725.333333 256 725.333333 362.666667z m-85.333333 0C640 302.933333 593.066667 256 533.333333 256S426.666667 302.933333 426.666667 362.666667s46.933333 106.666667 106.666666 106.666666S640 422.4 640 362.666667z" fill="#444444" p-id="3419"></path></svg></i>';
+                                return strBuf;
+                            } else
+                                return PhotoNull;
+
+                        }
+                    },
+                    {
+                        fixed: 'right',
+                        title: getLanguage('Report.r49'),//操作
+                        width: 100,
+                        toolbar: '#currentTableBar',
+                        align: "center"
+                    }
+                ]
+            ],
+            limits: [100, 200, 300, 400, 500, 600],
+            limit: 100,
+            page: true,
+            height: openWH[1] - 50,
+            skin: 'line',
+            done: function (res, curr, count) {
+                TableCurPage = curr;
+                //绑定事件
+                if (res.count > 0) {
+                    bindRecordPhotoKey();
+                }
+
+                setLanguage();
+                setAllAttrVal();
+            }
+        });
+
+
+        function bindRecordPhotoKey() {
+            $("[lay-id=IdentifyReportPage] i.RecordPhotoKey").mouseenter(RecordPhoto_mouseenter);
+            $("[lay-id=IdentifyReportPage] i.RecordPhotoKey").mouseleave(() => {
+                if (iMouseenter_TipIndex > 0)
+                    layer.close(iMouseenter_TipIndex);
+            });
+        }
+
+        var iMouseenter_TipIndex = 0;
+
+        function RecordPhoto_mouseenter() {
+            var that = this;
+            if (iMouseenter_TipIndex > 0)
+                layer.close(iMouseenter_TipIndex);
+            var spn = $(that);
+            var sValue = spn.attr("value");
+            var sHtml = '';
+
+            //测量一下文件尺寸
+            const img = new Image();
+            img.src = sValue;
+            img.onload = function () {
+                //console.log("图片尺寸：" + img.width + '*' + img.height)
+
+                var par = {
+                    area: [(img.width / 2+30) + 'px', (img.height / 2+30) + 'px']
+                };
+                sHtml = '<img id="showPeopleImg" src="' + sValue +
+                    '" width="' + img.width / 2 + '" height = "' + img.height / 2 +'"/>';
+
+                iMouseenter_TipIndex = layer.tips(sHtml, that, par);
+
+
+            }
+
+
+        }
+
+
+        function IniSearchPar() {
+            var par = {
+                field: {
+                    BeginDate: dayjs(dayjs().subtract(7, 'day').format("YYYY-MM-DD") + ' 00:00:00').unix(),//将 年月日时分秒 转为 时间戳
+                    EndDate: dayjs(dayjs().format("YYYY-MM-DD") + ' 23:59:59').unix(),
+                    UserID: null,
+                    Name: null,
+                    Job: null,
+                    Department: null,
+                    IdentityCard: null,
+                    CardNum: null,
+                    RecordTypes: null,
+                    Photo: null,
+                    QRCode: null,
+                    Code:null,
+                },
+                result: true
+            };
+
+            faceAPI.IdentifyReportSearchPageResult = par;
+        }
+        /**
+         * toolbar事件监听
+         */
+        table.on('toolbar(IdentifyReportPageTableFilter)', function (obj) {
+            if (obj.event === 'search') { // 查询操作
+                var content = miniPage.getHrefContent('page/report/IdentifySearch.html');
+
+
+                faceAPI.IdentifyReportSearch = { ...faceAPI.IdentifyReportSearchPageResult.field };
+                faceAPI.IdentifyReportSearch.BeginDate = dayjs.unix(faceAPI.IdentifyReportSearch.BeginDate).format("YYYY-MM-DD HH:mm:ss");
+                faceAPI.IdentifyReportSearch.EndDate = dayjs.unix(faceAPI.IdentifyReportSearch.EndDate).format("YYYY-MM-DD HH:mm:ss");
+                faceAPI.IdentifyReportSearch.EnentTypeTable = EnentTypeTable;
+                var index = layer.open({
+                    title: getLanguage('Report.r50'),
+                    type: 1,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['800px', '550px'],
+                    content: content,
+                    end: function (layero, index) {
+                        if (faceAPI.IdentifyReportSearchPageResult.result == true) {
+                            TableCurPage = 1;
+                            refreshTable(false);
+                        }
+
+
+                    }
+                });
+
+            } else if (obj.event == 'refresh') {
+                //执行搜索重载
+                refreshTable(true);
+            } else if (obj.event == 'ClearRecord') {
+                ClearRecord();
+            }
+
+        });
+
+        function ClearRecord() {
+            var layerindex = layer.confirm(getLanguage('Report.r51'), {
+                btn: [getLanguage('people.p24'), getLanguage('people.p25')], //按钮 删除和取消
+                icon: 3
+            }, function () { //删除
+                // debugger
+                var CheckPasswordcontent = miniPage.getHrefContent(
+                    "page/user/CheckPassword.html"
+                );
+                faceAPI.CheckPasswordResult = false;
+
+                // debugger;
+                layer.open({
+                    title: getLanguage("user.checkPassword"),
+                    type: 1,
+                    shade: 0.4,
+                    area: ["500px", "200px"],
+                    content: CheckPasswordcontent,
+                    end: function () {
+
+                        if (faceAPI.CheckPasswordResult) {
+                            sendClearRequest();
+                        }
+
+                    },
+                });
+
+
+                layer.close(layerindex);
+            });
+
+            function sendClearRequest() {
+                var postdata = {
+                    RecordType: 1 //打卡记录
+                };
+                var loadindex = layer.load(1, { shade: [0.6, '#e2e2e2'] });
+
+                faceAPI.AjaxPOSTJson({
+                    data: postdata,
+                    url: 'api/Record/Delete/ByType',
+                    timeout: 9999999,
+                    success: function (result) {
+                        layer.close(loadindex);
+                        if (result.result == false) {
+                            layer.alert(result.error, {
+                                icon: 2
+                            });
+                        } else {
+                            refreshTable(true);
+                        }
+                    }
+                });
+                layer.close(index);
+            }
+
+        }
+
+        function refreshTable(bIni) {
+            if (bIni) {
+                IniSearchPar();
+                TableCurPage = 1;
+            }
+            var rst = faceAPI.IdentifyReportSearchPageResult;
+            table.reload('IdentifyReportPage', {
+                page: {
+                    curr: TableCurPage
+                },
+                where: rst.field
+            });
+        }
+
+
+        table.on('tool(IdentifyReportPageTableFilter)', function (obj) {
+            var data = obj.data;
+
+            if (obj.event === 'edit') {
+
+                var content = miniPage.getHrefContent('page/report/IdentifyDetail.html');
+                var openWH = miniPage.getOpenWidthHeight();
+                var detail = { ...data }; //向layer页面传值，传值主要代码
+
+
+
+                if (detail.UserID == "0") detail.UserID = '-';
+
+                if (detail.CardNum == "0")
+                    detail.CardNum = "";
+
+                detail.RecordDate = faceAPI.unixTimeStampToDateString(detail.RecordDate);
+                detail.RecordType = EnentTypeTable[detail.RecordType];
+
+                if (detail.IsEntry == 1)
+                    detail.IsEntry = IsEntryMap[1];//进
+                else
+                    detail.IsEntry = IsEntryMap[0];//出
+
+                if (detail.BodyTemp > 0) {
+                    detail.BodyTemp = detail.BodyTemp + '℃';
+                } else
+                    detail.BodyTemp = BodyTempNull;
+
+                faceAPI.IdentifyReportDetail = detail;
+                var index = layer.open({
+                    title: getLanguage('Report.r52'),
+                    type: 1,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['1100px', '600px'],
+                    //offset: [openWH[2] + 'px', openWH[3] + 'px'],
+                    content: content,
+                });
+                $(window).on("resize", function () {
+                    layer.full(index);
+                });
+                return false;
+            }
+            setLanguage();
+            setAllAttrVal()
+        });
+    });
+    setLanguage();
+    setAllAttrVal();
+</script>

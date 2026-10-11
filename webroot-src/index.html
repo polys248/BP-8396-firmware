@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title lng-title="设备管理交互界面"></title>
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <script>
+        /**判断是否为手机端 */
+        var isMobile = function () {
+            var userAgentInfo = navigator.userAgent;
+            var mobileAgents = ["Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod"];
+            var mobile_flag = false;
+            //根据userAgent判断是否是手机
+            for (var v = 0; v < mobileAgents.length; v++) {
+                if (userAgentInfo.indexOf(mobileAgents[v]) > 0) {
+                    mobile_flag = true;
+                    break;
+                }
+            }
+            var screen_width = window.screen.width;
+            var screen_height = window.screen.height;
+            //根据屏幕分辨率判断是否是手机
+            if (screen_width < 500 && screen_height < 800) {
+                mobile_flag = true;
+            }
+            return mobile_flag;
+        };
+        if (isMobile()) {
+            window.location.href = "./Phone/index.html#/";
+        }
+
+    </script>
+
+
+    <link rel="stylesheet" href="lib/layui-v2.6.8/css/layui.css" media="all">
+    <link rel="stylesheet" href="lib/font-awesome-4.7.0/css/font-awesome.min.css" media="all">
+    <link rel="stylesheet" href="css/layuimini.css?v=2.0.1" media="all">
+    <link rel="stylesheet" href="css/themes/default.css" media="all">
+    <link rel="stylesheet" href="css/public.css" media="all">
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- 多语言 需要放置最前面 -->
+    <script src="./language/Ch.js"></script>
+    <script src="./language/En.js"></script>
+    <script src="./language/zh_hk.js"></script>
+    <script src="./language/index.js"></script>
+    <!-- 多语言 需要放置最前面 -->
+    <link rel="stylesheet" href="./css/index.css">
+    <style>
+        #multi_module_0 {
+            width: 300px;
+        }
+
+        .layuimini-tool {
+            left: 320px
+        }
+
+        .layui-layout-left {
+            left: 395px !important;
+        }
+
+        .layui-layout-admin .layui-side {
+            width: 300px
+        }
+
+        .layui-body {
+            left: 300px;
+        }
+    </style>
+    <style id="layuimini-bg-color">
+    </style>
+</head>
+
+<body class="layui-layout-body layuimini-all">
+    <div id="pageIndex" class="layui-layout layui-layout-admin">
+
+        <div class="layui-header header">
+            <div class="layui-logo layuimini-logo layuimini-back-home" style="width:300px"></div>
+
+            <div class="layuimini-header-content">
+                <a>
+                    <div class="layuimini-tool"><i title="展开" class="fa fa-outdent" data-side-fold="1"></i></div>
+                </a>
+
+                <!--电脑端头部菜单-->
+                <ul class="layui-nav layui-layout-left layuimini-header-menu layuimini-menu-header-pc layuimini-pc-show">
+                </ul>
+
+                <ul class="layui-nav layui-layout-right">
+                    <!-- <div language="hello"></div> -->
+                    <!-- 设置PC版本号 -->
+
+                    <li class="layui-nav-item" lay-unselect>
+                        <span>WEB Ver:1.05</span>
+                    </li>
+                    <li class="layui-nav-item" lay-unselect>
+                        <a href="javascript:;" data-refresh="刷新"><i class="fa fa-refresh"></i></a>
+                    </li>
+                    <li class="layui-nav-item" lay-unselect>
+                        <a href="javascript:;" data-clear="清理" class="layuimini-clear"><i class="fa fa-trash-o"></i></a>
+                    </li>
+                    <li class="layui-nav-item mobile layui-hide-xs" lay-unselect>
+                        <a href="javascript:;" data-check-screen="全屏"><i class="fa fa-arrows-alt"></i></a>
+                    </li>
+                    <li class="layui-nav-item" lay-unselect>
+                        <a href="javascript:;">
+                            <cite id="languageStatus">中文</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd onclick="changeLanguage('cn')"><a>中文</a></dd>
+                            <dd onclick="changeLanguage('zh_hk')"><a>繁體</a></dd>
+                            <dd onclick="changeLanguage('en')"><a>English</a></dd>
+                        </dl>
+                    </li>
+                    <li class="layui-nav-item layuimini-setting">
+                        <a href="javascript:;">User</a>
+                        <dl class="layui-nav-child">
+                            <dd>
+                                <a href="javascript:;" layuimini-content-href="page/user/EditPassword.html"
+                                   data-title="修改密码" data-icon="fa fa-gears" language='Login.l16' id="Login.l16"
+                                   data-lang='data-title'>修改密码</a>
+                            </dd>
+                            <dd>
+                                <hr>
+                            </dd>
+                            <dd>
+                                <a href="javascript:;" class="login-out" language='Login.l17'>退出登录</a>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="layui-nav-item layuimini-select-bgcolor" lay-unselect>
+                        <a href="javascript:;" data-bgcolor=""><i class="fa fa-ellipsis-v"></i></a>
+                    </li>
+
+
+                </ul>
+            </div>
+        </div>
+
+        <!--无限极左侧菜单-->
+        <div class="layui-side layui-bg-black layuimini-menu-left Fcard_Menu">
+        </div>
+
+        <!--初始化加载层-->
+        <div class="layuimini-loader">
+            <div class="layuimini-loader-inner"></div>
+        </div>
+
+        <!--手机端遮罩层-->
+        <div class="layuimini-make"></div>
+
+        <!-- 移动导航 -->
+        <div class="layuimini-site-mobile"><i class="layui-icon"></i></div>
+
+        <div class="layui-body">
+
+            <div class="layui-card layuimini-page-header layui-hide">
+                <div class="layui-breadcrumb layuimini-page-title">
+                    <a lay-href="" href="/">主页</a><span lay-separator="">/</span>
+                    <a><cite>常规管理</cite></a><span lay-separator="">/</span>
+                    <a><cite>系统设置</cite></a>
+                </div>
+            </div>
+
+            <div class="layuimini-content-page">
+            </div>
+
+        </div>
+
+    </div>
+    <script src="lib/layui-v2.6.8/layui.js" charset="utf-8"></script>
+    <script src="js/lay-config.js?v=2.0.0" charset="utf-8"></script>
+    <script src="/lib/dayjs/dayjs.min.js"></script>
+    <script src="/lib/dayjs/plugin/isSameOrAfter.js"></script>
+    <script src="/lib/HashTable.js"></script>
+    <script src="./jsLib/vue.global.js"></script>
+    <script>
+
+
+
+
+        dayjs.extend(window.dayjs_plugin_isSameOrAfter);
+        //var exptime = dayjs().add(-60, "minute");//截止时间
+        //var time = dayjs();
+        //if (time.isSameOrAfter(exptime)) {
+        console.log('isSameOrAfter 测试完毕');
+        //}
+
+
+        setLanguage();
+        setAllAttrVal();
+
+        layui.use(['jquery', 'layer', 'miniAdmin', 'faceAPI'], async function () {
+            var $;
+            var faceAPI;
+
+            $ = layui.jquery;
+            var layer = layui.layer,
+                miniAdmin = layui.miniAdmin,
+                faceAPI = layui.faceAPI;
+
+            //检查是否有Token
+            if (faceAPI.GetJWTToken() == "") {
+                faceAPI.GotoLogin(false);
+                return;
+            }
+
+            // 从后台获得菜单
+            //  var language = localStorage.getItem('language')?localStorage.getItem('language'):'';
+            // console.log('[ getCurrentLanguage().menus ] >', getCurrentLanguage().menus)
+
+            const getSNFn = () => {
+                return new Promise((resolve, reject) => {
+                    $.ajax({
+                        type: 'get',
+                        url: '/api/GetDeviceSN',
+                        success: function (result) {
+                            resolve(result);
+                        },
+                        error(err) {
+                            reject(err);
+                        }
+                    });
+                })
+            }
+            function GetFuncList() {
+                return new Promise((resolve, reject) => {
+                    //获取设备功能列表
+                    faceAPI.AjaxPOSTJson({
+                        url: '/api/Device/FunctionList',
+                        success: function (result) {
+                            resolve(result);
+                            if (result.result == true) {
+
+                                faceAPI.DeviceFunctionList = result.content;
+                                HideFunction();
+                            }
+
+                        },
+                        error: function (err) {
+                            reject(err);
+                        }
+
+                    });
+                })
+
+            }
+            await getSNFn().then(async (result) => {
+                if (result.result == true) {
+                    SetLanguageDeviceSN(result.content);
+                    setLanguage();
+                    $("#deviceSn").html(result.content);
+                    await GetFuncList();
+
+                }
+            });
+            // faceAPI.DeviceFunctionList.Face=false;
+            // faceAPI.DeviceFunctionList.Lift=false;
+            // faceAPI.DeviceFunctionList.WIFI=false;
+            // faceAPI.DeviceFunctionList.AlarmClock=false;
+            let menus = getCurrentLanguage().menus;
+
+            function HideFunction() {
+                let menus = getCurrentLanguage().menus;
+                if (faceAPI?.DeviceFunctionList) {
+                    const child = menus.menuInfo[0].child || [];
+                    // console.log('[ menuInfo ] >', child)
+                    // 从 child 数组中找出 id为 300 的设备管理菜单，并修改其 child 数组，去除不支持的功能
+                    let deviceMenu = child.find((item => item.id == 300))
+                    // console.log('[ deviceMenu ] >', deviceMenu)
+
+
+
+                    // TimingLocked 门禁功能--定时锁定
+                    let doorfunMenu = deviceMenu.child.find((item => item.id == 308)) //门禁功能菜单
+                    if (!faceAPI.DeviceFunctionList.TimingLocked) {
+                        doorfunMenu.child = doorfunMenu.child.filter((item => item.id != 420)) //定时锁定
+                    };
+                    //Face 人脸识别
+                    if (!faceAPI.DeviceFunctionList.Face) {
+                        deviceMenu.child = deviceMenu.child.filter((item => item.id != 403)) //人脸识别
+                    };
+                    // Lift 电梯功能
+                    if (!faceAPI.DeviceFunctionList.Lift) {
+                        deviceMenu.child = deviceMenu.child.filter((item => item.id != 406)) //电梯功能
+                    };
+
+                    // 网络设置
+                    let networkMenu = deviceMenu.child.find((item => item.id == 404)) //网络设置菜单
+                    if (!faceAPI.DeviceFunctionList.WIFI) {
+                        networkMenu.child = networkMenu.child.filter((item => item.id != 415)) //网络设置
+                    }
+                    // 响铃闹钟设置
+                    if (!faceAPI.DeviceFunctionList.AlarmClock) {
+                        deviceMenu.child = deviceMenu.child.filter((item => item.id != 309)) //响铃闹钟设置
+                    }
+
+                    var VideoCall = faceAPI?.DeviceFunctionList?.VideoCall || false;
+                    var SIP = faceAPI?.DeviceFunctionList?.SIP || false;
+
+                    //关闭 视频对讲菜单
+                    if (!VideoCall && !SIP) {
+                        deviceMenu.child = deviceMenu.child.filter((item => item.id != 405)) //视频对讲
+                    }
+
+
+                    console.log('[ deviceMenu ] >', deviceMenu)
+                    menus.menuInfo[0].child[3] = deviceMenu;
+                }
+            }
+            // 移除元素
+            function removeElement(selector) {
+                // console.log('[ selector ] >', selector)
+                // 检查selector是否以'.'开头，如果是，则按class选择器处理
+                if (selector.startsWith('.')) {
+                    var elements = document.querySelectorAll(selector);
+                    elements.forEach(function (element) {
+                        element.style.display = 'none';
+                        // element.parentNode.removeChild(element); // 移除每个匹配的元素
+                    });
+                } else {
+                    // 否则，按ID选择器处理
+                    var element = document.getElementById(selector);
+                    if (element) {
+                        element.style.display = 'none';
+                        // element.parentNode.removeChild(element); // 移除元素
+                    }
+                }
+            }
+            faceAPI.removeElement = removeElement;
+            // console.log('[ faceAPI ] >', faceAPI)
+
+
+
+
+
+
+            var options = {
+                iniUrl: menus,    // 初始化接口
+                //  clearUrl: "/SystemMenu/GCMemory", // 缓存清理接口
+                renderPageVersion: false,    // 初始化页面是否加版本号
+                bgColorDefault: false,      // 主题默认配置
+                multiModule: true,          // 是否开启多模块
+                menuChildOpen: false,       // 是否默认展开菜单
+                loadingTime: 1,
+                // 初始化加载时间
+                pageAnim: true,             // 切换菜单动画
+                //ajaxHeaders:{//添加 headers
+                //    ClientLanguage:language
+                //}
+            };
+            miniAdmin.render(options);
+
+
+
+            $('.login-out').on("click", function () {
+                var load_index = layer.load(1, { shade: [0.5, '#FFF'] });
+
+                faceAPI.Ajax({
+                    type: 'Get',
+                    url: '/api/User/Logout',
+                    success: function (result) {
+                        layer.close(load_index);
+                        layer.msg(getLanguage('Login.l14'), function () {
+                            faceAPI.GotoLogin(false);
+                        });
+                    }
+                })
+
+
+            });
+
+            var sn = getLanguageDeviceSN();
+            if (sn.length > 0) {
+                $("#deviceSn").html(sn);
+            }
+
+
+
+
+            faceAPI.StopOnlineAuthentication = false;
+            //在线验证Token是否有效
+            OnlineAuthentication();
+
+            //token 自动续期任务
+            setInterval(OnlineAuthentication, 10 * 60 * 1000); //10分钟检查一次
+
+
+
+
+            //检查是否已登录，未登录则跳转登陆页面
+            function OnlineAuthentication() {
+                if (faceAPI.StopOnlineAuthentication) return;
+
+                faceAPI.Ajax({
+                    type: 'Get',
+                    url: '/api/User/CheckLoginToken',
+                    success: function (result) {
+                        if (result.result == false) {
+                            faceAPI.GotoLogin(true, true);
+                            return;
+                        }
+                        var extension = result.content;
+                        faceAPI.userDetail = result.content;
+
+                        //console.log('token 的过期时间：' + dayjs.unix(extension).format('YYYY-MM-DD HH:mm:ss'));
+
+                        var exptime = dayjs.unix(extension).add(-60, "minute");//截止时间
+                        var nowtime = dayjs();
+
+                        if (nowtime.isSameOrAfter(exptime)) {
+                            console.log('token 即将过期，开始续期');
+                            Refresh_Token();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        window.location = 'page/login.html';
+                    }
+                })
+            }
+
+            function Refresh_Token() {
+                faceAPI.Ajax({
+                    type: 'Get',
+                    url: '/api/User/TokenExtension',
+                    success: function (result) {
+                        if (result.result == false) {
+                            faceAPI.GotoLogin(true, true);
+                            return;
+                        }
+                        else {
+                            //token 续期成功
+                            var extension = result.content;
+                            var exptime = dayjs.unix(extension).format('YYYY-MM-DD HH:mm:ss')
+                            console.log('token 新的过期时间：' + exptime);
+                        }
+                    }
+                })
+            }
+
+
+        });
+    </script>
+
+    <!-- 初始化语言，在每个需要翻译的文件底部加入下面的代码： -->
+    <script type="text/javascript">
+        setTimeout(() => {
+            setLanguage();
+            setAllAttrVal();
+        }, 300)
+
+
+        // 5、需要翻译的话，这样写，这里的hello就是语言对应的字段名，在language/index.js中配置：
+        // <div language="hello"></div>
+        // 6、如果需要在js中输出对应的语言，则这样调用：
+        // getLanguage('hello')
+    </script>
+
+</body>
+
+</html>

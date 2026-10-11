@@ -1,0 +1,217 @@
+﻿
+
+<style>
+    #device_NetworkWIFI_div label {
+        width: 250px;
+    }
+
+    .layui-form-pane .layui-input-block {
+        margin-left: 250px;
+        left: -1px;
+    }
+
+    .divwidth {
+        width: 1850px;
+    }
+
+    .status-black {
+        margin-left: 10px
+    }
+
+    .divpadding {
+        padding-right: 20px
+    }
+
+    .aligncenter {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+<div class="layui-form layuimini-form  layui-form-pane" id="device_NetworkWIFI_div" lay-filter="device_NetworkWIFI_div_filter">
+    <div class="layui-bg-gray" style="padding: 10px;">
+        <div class="layui-row layui-col-space15">
+
+
+
+            <div class="layui-col-md12">
+                <div class="layui-card">
+
+                    <div class="layui-card-body">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" language='device.d208'> 开关</label>
+                            <div class="layui-input-inline">
+                                <input type="checkbox" name="UseWIFI" lay-skin="switch"
+                                       data-lang='lay-text' lay-text="启用|禁用" value="1" id="device.d401">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"> MAC</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="WIFIMAC" autocomplete="off" disabled
+                                       class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" language='device.d209'> 网络名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="WIFIAPName" autocomplete="off" maxlength="32"
+                                       class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" language='device.d327'> 网络密码</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="WIFIAPPassword" autocomplete="off" maxlength="32"
+                                       class="layui-input">
+                            </div>
+                        </div>
+
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"> DHCP</label>
+                            <div class="layui-input-inline">
+                                <input type="checkbox" name="WIFIDHCP" lay-skin="switch"
+                                       data-lang='lay-text' lay-text="启用|禁用" id="device.d402" value="1">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"> IP</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="WIFIIP" autocomplete="off" maxlength="15" IPFormat
+                                       lay-verify="required" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" language='device.d205'> 子网掩码</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="WIFIIPMask" autocomplete="off" maxlength="15" IPFormat
+                                       lay-verify="required" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" language='device.d206'> 网关</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="WIFIGteway" autocomplete="off" maxlength="15" IPFormat
+                                       lay-verify="required" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"> DNS</label>
+                            <div class="layui-input-inline">
+
+                                <input type="text" name="WIFIDNS" autocomplete="off" maxlength="15" IPFormat
+                                       lay-verify="required" class="layui-input">
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="layui-col-md12">
+                <div class="layui-card">
+
+                    <div class="layui-card-body">
+                        <div class="layui-btn-container aligncenter">
+                            <button type="submit" class="layui-btn layui-btn-normal" lay-submit
+                                    lay-filter="data-save-btn" language='device.d224'>
+                                <i class="layui-icon"></i> 保存
+                            </button>
+                            <button type="reset" class="layui-btn layui-btn-danger" id="data-reset-btn" language='timingLock.t2'>
+                                <i class="layui-icon"></i> 刷新
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'laydate', 'table', 'miniPage', 'element', 'faceAPI'], function () {
+        setLanguage();
+        setAllAttrVal();
+        var faceAPI = layui.faceAPI;
+        var form = layui.form;
+        var $ = layui.$;
+        var laydate = layui.laydate;
+        var formdata;
+        form.render();
+        function LoadData() {
+            var parameter = {
+                "Network": true,
+            };
+            faceAPI.AjaxPOSTJson({
+                data: parameter,
+                url: '/api/Device/GetDetail',
+                success: function (rst) {
+                    if (rst != null && rst.result) {
+                        formdata = rst.content;
+                        form.val("device_NetworkWIFI_div_filter", formdata);
+                        //var _page = $('#device_NetworkWIFI_div');
+                        //_page.find('div[autoset]').each((ind, em) => {
+                        //    var _em = $(em);
+                        //    var name = _em.attr("name");
+                        //    if (formdata.hasOwnProperty(name))
+                        //        _em.html(formdata[name]);
+                        //});
+                    };
+                }
+            });
+        }
+        LoadData();
+
+        form.on('submit(data-save-btn)', function (data) {
+
+            layer.confirm(getLanguage('wifi.w1'), { icon: 3 }, function (index, layero, that) {
+                var postdata = data.field;
+
+                var postdata = data.field;
+                postdata.UseWIFI = postdata.UseWIFI == '1' ? 1 : 0;
+                postdata.WIFIDHCP = postdata.WIFIDHCP == '1' ? 1 : 0;
+
+                delete postdata["WIFIMAC"];
+
+                //启动遮罩层
+                var waitLayerIndex = layer.load(1, { shade: [0.5, '#FFF'] });
+
+                faceAPI.AjaxPOSTJson({
+                    data: postdata,
+                    url: '/api/device/UpdateParameter',
+                    success: function (result) {
+                        layer.close(waitLayerIndex);
+
+                        if (result.result == false) {
+                            layer.alert(result.error, { icon: 2 });
+                        }
+                        else {
+                            formdata = data.field;
+                            layer.alert(getLanguage('timingLock.t4'), { icon: 1 });
+                        }
+                    }
+                });
+                layer.close(index);
+            });
+
+        });
+        $("#data-reset-btn").on('click', function () {
+            layer.confirm(getLanguage('wifi.w2'), { icon: 3, btn: ["Yes", "No"] }, function (index, layero, that) {
+                LoadData();
+                layer.close(index)
+            });
+        });
+
+        faceAPI.ShowMouseTipMessageBox('device_NetworkWIFI_div_filter', layer);
+        
+        faceAPI.CheckInputBox();
+    });
+</script>

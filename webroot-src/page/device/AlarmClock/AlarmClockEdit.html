@@ -1,0 +1,110 @@
+﻿
+<style>
+    #admin-AlarmClockedit label {
+        width: 150px;
+        background-color: #dddddd;
+    }
+
+
+    .defcenter {
+        text-align: center;
+    }
+</style>
+<div class="layuimini-main" id="admin-AlarmClockedit">
+
+    <div class="layui-form layuimini-form " lay-filter="AlarmClock_edit_div_filter">
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span language="AlarmClocks.AlarmClocks_Num.p32">序号</span>
+            </label>
+            <div class="layui-input-inline">
+                <!--<input type="number" max="30" min="1" lay-reqText="请输入节假日序号" name="num" ay-verify="required" autocomplete="off" class="layui-input">-->
+                <input type="number" name="Num" disabled class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label required">
+                <span language="AlarmClocks.AlarmClocks_Clock">响铃时间</span>
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" lay-verify="required" maxlength="5" value="" class="layui-input" name="Clock" TimeFormat_HHmm>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span language="AlarmClocks.AlarmClocks_Times">响铃时长(秒)</span>
+            </label>
+            <div class="layui-input-inline">
+                <input type="number" max="255" min="0" name="Times" maxlength="3"
+                       autocomplete="off" class="layui-input" lay-verify="required">
+            </div>
+        </div>
+
+        <div class="layui-form-item defcenter">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveAlarmClock">
+                <i class="layui-icon">&#xe605;</i>
+                <span language="people.p39">保存</span>
+            </button>
+            <button class="layui-btn layui-btn-warm" id="BtnPeopleEditCancel">
+                <i class="layui-icon">&#x1006;</i>
+                <span language="people.p40">取消</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'faceAPI', 'laydate'], function () {
+        setLanguage();
+        setAllAttrVal();
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.$,
+            laydate = layui.laydate,
+            faceAPI = layui.faceAPI;
+        var AlarmClock = faceAPI.AlarmClock;
+        var parentIndex = layer.index;
+        /**
+        * 初始化表单，要加上，不然刷新部分组件可能会不加载
+        */
+        form.render();
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '[name="Clock"]', //指定元素
+            type: 'time',
+            format: 'HH:mm'
+        });
+        faceAPI.AlarmClockResult = false;
+
+        //加载表单数据
+        if (AlarmClock != undefined) {
+            form.val("AlarmClock_edit_div_filter", AlarmClock);
+            $("#num").attr("disabled", "disabled");
+        }
+
+        //保存按钮事件
+        form.on('submit(saveAlarmClock)', function (data) {
+
+            faceAPI.AlarmClock = data.field
+            faceAPI.AlarmClock.Num = Number(faceAPI.AlarmClock.Num);
+            faceAPI.AlarmClock.Times = Number(faceAPI.AlarmClock.Times);
+            faceAPI.AlarmClock.Clock = data.field.Clock.slice(0, 5);
+            
+            faceAPI.AlarmClockResult = true;
+            layer.close(parentIndex);
+
+            return false;
+        });
+
+
+        //取消操作，关闭窗口
+        $('#BtnPeopleEditCancel').on('click', function () {
+            faceAPI.AlarmClockResult = false;
+            layer.close(parentIndex);
+
+        });
+
+        faceAPI.CheckInputBox();
+    });
+</script>

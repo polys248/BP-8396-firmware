@@ -1,0 +1,108 @@
+﻿<div class="layuimini-main" id="add_people_feature">
+    <style>
+        .defcenter {
+            text-align: center;
+        }
+    </style>
+    <form class="layui-form" >
+        <div class="layui-card" id="page_SelectFeature">
+            <div class="layui-card-header">
+                <h2 language="people.SelectEnrollFeatureType">选择需要注册的类型</h2>
+            </div>
+            <div class="layui-card-body">
+                <div class="layui-form-block">
+                    <div class="layui-form-item FunctionListFace">
+                        <input type="radio" name="type" value="Face" title="人脸" checked
+                               id="people.FeatureType1" data-lang='title'>
+                    </div>
+                    <div class="layui-form-item FunctionListFingerprint">
+                        <input type="radio" name="type" value="FP" title="指纹"
+                               id="people.FeatureType2" data-lang='title'>
+                    </div>
+                    <div class="layui-form-item FunctionListPalmvein">
+                        <input type="radio" name="type" value="Palm" title="掌静脉"
+                               id="people.FeatureType3" data-lang='title'>
+                    </div>
+                </div>
+
+
+
+                <div class=" defcenter">
+                    <button type="button" class="layui-btn layui-bg-blue" lay-submit
+                            lay-filter="btnSelectOver" language="people.BtnSelect">
+                        选择
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    setLanguage();
+    setAllAttrVal();
+
+    layui.use(
+        ['faceAPI', 'form', 'layer'],
+        function () {
+            var $ = layui.jquery;
+            var form = layui.form,
+                layer = layui.layer;
+            var faceAPI = layui.faceAPI;
+
+
+            var fromdata = faceAPI.PeopleFeatureWindowData;
+            var parentIndex = layer.index;
+            fromdata.Save = false;
+
+            /**
+             * 初始化表单，要加上，不然刷新部分组件可能会不加载
+             */
+            form.render();
+
+
+            form.on('submit(btnSelectOver)', function (data) {
+                //console.log(data.field)
+                fromdata.type = data.field.type;
+                fromdata.Save = true;
+                layer.close(parentIndex);
+                return false;
+            });
+
+
+            if (faceAPI?.DeviceFunctionList) {
+                // faceAPI.DeviceFunctionList.BodyTemperature=false;
+                const { Face, Fingerprint, Palmvein } = faceAPI.DeviceFunctionList
+                console.log('[ faceAPI.DeviceFunctionList ] >', faceAPI.DeviceFunctionList)
+
+
+                if (!Fingerprint) {
+                    faceAPI.removeElement('.FunctionListFingerprint');
+                }
+                if (!Face) {
+                    faceAPI.removeElement('.FunctionListFace');
+                }
+
+
+
+                if (!Palmvein) {
+                    faceAPI.removeElement('.FunctionListPalmvein');
+                }
+
+
+            }
+
+        }
+    );
+
+
+
+    function isBase64(str) {
+        try {
+            return btoa(atob(str)) == str;
+        } catch (e) {
+            return false;
+        }
+    }
+</script>

@@ -1,0 +1,297 @@
+﻿
+<div class="layuimini-container layuimini-page-anim" divname="SystemReport">
+    <div class="layuimini-main">
+
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="search">
+                    <i class="layui-icon"> </i>
+                    <span language='people.p1' t="查询"></span>
+                </button>
+
+                <button class="layui-btn layui-btn-sm " lay-event="refresh" language='Report.r2' t="刷新">
+                    
+                </button>
+                <button class="layui-btn layui-btn-sm layui-bg-red " lay-event="ClearRecord" language='Report.r174' t="删除所有记录">
+                    
+                </button>
+            </div>
+        </script>
+
+        <table class="layui-hide" id="SystemReportPage" lay-filter="SystemReportPageTableFilter"> </table>
+    </div>
+</div>
+
+<script>
+
+    layui.use(['form', 'table', 'miniPage', 'element', 'faceAPI'], function () {
+
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            miniPage = layui.miniPage;
+        var faceAPI = layui.faceAPI;
+        var openWH = miniPage.getOpenWidthHeight();
+        form.render();
+        IniSearchPar();
+
+        var EnentTypeTable = [];
+        EnentTypeTable[1] = getLanguage('Report.EnentType_System_1');//软件开门
+        EnentTypeTable[2] = getLanguage('Report.EnentType_System_2');//软件关门
+        EnentTypeTable[3] = getLanguage('Report.EnentType_System_3');//软件常开
+        EnentTypeTable[4] = getLanguage('Report.EnentType_System_4');//控制器自动进入常开
+        EnentTypeTable[5] = getLanguage('Report.EnentType_System_5');//控制器自动关闭门
+        EnentTypeTable[6] = getLanguage('Report.EnentType_System_6');//长按出门按钮常开
+        EnentTypeTable[7] = getLanguage('Report.EnentType_System_7');//长按出门按钮常闭
+        EnentTypeTable[8] = getLanguage('Report.EnentType_System_8');//软件锁定
+        EnentTypeTable[9] = getLanguage('Report.EnentType_System_9');//软件解除锁定
+        EnentTypeTable[10] = getLanguage('Report.EnentType_System_10');//控制器定时锁定--到时间自动锁定
+        EnentTypeTable[11] = getLanguage('Report.EnentType_System_11');//控制器定时锁定--到时间自动解除锁定
+        EnentTypeTable[12] = getLanguage('Report.EnentType_System_12');//报警--锁定
+        EnentTypeTable[13] = getLanguage('Report.EnentType_System_13');//报警--解除锁定
+        EnentTypeTable[14] = getLanguage('Report.EnentType_System_14');//非法认证报警
+        EnentTypeTable[15] = getLanguage('Report.EnentType_System_15');//门磁报警
+        EnentTypeTable[16] = getLanguage('Report.EnentType_System_16');//胁迫报警
+        EnentTypeTable[17] = getLanguage('Report.EnentType_System_17');//开门超时报警
+        EnentTypeTable[18] = getLanguage('Report.EnentType_System_18');//黑名单报警
+        EnentTypeTable[19] = getLanguage('Report.EnentType_System_19');//消防报警
+        EnentTypeTable[20] = getLanguage('Report.EnentType_System_20');//防拆报警
+        EnentTypeTable[21] = getLanguage('Report.EnentType_System_21');//非法认证报警解除
+        EnentTypeTable[22] = getLanguage('Report.EnentType_System_22');//门磁报警解除
+        EnentTypeTable[23] = getLanguage('Report.EnentType_System_23');//胁迫报警解除
+        EnentTypeTable[24] = getLanguage('Report.EnentType_System_24');//开门超时报警解除
+        EnentTypeTable[25] = getLanguage('Report.EnentType_System_25');//黑名单报警解除
+        EnentTypeTable[26] = getLanguage('Report.EnentType_System_26');//消防报警解除
+        EnentTypeTable[27] = getLanguage('Report.EnentType_System_27');//防拆报警解除
+        EnentTypeTable[28] = getLanguage('Report.EnentType_System_28');//系统加电
+        EnentTypeTable[29] = getLanguage('Report.EnentType_System_29');//系统错误复位（看门狗）
+        EnentTypeTable[30] = getLanguage('Report.EnentType_System_30');//设备格式化记录
+        EnentTypeTable[31] = getLanguage('Report.EnentType_System_31');//读卡器接反。
+        EnentTypeTable[32] = getLanguage('Report.EnentType_System_32');//读卡器线路未接好。
+        EnentTypeTable[33] = getLanguage('Report.EnentType_System_33');//无法识别的读卡器
+        EnentTypeTable[34] = getLanguage('Report.EnentType_System_34');//网线已断开
+        EnentTypeTable[35] = getLanguage('Report.EnentType_System_35');//网线已插入
+        EnentTypeTable[36] = getLanguage('Report.EnentType_System_36');//WIFI 已连接
+        EnentTypeTable[37] = getLanguage('Report.EnentType_System_37');//WIFI 已断开
+        EnentTypeTable[38] = getLanguage('Report.EnentType_System_38');//蓝牙开门
+        EnentTypeTable[39] = getLanguage('Report.EnentType_System_39');//点名超时
+        EnentTypeTable[40] = getLanguage('Report.EnentType_System_40');//在设备菜单中清空所有人员
+        EnentTypeTable[41] = getLanguage('Report.EnentType_System_41');//在设备菜单中备份人员到U盘
+        EnentTypeTable[42] = getLanguage('Report.EnentType_System_42');//在设备菜单中从U盘导入人员
+        EnentTypeTable[43] = getLanguage('Report.EnentType_System_43');//室内机远程开门
+        EnentTypeTable[44] = getLanguage('Report.EnentType_System_44');//删除所有记录
+        EnentTypeTable[45] = getLanguage('Report.EnentType_System_45');//删除所有人员
+
+
+       //EnentTypeTable[1] = getLanguage('Report.EnentType_System_1');//门磁-开门
+       //EnentTypeTable[2] = getLanguage('Report.EnentType_System_2');//门磁-关门
+       //EnentTypeTable[3] = getLanguage('Report.EnentType_System_3');//进入门磁报警检测状态
+       //EnentTypeTable[4] = getLanguage('Report.EnentType_System_4');//退出门磁报警检测状态
+       //EnentTypeTable[5] = getLanguage('Report.EnentType_System_5');//门未关好
+       //EnentTypeTable[6] = getLanguage('Report.EnentType_System_6');//使用按钮开门
+       //EnentTypeTable[7] = getLanguage('Report.EnentType_System_7');//按钮开门时门已锁定
+       //EnentTypeTable[8] = getLanguage('Report.EnentType_System_8');//按钮开门时控制器已过期
+
+        var TableCurPage = 0;
+
+        //  debugger;
+        table.render({
+            elem: '#SystemReportPage',
+            //**************************异步请求开始***********************
+            url: 'api/Record/System/Search',
+            method: 'post',
+            where: faceAPI.SystemReportSearchPageResult.field,
+            contentType: 'application/json',
+            headers: {
+                //  'Content-Type': 'application/json',
+                Authorization: "Bearer " + faceAPI.GetJWTToken()
+            }, //增加Token验证头
+            request: {
+                pageName: 'PageIndex', //页码的参数名称，默认：page
+                limitName: 'PageSize' //每页数据量的参数名，默认：limit
+            },
+            parseData: function (res) { //res 即为原始返回的数据
+                if (res.result == true) {
+                    var data = res.content;
+                    var ret = {
+                        "code": 0, //解析接口状态
+                        "msg": "", //解析提示文本
+                        "count": data.TotalCount, //解析数据长度
+                        "data": data.DataList //解析数据列表
+                    };
+                    return ret;
+
+                } else {
+                    return {
+                        "code": 0, //解析接口状态
+                        "msg": '', //解析提示文本
+                        "count": 0, //解析数据长度
+                        "data": [] //解析数据列表
+                    };
+                }
+
+
+            }, //**************************异步请求结束***********************
+
+            toolbar: '#toolbarDemo',
+            defaultToolbar: ['filter', 'exports', 'print'],
+            cols: [
+                [
+
+                    {
+                        field: 'RecordDate',
+                        width: 200,
+                        title: getLanguage('Report.r36'),
+                        sort: true,
+                        templet: function (d) {
+                            var strDate = faceAPI.unixTimeStampToDateString(d.RecordDate);
+                            return strDate;
+                        }
+                    },
+                    { //打卡事件
+                        field: 'RecordType',
+                        title: getLanguage('Report.r42'),
+                        sort: true,
+                        templet: function (d) {
+                            var sTip = EnentTypeTable[d.RecordType];
+
+                            return sTip;
+                        }
+                    }
+                ]
+            ],
+            limits: [100, 200, 300, 400, 500, 600],
+            limit: 100,
+            page: true,
+            height: openWH[1] - 50,
+            skin: 'line',
+            done: function (res, curr, count) {
+                TableCurPage = curr;
+            }
+        });
+
+
+
+        function IniSearchPar() {
+            var par = {
+                field: {
+                    BeginDate: dayjs(dayjs().subtract(7, 'day').format("YYYY-MM-DD") + ' 00:00:00').unix(),//将 年月日时分秒 转为 时间戳
+                    EndDate: dayjs(dayjs().format("YYYY-MM-DD") + ' 23:59:59').unix(),
+                    RecordTypes: null,
+                },
+                result: true
+            };
+
+            faceAPI.SystemReportSearchPageResult = par;
+        }
+        /**
+         * toolbar事件监听
+         */
+        table.on('toolbar(SystemReportPageTableFilter)', function (obj) {
+            if (obj.event === 'search') { // 查询操作
+                var content = miniPage.getHrefContent('page/report/SystemSearch.html');
+
+
+                faceAPI.SystemReportSearch = { ...faceAPI.SystemReportSearchPageResult.field };
+                faceAPI.SystemReportSearch.BeginDate = dayjs.unix(faceAPI.SystemReportSearch.BeginDate).format("YYYY-MM-DD HH:mm:ss");
+                faceAPI.SystemReportSearch.EndDate = dayjs.unix(faceAPI.SystemReportSearch.EndDate).format("YYYY-MM-DD HH:mm:ss");
+                faceAPI.SystemReportSearch.EnentTypeTable = EnentTypeTable;
+                var index = layer.open({
+                    title: getLanguage('Report.SearchDoorSystemRecord'),
+                    type: 1,
+                    shade: 0.2,
+                    maxmin: true,
+                    shadeClose: true,
+                    area: ['800px', '500px'],
+                    content: content,
+                    end: function (layero, index) {
+                        if (faceAPI.SystemReportSearchPageResult.result == true) {
+                            TableCurPage = 1;
+                            refreshTable(false);
+                        }
+                    }
+                });
+
+            } else if (obj.event == 'refresh') {
+                //执行搜索重载
+                refreshTable(true);
+            } else if (obj.event == 'ClearRecord') {
+                ClearRecord();
+            }
+
+        });
+        function ClearRecord() {
+            var layerindex = layer.confirm(getLanguage('Report.r51'), {
+                btn: [getLanguage('people.p24'), getLanguage('people.p25')], //按钮 删除和取消
+                icon: 3
+            }, function () { //删除
+                // debugger
+                var CheckPasswordcontent = miniPage.getHrefContent(
+                    "page/user/CheckPassword.html"
+                );
+                faceAPI.CheckPasswordResult = false;
+
+                // debugger;
+                layer.open({
+                    title: getLanguage("user.checkPassword"),
+                    type: 1,
+                    shade: 0.4,
+                    area: ["500px", "200px"],
+                    content: CheckPasswordcontent,
+                    end: function () {
+
+                        if (faceAPI.CheckPasswordResult) {
+                            sendClearRequest();
+                        }
+
+                    },
+                });
+
+
+                layer.close(layerindex);
+            });
+
+            function sendClearRequest() {
+                var postdata = {
+                    RecordType: 3 //系统记录
+                };
+                var loadindex = layer.load(1, { shade: [0.6, '#e2e2e2'] });
+
+                faceAPI.AjaxPOSTJson({
+                    data: postdata,
+                    url: 'api/Record/Delete/ByType',
+                    timeout: 9999999,
+                    success: function (result) {
+                        layer.close(loadindex);
+                        if (result.result == false) {
+                            layer.alert(result.error, {
+                                icon: 2
+                            });
+                        } else {
+                            refreshTable(true);
+                        }
+                    }
+                });
+                layer.close(index);
+            }
+
+        }
+        function refreshTable(bIni) {
+            
+            if (bIni) {
+                IniSearchPar();
+                TableCurPage = 1;
+            }
+            var rst = faceAPI.SystemReportSearchPageResult;
+            
+            table.reload('SystemReportPage', {
+                page: {
+                    curr: TableCurPage
+                },
+                where: rst.field
+            });
+        }
+    });
+    setLanguage();
+    setAllAttrVal();
+</script>

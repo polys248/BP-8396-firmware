@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title lng-title="FC8280T 人脸机管理软件-登陆"></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="../lib/layui-v2.6.8/css/layui.css" media="all">
+
+    <!-- 多语言 需要放置最前面 -->
+    <script src="../language/Ch.js"></script>
+    <script src="../language/En.js"></script>
+    <script src="../language/zh_hk.js"></script>
+    <script src="../language/index.js"></script>
+    <!-- 多语言 需要放置最前面 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden
+        }
+
+        body {
+            background: #1E9FFF;
+        }
+
+            body:after {
+                content: '';
+                background-repeat: no-repeat;
+                background-size: cover;
+                -webkit-filter: blur(3px);
+                -moz-filter: blur(3px);
+                -o-filter: blur(3px);
+                -ms-filter: blur(3px);
+                filter: blur(3px);
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: -1;
+            }
+
+        .layui-container {
+            width: 100%;
+            height: 100%;
+            overflow: hidden
+        }
+
+        .admin-login-background {
+            width: 360px;
+            height: 300px;
+            position: absolute;
+            left: 50%;
+            top: 40%;
+            margin-left: -180px;
+            margin-top: -100px;
+        }
+
+        .logo-title {
+            text-align: center;
+            letter-spacing: 2px;
+            padding: 14px 0;
+        }
+
+            .logo-title h1 {
+                color: #1E9FFF;
+                font-size: 25px;
+                font-weight: bold;
+            }
+
+        .login-form {
+            background-color: #fff;
+            border: 1px solid #fff;
+            border-radius: 3px;
+            padding: 14px 20px;
+            box-shadow: 0 0 8px #eeeeee;
+        }
+
+            .login-form .layui-form-item {
+                position: relative;
+            }
+
+                .login-form .layui-form-item label {
+                    position: absolute;
+                    left: 1px;
+                    top: 1px;
+                    width: 38px;
+                    line-height: 36px;
+                    text-align: center;
+                    color: #d2d2d2;
+                }
+
+                .login-form .layui-form-item input {
+                    padding-left: 36px;
+                }
+
+        .captcha {
+            width: 60%;
+            display: inline-block;
+        }
+
+        .captcha-img {
+            display: inline-block;
+            width: 34%;
+            float: right;
+        }
+
+            .captcha-img img {
+                height: 34px;
+                border: 1px solid #e6e6e6;
+                height: 36px;
+                width: 100%;
+            }
+
+        footer {
+            position: absolute;
+            bottom: 0; /* 4. 设置页脚position为absolute之后，再将其bottom值设为0，即可使其处于页面的底部 */
+            width: 100%;
+        }
+    </style>
+
+    <!-- 额外的css -->
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+
+<body>
+    <div class="layui-container">
+        <div class="admin-login-background">
+            <div class="layui-form login-form">
+                <form class="layui-form" action="">
+                    <div class="layui-form-item logo-title">
+                        <h1 id="deviceSn"></h1>
+                        <h1 language="Login.h1" lng-title="人脸机管理界面"></h1>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-icon layui-icon-password" for="password"></label>
+                        <input id="Login.l2" data-lang='placeholder'
+                               type="password" name="password"
+                               maxlength="8"
+                               lay-verify="required|password"
+                               lng-placeholder="密码"
+                               autocomplete="off"
+                               class="layui-input"
+                               value=""
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                    </div>
+
+                    <div class="layui-form-item">
+                        <input type="checkbox" id="rememberMe" name="rememberMe" value="true" lay-skin="primary"><span style="color: #666;position: absolute;top: 10px;" language='Login.l4' lng-title="记住密码"></span>
+                    </div>
+                    <div class="layui-form-item">
+                        <button class="layui-btn layui-btn layui-btn-normal layui-btn-fluid" lay-submit=""
+                                lay-filter="login">
+                            <span language='Login.h2' lng-title="登 入"></span>
+                        </button>
+                    </div>
+                </form>
+                <div class="langSet">
+
+                    <ul class="layui-nav layui-layout-right languageChange">
+
+                        <img style="width:20px;height: 20px;" src="../images/language.png" alt="" srcset="">
+                        <li class="layui-nav-item" lay-unselect>
+                            <a href="javascript:;">
+                                <cite id="languageStatus" lng-title="中文"></cite>
+                            </a>
+                            <dl class="layui-nav-child">
+                                <dd onclick="changeLanguage('cn')"><a>中文</a></dd>
+                                <dd onclick="changeLanguage('zh_hk')"><a>繁體</a></dd>
+                                <dd onclick="changeLanguage('en')"><a>English</a></dd>
+                            </dl>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+    </footer>
+    <script src="../lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
+    <script src="../lib/layui-v2.6.8/layui.js" charset="utf-8"></script>
+    <script src="../lib/jq-module/jquery.particleground.min.js" charset="utf-8"></script>
+    <script src="../js/lay-config.js?v=2.0.0" charset="utf-8"></script>
+    <script src="/jsLib/crypto-js.js"></script>
+    <script>
+        setLanguage();
+        setAllAttrVal()
+        layui.use(['form', 'jquery', 'layer', 'faceAPI'], function () {
+            var $ = layui.jquery, form = layui.form,
+                layer = layui.layer;
+            var faceAPI = layui.faceAPI;
+
+            var token = faceAPI.GetJWTToken();
+            if (token.length > 0) {
+
+                //检查token是否过期
+                faceAPI.Ajax({
+                    type: 'Get',
+                    url: '/api/User/CheckLoginToken',
+                    success: function (result) {
+
+                        if (result.result == false) {
+                            layui.faceAPI.SaveJWTToken("");
+                            return;
+                        }
+                        //token未过期，跳转到首页
+                        window.location = '../index.html';
+                    }
+                })
+            }
+
+
+            //检查管理密码是否为空
+            $.ajax({
+                type: 'get',
+                url: '/api/User/CheckAdminPasswordIsEmpty',
+                success: function (result) {
+                    if (result.result == true) {
+                        if (result.content.IsEmpty == 1) {
+                            //说明管理密码为空，跳转到初始化密码页面
+                            //token未过期，跳转到首页
+                            window.location = 'inipassword.html';
+                        }
+                    }
+
+                }
+            });
+
+
+            var sn = getLanguageDeviceSN();
+            if (sn == null)
+                sn = '';
+            if (sn.length > 0) {
+                $("#deviceSn").html(sn);
+            }
+
+            $.ajax({
+                type: 'get',
+                url: '/api/GetDeviceSN',
+                success: function (result) {
+                    if (result.result == true) {
+                        SetLanguageDeviceSN(result.content);
+                        setLanguage();
+                        $("#deviceSn").html(result.content);
+                    }
+
+                }
+            });
+            // 粒子线条背景
+            $(document).ready(function () {
+                $('.layui-container').particleground({
+                    dotColor: '#7ec7fd',
+                    lineColor: '#7ec7fd'
+                });
+            });
+
+            let login = localStorage.getItem('login') || null;
+            //console.log('[ login ] >', login)
+            if (login) {
+                login = JSON.parse(login);
+                //console.log('[ login ] >', login)
+                $('#rememberMe').attr("checked", login.checked);
+
+
+                form.render("checkbox")
+                if (login.checked == true) {
+                    var sSavePassword = login.password;
+                    var bytes = CryptoJS.AES.decrypt(sSavePassword, "92FBC41382266351");
+                    sSavePassword = bytes.toString(CryptoJS.enc.Utf8);
+
+                    document.getElementById('Login.l2').value = sSavePassword;
+                }
+
+                
+                //document.getElementById('Login.l2').value = login.username;
+
+            }
+
+            // 进行登录操作
+
+            form.on('submit(login)', function (data) {
+                data = data.field;
+
+                
+
+                if (data.password == '') {
+                    //密码不能为空
+                    layer.alert(getLanguage('Login.l6'), { icon: 2 });
+                    return false;
+                }
+
+                var sSavePassword = data.password;
+
+                // 将密码加盐混淆后发送
+                //创建密码盐
+                var sHash = generateGUID();
+                var sMessage = sHash + data.password + sHash;
+                var ciphertext = CryptoJS.MD5(sMessage).toString(CryptoJS.enc.Hex).toUpperCase();
+                data.password = ciphertext;
+                data.Hash = sHash;
+
+                //检查是否已登录，未登录则跳转登陆页面
+                $.ajax({
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    url: '/api/User/Login',
+                    success: function (result) {
+                        if (result.result == false) {
+                            var errMsgs = [];
+                            errMsgs[1] = getLanguage('Login.l9')//"密码错误！";
+                            errMsgs[2] = getLanguage('Login.l8')//"密码错误次数太多，已锁定！";
+
+                            if (result.errCode <= 2) {
+                                layer.alert(errMsgs[result.errCode], { icon: 2 });
+                            }
+                            else {
+                                layer.alert(result.error, { icon: 2 });
+                            }
+                        }
+                        else {
+                            if ($('#rememberMe').prop("checked")) {
+                                //需要保存登录密码
+                                //将登录密码加密
+                                sSavePassword = CryptoJS.AES.encrypt(sSavePassword, "92FBC41382266351").toString();
+
+                                localStorage.setItem('login', JSON.stringify({
+                                    checked: true,
+                                    password: sSavePassword
+                                }))
+                            } else {
+                                localStorage.removeItem('login')
+                            }
+                            var token = result.content.token;
+                            if (token.length > 0) {
+                                layui.faceAPI.SaveJWTToken(token);
+                                //layer.msg(getLanguage('Login.l12'), function () {
+                                window.location = '../index.html';
+                                //});
+                            }
+
+                        }
+
+                    }
+                });
+
+                return false;
+            });
+
+            function generateGUID() {
+                let d = new Date().getTime();
+                let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                    let r = (d + Math.random() * 16) % 16 | 0;
+                    d = Math.floor(d / 16);
+                    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+                });
+                return uuid;
+            }
+
+
+            faceAPI.CheckInputBox();
+        });
+    </script>
+</body>
+
+<script type="text/javascript">
+    setTimeout(() => {
+        setLanguage();
+        setAllAttrVal()
+    }, 300)
+</script>
+
+</html>

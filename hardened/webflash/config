@@ -1,0 +1,17 @@
+# /data/webflash/config  -- firmware update service settings (KEY=VALUE)
+
+# --- Local browser upload (http://<device-ip>:8090/) ---
+LISTEN=:8090
+# REQUIRED to allow local uploads. Set a long random secret, or leave blank to
+# disable browser upload entirely (OTA still works).
+TOKEN=
+
+# --- OTA pull from your backend (bettapay) ---
+# Manifest endpoint (HTTPS). Leave blank or OTA_INTERVAL=0 to disable OTA.
+OTA_URL=https://api.bettapay.ng/functions/v1/fw-manifest
+# NOTE: no OTA secret lives here. The OTA bearer is taken from the token files
+# (/data/device_token after claim, else the fleet token) -- nothing to edit.
+# Seconds between checks (min 60). 0 disables OTA.
+OTA_INTERVAL=3600
+# This unit's serial, sent to the backend so you can target updates per device.
+DEVICE_SN=SV-8396H26031043

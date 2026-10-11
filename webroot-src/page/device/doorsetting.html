@@ -1,0 +1,471 @@
+﻿<style>
+    #device_DoorSetting_div label {
+        width: 250px;
+    }
+
+    .layui-form-pane .layui-input-block {
+        margin-left: 250px;
+        left: -1px;
+    }
+
+    .aligncenter {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+<div class="layui-form layuimini-form  layui-form-pane" id="device_DoorSetting_div" lay-filter="device_DoorSetting_div_filter">
+    <div class="layui-bg-gray" style="padding: 10px;">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-header" language='Doorsetting.d1'>鉴权参数</div>
+                    <div class="layui-card-body">
+                        <div class="divwidth">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='device.d115'> 出入类型</label>
+                                    <div class="layui-input-inline">
+                                        <input type="radio" name="AccessType" value="0" id="device.d116"
+                                               data-lang='title' title="入门" checked>
+                                        <input type="radio" name="AccessType" value="1" id="device.d117"
+                                               data-lang='title' title="出门">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='device.d128'> 开门保持(秒)</label>
+                                    <div class="layui-input-inline">
+                                        <input type="number" max="65535" min="0" maxlength="5" name="ReleaseTime"
+                                               autocomplete="off" class="layui-input" lay-verify="required"
+                                               id="device.d129,device.d130,device.d131"
+                                               data-lang='placeholder,lay-reqText,tipMsg' placeholder="请输入开门保持"
+                                               lay-reqText="请输入开门保持时间" tipShow="1"
+                                               tipMsg="开门保持时间，必填<br/>识别后继电器输出的时间<br/> 取值范围 0 -- 65535(s)，单位:秒">
+                                    </div>
+                                </div>
+                                <div class="layui-inline FunctionList_DelayOpenDoorTime">
+                                    <label class="layui-form-label" language='device.DelayOpenDoorTime_Title'> 延迟开门时间(秒)</label>
+                                    <div class="layui-input-inline">
+                                        <input type="number" max="65535" min="0" maxlength="5" name="DelayOpenDoorTime"
+                                               autocomplete="off" class="layui-input" 
+                                               id="device.DelayOpenDoorTime_Tip,device.DelayOpenDoorTime_Tip,device.DelayOpenDoorTime_Desc"
+                                               data-lang='placeholder,lay-reqText,tipMsg' placeholder="请输入延迟开门时间"
+                                               lay-reqText="请输入延迟开门时间" tipShow="1"
+                                               tipMsg="延迟开门时间，必填<br/>识别后延迟一段时间后开门<br/> 取值范围 0 -- 65535(s)，单位:秒<br/> 0 -- 表示禁用">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline FunctionList_VisitorRootPassword" >
+                                    <label class="layui-form-label" language='device.d303'> 访客密码根密码</label>
+                                    <div class="layui-input-inline">
+                                        <input type="password" OnlyNumber name="VisitorRootPassword" maxlength="8" autocomplete="off"
+                                               class="layui-input">
+
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='device.d118'> 免验证开门</label>
+                                    <div class="layui-input-inline">
+                                        <input type="checkbox" name="FreeOpen" lay-skin="switch"
+                                               id="device.d119" data-lang='lay-text' lay-text="启用|禁用" unchecked value="1">
+                                    </div>
+                                </div>
+                                <!-- <div class="layui-inline FunctionList_MultiPerson">
+                                    <label class="layui-form-label" language='device.d413'> 组合开门人数</label>
+                                    <div class="layui-input-inline">
+                                        <input type="number" max="50" min="1" maxlength="3" name="MultiPerson"
+                                               autocomplete="off" class="layui-input">
+                                    </div>
+                                </div> -->
+                            </div>
+                            <!-- <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='device.d120'> 识别间隔（秒）</label>
+                                    <div class="layui-input-inline">
+                                        <input type="number" max="65535" min="0" maxlength="5" name="OpenInterval"
+                                               autocomplete="off" class="layui-input" lay-verify="required"
+                                               id="device.d121,device.d122,device.d123"
+                                               data-lang='placeholder,lay-reqText,tipMsg' placeholder="请输入识别间隔"
+                                               lay-reqText="请输入识别间隔时间" tipShow="1"
+                                               tipMsg="识别间隔时间，必填<br/> 取值范围 0 -- 65535(s)，单位：秒">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='device.d124'>保存重复记录</label>
+                                    <div class="layui-input-inline">
+                                        <input type="checkbox" name="OpenInterval_SaveRecord" lay-skin="switch"
+                                               id="device.d125" data-lang='lay-text' lay-text="保存|丢弃" unchecked value="1">
+                                    </div>
+                                </div>
+
+
+                            </div> -->
+                            <div class="layui-form-item divpadding FunctionList_OverdueRemind">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='device.d305'> 权限到期提示</label>
+                                    <div class="layui-input-inline">
+                                        <input type="checkbox" name="OverdueRemind" lay-skin="switch" id="device.d136" lay-filter="OverdueRemind"
+                                               data-lang='lay-text' lay-text="启用|禁用" unchecked value="1">
+                                    </div>
+                                </div>
+                                <div class="layui-inline" lay-filter="OverdueRemind_Day">
+                                    <label class="layui-form-label" language='device.d306'> 权限到期提示(天)</label>
+                                    <div class="layui-input-inline">
+                                        <input type="number" max="255" min="0" maxlength="3" name="OverdueRemind_Day"
+                                               autocomplete="off" class="layui-input" id="device.d307,device.d308"
+                                               data-lang='placeholder,tipMsg' placeholder="请输入权限到期提示" tipShow="1"
+                                               tipMsg="权限到期提示 效期阈值，最少剩余有效天数，低于这个天数在识别后会提示有效期即将过期，取值范围：1-255（天）">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- <div class="layui-form-item divpadding FunctionList_DailyLimit">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='device.DailyLimit'> 每日识别次数限制</label>
+                                    <div class="layui-input-inline">
+                                        <input type="checkbox" name="UseDailyLimit" lay-skin="switch" id="device.d136" lay-filter="UseDailyLimit"
+                                               data-lang='lay-text' lay-text="启用|禁用" unchecked value="1">
+                                    </div>
+                                </div>
+                                <div class="layui-inline" lay-filter="DailyLimit">
+                                    <label class="layui-form-label" language='device.DailyLimitTimes'> 每日限制次数</label>
+                                    <div class="layui-input-inline">
+                                        <input type="number" max="65535" min="0" maxlength="5" name="DailyLimit"
+                                               autocomplete="off" class="layui-input" id="device.DailyLimitTip,device.DailyLimitTip1"
+                                               data-lang='placeholder,tipMsg' placeholder="请输入每日限制次数" tipShow="1"
+                                               tipMsg="每日识别次数限制，必填<br/> 取值范围 0 -- 65535">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="layui-form-item divpadding FunctionList_VerificationType">
+                                <label class="layui-form-label" language='device.d309'>组合验证</label>
+                                <div class="layui-input-block">
+                                    <select name="VerificationType" required lay-verify="">
+                                        <option value="1" language='device.d422' selected></option>
+                                        <option value="2" language='device.d423'></option>
+                                        <option value="3" language='device.d424'></option>
+                                        <option value="4" language='device.d425'></option>
+                                        <option value="5" language='device.d426'></option>
+                                        <option value="6" language='device.d427'></option>
+                                        <option value="7" language='device.d428'></option>
+                                        <option value="8" language='device.d429'></option>
+                                        <option value="9" language='device.d430'></option>
+                                        <option value="10" language='device.d431'></option>
+                                        <option value="11" language='device.d432'></option>
+                                        <option value="12" language='device.d433'></option>
+                                        <option value="13" language='device.d434'></option>
+                                        <option value="14" language='device.d435'></option>
+                                        <option value="15" language='device.d436'></option>
+
+                                    </select>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-header" language='Doorsetting.d2'>输入输出</div>
+                    <div class="layui-card-body">
+                        <div class="divwidth">
+                            <div class="layui-form-item">
+                                <div class="layui-inline FunctionList_Card">
+                                    <label class="layui-form-label" language='device.d414'> 卡号字节</label>
+                                    <div class="layui-input-inline">
+                                        <select name="CardBytes" required lay-verify="">
+                                            <option value="3" language='device.d415'>3字节</option>
+                                            <option value="4" selected language='device.d416'>4字节</option>
+                                            <!--<option value="8" language='device.d417'>8字节</option>-->
+                                            <option value="0" language='device.d418'>禁用</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- <div class="layui-inline">
+                                    <label class="layui-form-label" language='device.d311'> 继电器双稳态</label>
+                                    <div class="layui-input-inline">
+                                        <input type="checkbox" name="Relay" lay-skin="switch" id="device.d3121"
+                                               data-lang='lay-text' lay-text="支持|不支持" unchecked value="1">
+                                    </div>
+                                </div> -->
+                            </div>
+                            <div class="layui-form-item FunctionList_WGOutput">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='device.d127'> WG格式</label>
+                                    <div class="layui-input-inline">
+                                        <select name="WgFormat" required lay-verify="">
+                                            <option value="26" selected>26</option>
+                                            <option value="34">34</option>
+                                            <option value="66">66</option>
+                                            <option value="0" language='device.d418'>禁用</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='device.d421'> WG输出内容</label>
+                                    <div class="layui-input-inline">
+                                        <select name="WGContent" required lay-verify="">
+                                            <option value="1" selected language='device.d419'>用户号</option>
+                                            <option value="2" language='device.d420'>卡号</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="layui-form-item FunctionList_WGOutput">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='device.WgBytesSort'> WG字节顺序</label>
+                                    <div class="layui-input-inline">
+                                        <select name="WgBytesSort" required lay-verify="">
+                                            <option value="1" selected>高位在前低位在后</option>
+                                            <option value="2">低位在前高位在后</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <div class="layui-form-item divpadding FunctionList_LCD">
+                                <label class="layui-form-label" language='device.d312'> 短消息</label>
+                                <div class="layui-input-block">
+                                    <input type="text" maxlength="30" name="ShortMessage" autocomplete="off"
+                                           class="layui-input" id="device.d313,device.d313"
+                                           data-lang='placeholder,tipMsg' placeholder="合法验证后的短消息，可填写30个字符" tipShow="1"
+                                           width="300" tipMsg="合法验证后的短消息，可填写30个字符">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <div class="layui-col-md12">
+                <div class="layui-card">
+
+                    <div class="layui-card-body">
+                        <div class="layui-btn-container aligncenter">
+                            <button type="submit" class="layui-btn layui-btn-normal" lay-submit
+                                    lay-filter="data-save-btn" language='device.d224'>
+                                <i class="layui-icon"></i> 保存
+                            </button>
+                            <button type="reset" class="layui-btn layui-btn-danger" id="data-reset-btn" language='Doorsetting.d3'>
+                                <i class="layui-icon"></i> 刷新
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    layui.use(['form', 'laydate', 'table', 'miniPage', 'element', 'faceAPI'], function () {
+        setLanguage();
+        setAllAttrVal();
+        var faceAPI = layui.faceAPI;
+        var form = layui.form;
+        var $ = layui.$;
+        var formdata;
+
+
+        function LoadData() {
+            var parameter = {
+                "Door": true
+            };
+            faceAPI.AjaxPOSTJson({
+                url: '/api/Device/GetDetail',
+                data: parameter,
+                success: function (rst) {
+                    if (rst != null && rst.result) {
+
+                        formdata = rst.content;
+
+
+                        if (formdata.DailyLimit > 0) {
+                            formdata.UseDailyLimit = 1;
+                        } else {
+                            formdata.UseDailyLimit = 0;
+                        }
+                        switchDivHide(formdata.UseDailyLimit, "DailyLimit");
+                        switchDivHide(formdata.OverdueRemind, "OverdueRemind_Day");
+
+                        form.val("device_DoorSetting_div_filter", formdata);
+                    };
+                }
+            });
+        }
+        LoadData();
+        form.render();
+        form.on('submit(data-save-btn)', function (data) {
+
+            layer.confirm(getLanguage("Doorsetting.d4"), { icon: 3 }, function (index, layero, that) {
+                var postdata = data.field;
+                postdata.AccessType = postdata.AccessType == '1' ? 1 : 0;
+                postdata.CardBytes = Number(postdata.CardBytes);
+                postdata.FreeOpen = postdata.FreeOpen == '1' ? 1 : 0;
+                postdata.MultiPerson = Number(postdata.MultiPerson);
+                postdata.OpenInterval = Number(postdata.OpenInterval);
+                postdata.OpenInterval_SaveRecord = postdata.OpenInterval_SaveRecord == '1' ? 1 : 0;
+                postdata.OverdueRemind = postdata.OverdueRemind == '1' ? 1 : 0;
+                postdata.OverdueRemind_Day = Number(postdata.OverdueRemind_Day);
+                postdata.Relay = postdata.Relay == '1' ? 1 : 0;
+                postdata.ReleaseTime = Number(postdata.ReleaseTime);
+                postdata.DelayOpenDoorTime = Number(postdata.DelayOpenDoorTime);
+                postdata.VerificationType = Number(postdata.VerificationType);
+                postdata.WGContent = Number(postdata.WGContent);
+                postdata.WgFormat = Number(postdata.WgFormat);
+                postdata.WgBytesSort = Number(postdata.WgBytesSort);
+
+                postdata.UseDailyLimit = postdata.UseDailyLimit == '1' ? 1 : 0;
+                postdata.DailyLimit = Number(postdata.DailyLimit);
+                if (postdata.UseDailyLimit == 0) {
+                    postdata.DailyLimit = 0;
+                }
+
+                delete postdata.UseDailyLimit
+
+                //启动遮罩层
+                var waitLayerIndex = layer.load(1, { shade: [0.5, '#FFF'] });
+
+                faceAPI.AjaxPOSTJson({
+                    data: postdata,
+                    url: '/api/device/UpdateParameter',
+                    success: function (result) {
+                        layer.close(waitLayerIndex)
+
+                        if (result.result == false) {
+                            layer.alert(result.error, { icon: 2 });
+                        }
+                        else {
+                            formdata = data.field;
+                            layer.alert(getLanguage("Doorsetting.d5"), { icon: 1 });
+                        }
+                    }
+                });
+                layer.close(index)
+            });
+
+        });
+        $("#data-reset-btn").on('click', function () {
+
+            layer.confirm(getLanguage("Doorsetting.d6"), { icon: 3, btn: ["Yes", "No"] }, function (index, layero, that) {
+                LoadData();
+                layer.close(index)
+            });
+
+        });
+
+        form.on('switch(OverdueRemind)', function (data) {
+
+
+            var models = form.val("device_DoorSetting_div_filter");
+            models.OverdueRemind = models.OverdueRemind == "1" ? 1 : 0;
+            switchDivHide(models.OverdueRemind, "OverdueRemind_Day");
+
+
+            return false;
+        });
+
+        form.on('switch(UseDailyLimit)', function (data) {
+
+
+            var models = form.val("device_DoorSetting_div_filter");
+            models.UseDailyLimit = models.UseDailyLimit == "1" ? 1 : 0;
+            switchDivHide(models.UseDailyLimit, "DailyLimit");
+
+
+            return false;
+        });
+
+        function switchDivHide(value, filterName) {
+
+            var elems = $('div[lay-filter="device_DoorSetting_div_filter"] div[lay-filter="' + filterName + '"]')
+
+            if (value == 0) {
+                elems.addClass("layui-hide");
+
+            }
+            else {
+                elems.removeClass("layui-hide");
+            }
+            form.render();
+        }
+
+
+
+        faceAPI.ShowMouseTipMessageBox("device_DoorSetting_div_filter", layer);
+        faceAPI.CheckInputBox();
+
+        {
+            var DailyLimit = false, OverdueRemind = false;
+            var DelayOpenDoorTime = false;
+            var MultiPerson = false;//组合开门
+            var VerificationType = false;//组合验证
+            var WGOutput = false;//WG输出
+            var Card = false;//支持刷卡
+            var VisitorRootPassword = false;//访客密码根密码
+            var LCD = false;//短消息
+            if (faceAPI?.DeviceFunctionList) {
+                // faceAPI.DeviceFunctionList.BodyTemperature=false;
+                DailyLimit = faceAPI?.DeviceFunctionList.DailyLimit;
+                OverdueRemind = faceAPI?.DeviceFunctionList.OverdueRemind;
+                DelayOpenDoorTime = faceAPI?.DeviceFunctionList.DelayOpenDoorTime;
+                MultiPerson = faceAPI?.DeviceFunctionList.MultiPerson;
+                VerificationType = faceAPI?.DeviceFunctionList.VerificationType;
+                WGOutput = faceAPI?.DeviceFunctionList.WGOutput;
+                Card = faceAPI?.DeviceFunctionList.Card;
+                LCD = faceAPI?.DeviceFunctionList.LCD;
+                VisitorRootPassword = faceAPI?.DeviceFunctionList.VisitorRootPassword;
+                if (DelayOpenDoorTime == undefined) {
+                    DelayOpenDoorTime = false;
+                }
+
+            }
+
+
+            if (!DailyLimit) {
+                faceAPI.removeElement('.FunctionList_DailyLimit');
+            }
+            if (!OverdueRemind) {
+                faceAPI.removeElement('.FunctionList_OverdueRemind');
+            }
+            if (!DelayOpenDoorTime) {
+                faceAPI.removeElement('.FunctionList_DelayOpenDoorTime');
+            }
+
+            if (!MultiPerson) {
+                faceAPI.removeElement('.FunctionList_MultiPerson');
+            }
+
+            if (!VerificationType) {
+                faceAPI.removeElement('.FunctionList_VerificationType');
+            }
+
+            if (!WGOutput) {
+                faceAPI.removeElement('.FunctionList_WGOutput');
+            }
+            if (!Card) {
+                faceAPI.removeElement('.FunctionList_Card');
+            }
+            //短消息
+            if (!LCD) {
+                faceAPI.removeElement('.FunctionList_LCD');
+            }
+            if (!VisitorRootPassword) {
+                faceAPI.removeElement('.FunctionList_VisitorRootPassword');
+            }
+
+
+        }
+    });
+</script>

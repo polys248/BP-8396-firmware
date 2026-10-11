@@ -1,0 +1,240 @@
+
+<style>
+    #people-search label {
+        width: 250px;
+    }
+
+    .layui-form-pane .layui-input-block {
+        margin-left: 250px;
+        left: -1px;
+    }
+</style>
+<div class="layuimini-main" id="people-search">
+
+    <form class="layui-form layui-form-pane" lay-filter="people_search_div_filter">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">
+                    <span language="people.p51">用户号</span>
+                </label>
+                <div class="layui-input-inline">
+                    <input type="number"
+                           max="4294967295"
+                           min="0"
+                           maxlength="10"
+                           name="UserID"
+                           autocomplete="off"
+                           class="layui-input" />
+                </div>
+            </div>
+            <div class="layui-inline FunctionList_UserCode">
+                <label class="layui-form-label">
+                    <span language="people.UserCode">人员编号</span>
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" maxlength="63" CheckBytes name="Code" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">
+                    <span language="people.p52">人员姓名</span>
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" maxlength="63" CheckBytes name="Name" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline FunctionList_Card">
+                <label class="layui-form-label">
+                    <span language="people.p53">卡号</span>
+                </label>
+                <div class="layui-input-inline">
+                    <input type="number"
+                           max="18446744073709550000"
+                           min="0"
+                           maxlength="20"
+                           name="CardNum"
+                           value=""
+                           class="layui-input" />
+                </div>
+            </div>
+
+
+            <!-- <div class="layui-inline">
+                <label class="layui-form-label">
+                    <span language="people.p90">部门</span>
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" maxlength="63" CheckBytes name="Department" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">
+                    <span language="Report.r136">身份证号码 </span>
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" maxlength="63" CheckBytes name="IdentityCard" autocomplete="off" class="layui-input">
+                </div>
+            </div> -->
+            <!-- <div class="layui-inline">
+                <label class="layui-form-label">
+                    <span language="people.p55">登记照片</span>
+                </label>
+                <div class="layui-input-inline selectUp">
+                    <select name="Photo" required lay-verify="">
+                        <option value="" language='people.p56' selected>不查询</option>
+                        <option value="1" language='people.p57'>已登记</option>
+                        <option value="0" language='people.p58'>未登记</option>
+                    </select>
+
+                </div>
+            </div> -->
+            <div class="layui-inline">
+                <label class="layui-form-label">
+                    <span language="access.a123">角色</span>
+                </label>
+                <div class="layui-input-inline">
+                    <select name="AccessType" required lay-verify="">
+                        <option value="" language='people.p56' selected>不查询</option>
+                        <option value="0" language='people.p108'>普通人员</option>
+                        <option value="1" language='people.p109'>管理员</option>
+                        <option value="2" language='people.p110'>黑名单</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline FunctionList_Fingerprint">
+                <label class="layui-form-label">
+                    <span language='people.p111'>是否有指纹</span>
+                </label>
+                <div class="layui-input-inline selectUp">
+                    <select name="Fingerprint" required lay-verify="">
+                        <option value="" language='people.p56' selected>不查询</option>
+                        <option value="0" language='people.p114'>无</option>
+                        <option value="1" language='people.p113'>有</option>
+                    </select>
+
+                </div>
+            </div>
+            <div class="layui-inline FunctionList_Palmvein">
+                <label class="layui-form-label ">
+                    <span language='people.p112'>是否有掌纹</span>
+                </label>
+                <div class="layui-input-inline selectUp">
+                    <select name="Palmprint" required lay-verify="">
+                        <option value="" language='people.p56' selected>不查询</option>
+                        <option value="0" language='people.p114'>无</option>
+                        <option value="1" language='people.p113'>有</option>
+                    </select>
+
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item" style="text-align: center; ">
+            <div class="layui-inline">
+                <button type="submit" class="layui-btn" lay-submit lay-filter="data-search-btn">
+                    <i class="layui-icon">&#xe615;</i>
+                    <span language="people.p60">搜索</span>
+                </button>
+                <button type="reset" class="layui-btn layui-bg-blue" id="btn-reset">
+                    <span language="people.p61">重置</span>
+                </button>
+                <button type="submit" class="layui-btn layui-bg-orange" id="btnsearchclose">
+                    <i class="layui-icon">&#x1006;</i>
+                    <span language="people.p62">取消</span>
+                </button>
+            </div>
+        </div>
+    </form>
+
+</div>
+<script>
+    setLanguage();
+    setAllAttrVal()
+    layui.use(['form', 'table', 'faceAPI'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            table = layui.table,
+            $ = layui.$;
+        var faceAPI = layui.faceAPI;
+        /**
+         * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+        form.render();
+
+        // 当前弹出层，防止ID被覆盖
+        var parentIndex = layer.index;
+
+        if (faceAPI.PeopleSearchPageResult != null) {
+            form.val("people_search_div_filter", faceAPI.PeopleSearchPageResult.field);
+        } else
+            faceAPI.PeopleSearchPageResult = {};
+
+        faceAPI.PeopleSearchPageResult.result = false;
+        //监听提交
+        form.on('submit(data-search-btn)', function (data) {
+            var result = data.field;
+            faceAPI.PeopleSearchPageResult = {};
+            
+            if (result.CardNum == "") result.CardNum = null;
+            if (result.CardNum == "0") result.CardNum = null;
+            if (result.UserID == "") result.UserID = null;
+            if (result.UserID == "0") result.UserID = null;
+            if (result.Code == "") result.Code = null;
+            if (result.Name == "") result.Name = null;
+            if (result.IdentityCard == "") result.IdentityCard = null;
+
+            if (result.Department == "") result.Department= null;
+
+            if (result.Photo == "")  result.Photo= null;
+            if (result.AccessType == "") result.AccessType = null;
+            if (result.Fingerprint == "") result.Fingerprint = null;
+            if (result.Palmprint == "") result.Palmprint = null;
+
+            faceAPI.PeopleSearchPageResult.result = true;
+            faceAPI.PeopleSearchPageResult.field = result;
+            layer.close(parentIndex);
+            return false;
+        });
+
+
+        $('#btnsearchclose').on('click', function () {
+            faceAPI.PeopleSearchPageResult.result = false
+            layer.close(parentIndex);
+            return false;
+        });
+
+        //删除不支持的功能
+        if (faceAPI.DeviceFunctionList != undefined) {
+            const { Card, Fingerprint, Palmvein, UserCode } = faceAPI.DeviceFunctionList;
+            //设备不支持人员编号
+            if (!UserCode) {
+                faceAPI.removeElement('.FunctionList_UserCode');
+            }
+            //设备不支持刷卡
+            if (!Card) {
+                faceAPI.removeElement('.FunctionList_Card');
+            }
+            //设备不支持指纹
+            if (!Fingerprint) {
+                faceAPI.removeElement('.FunctionList_Fingerprint');
+            }
+            //设备不支持指纹
+            if (!Palmvein) {
+                faceAPI.removeElement('.FunctionList_Palmvein');
+            }
+        }
+
+        // $('#btn-reset').on('click', function () {
+        //     form.render("people_search_div_filter",{
+        //         EmployeeIC:"",
+        //         UserID:"",
+        //         Name:"",
+        //         UserIDentity:"",
+        //         employeeDept:""
+
+        //     });
+        //     return false;
+        // });
+        faceAPI.CheckInputBox();
+    });
+
+</script>

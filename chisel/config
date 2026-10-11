@@ -1,0 +1,22 @@
+# /data/chisel/config  -- reverse-tunnel agent (remote telnet over the internet).
+# The device dials OUT to your central chisel hub and exposes its telnet back to
+# the hub (bound to the hub's localhost). No TUN, no inbound firewall holes.
+
+ENABLED=0                                   # set 1 to turn on
+
+# Central hub (public). http:// is fine because chisel's tunnel is SSH-encrypted;
+# pin the hub key with CHISEL_FINGERPRINT (below) so no CA store is needed.
+CHISEL_HUB=http://YOUR-HUB-HOST:8080
+
+# Hub server key fingerprint (chisel prints it on start). Pins the hub = secure.
+CHISEL_FINGERPRINT=
+
+# Per-device credential (user:pass) the hub's authfile checks. Keep it unique per unit.
+CHISEL_AUTH=
+
+# Reverse port on the hub for THIS device's telnet. Must be unique per device
+# (your SN->port registry). The hub will expose it on ITS localhost only.
+CHISEL_PORT=
+
+# Soft memory cap (MiB) so chisel can't push aio into swap.
+CHISEL_MEM_MIB=16

@@ -1,0 +1,280 @@
+﻿<style>
+    #device_Alarm_div label {
+        width: 250px;
+    }
+
+    .layui-form-pane .layui-input-block {
+        margin-left: 250px;
+        left: -1px;
+    }
+
+    .divwidth {
+        width: 1850px;
+    }
+
+    .divpadding {
+        padding-right: 20px
+    }
+
+    .aligncenter {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+<div class="layui-form layuimini-form  layui-form-pane" id="device_Alarm_div" lay-filter="device_Alarm_div_filter">
+    <div class="layui-bg-gray" style="padding: 10px;">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-header" language='Alarm.a6'>报警参数</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.d268'> 消防报警</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="FireAlarm" lay-skin="switch" id="device.d134"
+                                           data-lang='lay-text' lay-text="启用|禁用" unchecked value="1">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.d32'> 黑名单报警</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="BlacklistAlarm" lay-skin="switch"
+                                           id="device.d119" data-lang='lay-text' lay-text="启用|禁用" unchecked value="1">
+                                </div>
+                            </div>
+                          
+                        </div>
+
+                        <div class="layui-form-item">
+                            <!-- <div class="layui-inline">
+                                <label class="layui-form-label" language='device.d371'> 防拆报警功能开关</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="AntiDisassemblyAlarm" lay-skin="switch"
+                                           id="device.d136" data-lang='lay-text' lay-text="启用|禁用" unchecked value="1">
+                                </div>
+                            </div> -->
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.d372'>合法验证解除报警开关</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="UseUserCloseAlarm" lay-skin="switch"
+                                           id="device.d151" data-lang='lay-text' lay-text="启用|禁用" unchecked value="1">
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+            </div>
+            <!-- <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-header" language='device.d373'>开门超时报警参数</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.d135'> 超时报警</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="DoorLongOpenAlarm" lay-skin="switch"
+                                           id="device.d158" data-lang='lay-text' lay-text="启用|禁用" unchecked value="1">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.d137'> 开门超时(秒)</label>
+                                <div class="layui-input-inline">
+                                    <input type="number" max="255" min="5" maxlength="3" name="DoorLongOpenTime"
+                                           autocomplete="off" class="layui-input" lay-verify="required"
+                                           id="device.d138,device.d139,device.d140"
+                                           data-lang='placeholder,lay-reqText,tipMsg' placeholder="请输入开门超时"
+                                           lay-reqText="请输入开门超时时间" tipShow="1"
+                                           tipMsg="开门超时时间，必填<br/>启用【超时报警】功能后，门打开超过此时间后就会报警<br/>取值范围 5 -- 255(s)，单位：秒">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-header" language='device.d376'>非法验证报警参数</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.d377'> 非法验证报警</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="IllegalVerificationAlarm" lay-skin="switch"
+                                           id="device.d165" data-lang='lay-text' lay-text="启用|禁用" unchecked value="1">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.d378'> 非法认证次数</label>
+                                <div class="layui-input-inline">
+                                    <input type="number" max="255" min="1"  maxlength="3" name="IllegalVerificationAlarmLimit"
+                                           autocomplete="off" class="layui-input" lay-verify="required"
+                                           data-lang='placeholder,lay-reqText,tipMsg' placeholder="请输入非法认证次数"
+                                           lay-reqText="请输入非法认证次数" tipShow="1" id="device.d379,device.d379,device.d380"
+                                           tipMsg="非法认证次数，必填<br/>非法刷卡到一定次数之后将会产生报警<br/> 取值范围 1 -- 255，单位:次">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="layui-col-md12 FunctionList_Password">
+                <div class="layui-card ">
+                    <div class="layui-card-header" language='device.d381'>胁迫报警参数</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.d382'> 胁迫报警</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="PasswordAlarm" lay-skin="switch"
+                                           id="device.d175" data-lang='lay-text' lay-text="启用|禁用" unchecked value="1">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.d383'> 胁迫报警密码</label>
+                                <div class="layui-input-inline">
+                                    <input type="password" maxlength="8" OnlyNumber name="PasswordAlarm_Password"
+                                           autocomplete="off" class="layui-input" tipShow="1" id="device.d384"
+                                           data-lang="tipMsg" tipMsg="胁迫报警密码，输入此密码则发生报警，密码仅支持数字，可以包含0">
+                                </div>
+                            </div>
+                           
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.d385'> 工作模式</label>
+                                <div class="layui-input-inline selectUp" style="width:655px">
+                                    <select name="PasswordAlarm_Mode" required lay-verify="">
+                                        <option value="1" selected language='device.d386'>不开门，报警输出</option>
+                                        <option value="2" language='device.d387'>开门，报警输出</option>
+                                        <option value="3" language='device.d388'>锁定门，报警，只能软件解锁</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-body">
+                        <div class="layui-btn-container aligncenter">
+                            <button type="submit" class="layui-btn layui-btn-normal" lay-submit
+                                    lay-filter="data-save-btn" language='device.d224'>
+                                <i class="layui-icon"></i> 保存
+                            </button>
+                            <button type="reset" class="layui-btn layui-btn-danger" id="data-reset-btn" language='timingLock.t2'>
+                                <i class="layui-icon"></i> 刷新
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'laydate', 'table', 'miniPage', 'element', 'faceAPI'], function () {
+        setLanguage();
+        setAllAttrVal();
+        var faceAPI = layui.faceAPI;
+        var form = layui.form;
+        var $ = layui.$;
+        var laydate = layui.laydate;
+
+        var formdata;
+        function LoadData() {
+            var parameter = {
+                "Alarm": true,
+            };
+            faceAPI.AjaxPOSTJson({
+                data: parameter,
+                url: '/api/Device/GetDetail',
+                success: function (rst) {
+                    if (rst != null && rst.result) {
+                        formdata = rst.content;
+                        form.val("device_Alarm_div_filter", formdata);
+
+
+                    };
+                }
+            });
+
+        }
+        LoadData();
+
+        form.on('submit(data-save-btn)', function (data) {
+
+            layer.confirm(getLanguage('Alarm.a1'), { icon: 3 }, function (index, layero, that) {
+
+                var postdata = data.field;
+
+                postdata.FireAlarm = postdata.FireAlarm == '1' ? 1 : 0;
+
+                postdata.BlacklistAlarm = postdata.BlacklistAlarm == '1' ? 1 : 0;
+
+                postdata.AntiDisassemblyAlarm = postdata.AntiDisassemblyAlarm == '1' ? 1 : 0;
+
+                postdata.UseUserCloseAlarm = postdata.UseUserCloseAlarm == '1' ? 1 : 0;
+
+
+                postdata.DoorLongOpenAlarm = postdata.DoorLongOpenAlarm == '1' ? 1 : 0;
+                postdata.DoorLongOpenTime = parseInt(postdata.DoorLongOpenTime);
+
+                postdata.IllegalVerificationAlarm = postdata.IllegalVerificationAlarm == '1' ? 1 : 0;
+                postdata.IllegalVerificationAlarmLimit = parseInt(postdata.IllegalVerificationAlarmLimit);
+
+                postdata.PasswordAlarm = postdata.PasswordAlarm == '1' ? 1 : 0;
+                postdata.PasswordAlarm_Mode = parseInt(postdata.PasswordAlarm_Mode);
+
+                //启动遮罩层
+                var waitLayerIndex = layer.load(1, { shade: [0.5, '#FFF'] });
+                faceAPI.AjaxPOSTJson({
+                    data: postdata,
+                    url: '/api/device/UpdateParameter',
+                    success: function (result) {
+                        layer.close(waitLayerIndex);
+
+                        if (result.result == false) {
+                            layer.alert(result.error, { icon: 2 });
+                        }
+                        else {
+                            formdata = data.field;
+                            layer.alert(getLanguage('timingLock.t4'), { icon: 1 });
+                        }
+                    }
+                });
+                layer.close(index);
+            });
+
+        });
+        $("#data-reset-btn").on('click', function () {
+            layer.confirm(getLanguage('Alarm.a2'), { icon: 3 ,btn:["Yes","No"]}, function (index, layero, that) {
+                LoadData();
+                layer.close(index)
+            });
+
+        });
+
+        faceAPI.CheckInputBox();
+
+        {
+            var Password = false;//支持密码
+            if (faceAPI?.DeviceFunctionList) {
+                // faceAPI.DeviceFunctionList.BodyTemperature=false;
+                Password = faceAPI?.DeviceFunctionList.Password;
+
+            }
+
+
+            if (!Password) {
+                faceAPI.removeElement('.FunctionList_Password');
+            }
+        }
+    });
+</script>

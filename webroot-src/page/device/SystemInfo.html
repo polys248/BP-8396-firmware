@@ -1,0 +1,301 @@
+<style>
+    #device_info_div label {
+        width: 250px;
+    }
+
+    .layui-form-pane .layui-input-block {
+        margin-left: 250px;
+        left: -1px;
+    }
+
+    .divwidth {
+        width: 1850px;
+    }
+
+    .status-black {
+        margin-left: 10px
+    }
+
+    .divpadding {
+        padding-right: 20px
+    }
+
+    .aligncenter {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+<div class="layui-form layuimini-form  layui-form-pane page_SystemSetting" id="device_info_div"
+    lay-filter="device_info_div_filter">
+    <div class="layui-bg-gray" style="padding: 10px;">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-header" language='DeviceInfo.d1'>设备身份</div>
+                    <div class="layui-card-body">
+                        <div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label" language='DeviceInfo.d25'> 设备名称</label>
+                                <div class="layui-input-block">
+                                    <input type="text" maxlength="30" name="DeviceName" autocomplete="off"
+                                        class="layui-input">
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label"> SN</label>
+                                    <div class="layui-input-inline">
+                                        <div class="layui-form-mid status-black" name="DeviceSN" autoset></div>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='DeviceInfo.d3'> 生产日期</label>
+                                    <div class="layui-input-inline">
+                                        <div class="layui-form-mid status-black" name="ProductionDate" autoset></div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='DeviceInfo.d7'> 版本号</label>
+                                    <div class="layui-input-inline ">
+                                        <div class="layui-form-mid status-black" name="FirmwareVerson" autoset></div>
+                                    </div>
+                                </div>
+
+                                <div class="layui-inline FunctionListFace">
+                                    <label class="layui-form-label" language='DeviceInfo.d8'>人脸算法版本</label>
+                                    <div class="layui-input-inline">
+                                        <div class="layui-form-mid status-black" name="FaceVerson" autoset></div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="layui-form-item">
+                                <!--<div class="layui-inline FunctionListFingerprint">
+                                    <label class="layui-form-label" language='DeviceInfo.d9'>指纹算法版本</label>
+                                    <div class="layui-input-inline">
+
+                                        <div class="layui-form-mid status-black" name="FingerprintVerson" autoset></div>
+
+                                    </div>
+                                </div>
+                                -->
+                                <div class="layui-inline FunctionListPalmvein">
+                                    <label class="layui-form-label" language='DeviceInfo.d10'>掌静脉算法</label>
+                                    <div class="layui-input-inline">
+                                        <div class="layui-form-mid status-black" name="PalmveinVerson" autoset></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item divpadding">
+
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='DeviceInfo.d11'> 制造商</label>
+                                    <div class="layui-input-block">
+                                        <div class="layui-form-mid status-black" name="Manufacturer" autoset></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- <div class="layui-form-item divpadding">
+                                <label class="layui-form-label" language='DeviceInfo.d15'> 厂家电话</label>
+                                <div class="layui-input-block">
+                                    <div class="layui-form-mid status-black" name="ManufacturerPhone" autoset></div>
+                                </div>
+                            </div> -->
+                            <div class="layui-form-item divpadding">
+
+                                <label class="layui-form-label" language='DeviceInfo.d13'> 网址</label>
+                                <div class="layui-input-block">
+                                    <div class="layui-form-mid status-black" name="Website" autoset></div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-header" language='DeviceInfo.d17'>设备时间</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='DeviceInfo.d33'> 设备时间</label>
+                                <div class="layui-input-inline">
+                                    <div class="layui-form-mid status-black" name="SystemTime" autoset></div>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <button class="layui-btn layui-btn-normal" style="margin: 0 0 0 10px" lay-submit
+                                    lay-filter="btn-SyncTime">
+                                    <span language='DeviceInfo.d21'>刷新</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-col-md12">
+                <div class="layui-card">
+
+                    <div class="layui-card-body">
+                        <div class="layui-btn-container aligncenter">
+                            <button type="submit" class="layui-btn layui-btn-normal" lay-submit
+                                lay-filter="btn-data-save" language='DeviceInfo.d20'>
+                                <i class="layui-icon"></i> 保存
+                            </button>
+
+                            <button type="button" class="layui-btn layui-btn-danger" lay-submit
+                                lay-filter="btn-data-refresh" language="DeviceInfo.d21">
+                                <i class="layui-icon"></i> 刷新
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<script>
+    
+    layui.use(['form', 'laydate', 'table', 'miniPage', 'element', 'faceAPI'], function () {
+
+        setLanguage();
+        setAllAttrVal()
+        var faceAPI = layui.faceAPI;
+        var form = layui.form;
+        var $ = layui.$;
+        var formdata;
+
+
+        function LoadData() {
+            var parameter = {
+                "SystemInfo": true,
+                "Language": true
+            };
+
+            faceAPI.AjaxPOSTJson({
+                url: '/api/Device/GetDetail',
+                data: parameter,
+                success: function (rst) {
+                    if (rst != null && rst.result) {
+                        rst.content.SystemTime = faceAPI.unixTimeStampToDateString(rst.content.SystemTime);
+
+                        formdata = rst.content;
+                        bindfrom();
+                    };
+                }
+            });
+        }
+        LoadData();
+
+        form.on('submit(btn-data-save)', function (data) {
+
+            layer.confirm(getLanguage('DeviceInfo.d22'), { icon: 3 }, function (index, layero, that) {//'确定保存设备信息吗?'
+
+                var postdata = data.field;
+
+                //启动遮罩层
+                var waitLayerIndex = layer.load(1, { shade: [0.5, '#FFF'] });
+                faceAPI.AjaxPOSTJson({
+                    data: postdata,
+                    contentType: "application/json",
+                    url: '/api/device/UpdateParameter',
+                    success: function (result) {
+                        layer.close(waitLayerIndex);
+                        if (result.result == false) {
+                            layer.alert(result.error, { icon: 2 });
+                        }
+                        else {
+                            formdata = data.field;
+                            layer.alert(getLanguage('DeviceInfo.d23'), { icon: 1 });
+                        }
+                    }
+                });
+                layer.close(index);
+            });
+
+        });
+        form.on('submit(btn-data-refresh)', function (data) {
+
+            layer.confirm(getLanguage('DeviceInfo.d24'), { icon: 3, btn: ["Yes", "No"] }, function (index, layero, that) {//'确定刷新设备信息吗?'
+                LoadData();
+                layer.close(index)
+            });
+        });
+
+
+        form.on('submit(btn-SyncTime)', function (data) {
+
+            var parameter = {
+                "Language": true
+            };
+
+            faceAPI.AjaxPOSTJson({
+                url: '/api/Device/GetDetail',
+                data: parameter,
+                success: function (rst) {
+                    if (rst != null && rst.result) {
+
+                        formdata.SystemTime = faceAPI.unixTimeStampToDateString(rst.content.SystemTime);
+                        bindfrom();
+                    };
+                }
+            });
+        });
+
+
+
+        function bindfrom() {
+            var _page = $('#device_info_div');
+            _page.find('div[autoset]').each((ind, em) => {
+                var _em = $(em);
+                var name = _em.attr("name");
+                if (formdata.hasOwnProperty(name))
+                    _em.html(formdata[name]);
+            });
+            form.val("device_info_div_filter", formdata);
+        }
+
+        if(faceAPI?.DeviceFunctionList){
+            // faceAPI.DeviceFunctionList.BodyTemperature=false;
+            const { Face, Fingerprint, Palmvein }=faceAPI.DeviceFunctionList
+            console.log('[ faceAPI.DeviceFunctionList ] >', faceAPI.DeviceFunctionList)
+            
+
+            if(!Fingerprint){
+                faceAPI.removeElement('.FunctionListFingerprint');
+            }
+            if(!Face){
+                faceAPI.removeElement('.FunctionListFace');
+            }
+            if (!Palmvein) {
+                faceAPI.removeElement('.FunctionListPalmvein');
+            }
+            
+            
+
+            
+
+            
+
+        }
+
+
+    });
+
+</script>

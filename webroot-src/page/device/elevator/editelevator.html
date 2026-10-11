@@ -1,0 +1,391 @@
+﻿
+<style>
+    #device_Elevator_Edit_div label {
+        width: 250px;
+        background-color: #dddddd;
+    }
+
+    #timingGourp label {
+        width: 110px;
+    }
+
+    .layui-inline-space {
+        margin-left: 50px;
+    }
+</style>
+
+<div class="layui-form layuimini-form  layui-form-pane " id="device_Elevator_Edit_div" lay-filter="device_Elevator_Edit_div_filter">
+    <div class="layui-bg-gray" style="padding: 10px;">
+        <div class="layui-row layui-col-space15">
+
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-header" language='device.d389'>基本参数</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" language='Elevator.e3'> 电梯端口号</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="Num"
+                                       autocomplete="off" class="layui-input" lay-verify="required" disabled>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='Elevator.e4'> 开锁时长</label>
+                                <div class="layui-input-inline">
+                                    <input type="number" max="65535" min="0" name="ReleaseTime" maxlength="5"
+                                           autocomplete="off" class="layui-input" lay-verify="required"
+                                           id="device.d391,device.d392"
+                                           placeholder="请输入开锁时输出时长" tipShow="1" tipMsg="开锁时输出时长 取值范围 0 -- 65535,整数，必填">
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='Elevator.e16'> 继电器</label>
+                                <div class="layui-input-inline">
+                                    <select name="RelayType" required lay-verify="">
+                                        <option language='Elevator.e16_1' value="1" selected>COM & NC 常闭</option>
+                                        <option language='Elevator.e16_2' value="2">COM & NO 常闭</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md12">
+                <div class="layui-card">
+                    <div class="layui-card-header" language='device.d393'>常开参数</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" language='device.d394'>功能开关</label>
+                            <div class="layui-input-block">
+                                <input type="checkbox" name="TimingOpen_Use" lay-skin="switch" value="1">
+                            </div>
+                        </div>
+
+
+                        <div class="layui-form-item">
+                            <div class="layui-form layuimini-form  layui-form-pane " id="timingGourp"
+                                 lay-filter="timingOpen_edit_div_filter">
+                                <fieldset class="layui-elem-field layui-field-title">
+                                    <legend style="font-size:15px" language='timingOpen.t1'>
+                                        门常开时段
+                                    </legend>
+                                </fieldset>
+                                <div style="margin: 3px 3px 3px 3px">
+                                    <div class="layui-form-item">
+                                        <div class="layui-btn-group">
+                                            <button type="button" name="timingOpenWeek" weekid="1"
+                                                    class="layui-btn layui-btn-radius layui-btn-primary"
+                                                    language='TimeGroup.t15'>
+                                                星期一
+                                            </button>
+                                            <button type="button" name="timingOpenWeek" weekid="2"
+                                                    class="layui-btn layui-btn-radius layui-btn-primary"
+                                                    language='TimeGroup.t16'>
+                                                星期二
+                                            </button>
+                                            <button type="button" name="timingOpenWeek" weekid="3"
+                                                    class="layui-btn layui-btn-radius layui-btn-normal"
+                                                    language='TimeGroup.t17'>
+                                                星期三
+                                            </button>
+                                            <button type="button" name="timingOpenWeek" weekid="4"
+                                                    class="layui-btn layui-btn-radius layui-btn-primary"
+                                                    language='TimeGroup.t18'>
+                                                星期四
+                                            </button>
+                                            <button type="button" name="timingOpenWeek" weekid="5"
+                                                    class="layui-btn layui-btn-radius layui-btn-primary"
+                                                    language='TimeGroup.t19'>
+                                                星期五
+                                            </button>
+                                            <button type="button" name="timingOpenWeek" weekid="6"
+                                                    class="layui-btn layui-btn-radius layui-btn-primary"
+                                                    language='TimeGroup.t20'>
+                                                星期六
+                                            </button>
+                                            <button type="button" name="timingOpenWeek" weekid="7"
+                                                    class="layui-btn layui-btn-radius layui-btn-primary"
+                                                    language='TimeGroup.t21'>
+                                                星期日
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <div class="layui-btn-group">
+                                            <button type="button" name="timingOpenCopy"
+                                                    class="layui-btn layui-btn-radius layui-btn-primary"
+                                                    language='TimeGroup.t22'>
+                                                拷贝时段
+                                            </button>
+                                            <button type="button" name="timingOpenPaste"
+                                                    class="layui-btn layui-btn-radius layui-btn-primary"
+                                                    language='TimeGroup.t23'>
+                                                黏贴时段
+                                            </button>
+                                            <button type="button" name="timingOpenClear"
+                                                    class="layui-btn layui-btn-radius layui-btn-primary"
+                                                    language='TimeGroup.t24'>
+                                                清空
+                                            </button>
+                                            <button type="button" name="timingOpenClearAll"
+                                                    class="layui-btn layui-btn-radius layui-btn-primary"
+                                                    language='TimeGroup.t25'>
+                                                清空所有
+                                            </button>
+                                            <button type="button" name="timingOpenTestData"
+                                                    class="layui-btn layui-btn-radius layui-btn-primary layui-hide"
+                                                    language='TimeGroup.t26'>
+                                                测试数据
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <div class="layui-inline ">
+                                            <label class="layui-form-label"
+                                                   language='TimeGroup.t27'>时段1</label>
+                                            <div class="layui-input-inline"
+                                                 style="margin-right: 0px; width: 90px;">
+                                                <input type="text" maxlength="5" name="timingOpen_blockBegin_1"
+                                                       value="00:00" lay-verify="required" autocomplete="off"
+                                                       class="layui-input">
+                                            </div>
+                                            <label class="layui-form-label"
+                                                   language='TimeGroup.t28'>至</label>
+                                            <div class="layui-input-inline" style="width: 90px;">
+                                                <input type="text" maxlength="5" name="timingOpen_blockEnd_1"
+                                                       value="00:00" lay-verify="required" autocomplete="off"
+                                                       class="layui-input">
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline layui-inline-space">
+                                            <label class="layui-form-label"
+                                                   language='TimeGroup.t29'>时段2</label>
+                                            <div class="layui-input-inline"
+                                                 style="margin-right: 0px; width: 90px;">
+                                                <input type="text" maxlength="5" name="timingOpen_blockBegin_2"
+                                                       value="00:00" lay-verify="required" autocomplete="off"
+                                                       class="layui-input">
+                                            </div>
+                                            <label class="layui-form-label"
+                                                   language='TimeGroup.t30'>至</label>
+                                            <div class="layui-input-inline" style="width: 90px;">
+                                                <input type="text" maxlength="5" name="timingOpen_blockEnd_2"
+                                                       value="00:00" lay-verify="required" autocomplete="off"
+                                                       class="layui-input">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label"
+                                                   language='TimeGroup.t31'>时段3</label>
+                                            <div class="layui-input-inline"
+                                                 style="margin-right: 0px; width: 90px;">
+                                                <input type="text" maxlength="5" name="timingOpen_blockBegin_3"
+                                                       value="00:00" lay-verify="required" autocomplete="off"
+                                                       class="layui-input">
+                                            </div>
+                                            <label class="layui-form-label"
+                                                   language='TimeGroup.t32'>至</label>
+                                            <div class="layui-input-inline" style="width: 90px;">
+                                                <input type="text" maxlength="5" name="timingOpen_blockEnd_3"
+                                                       value="00:00" lay-verify="required" autocomplete="off"
+                                                       class="layui-input">
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline layui-inline-space">
+                                            <label class="layui-form-label"
+                                                   language='TimeGroup.t33'>时段4</label>
+                                            <div class="layui-input-inline"
+                                                 style="margin-right: 0px; width: 90px;">
+                                                <input type="text" maxlength="5" name="timingOpen_blockBegin_4"
+                                                       value="00:00" lay-verify="required" autocomplete="off"
+                                                       class="layui-input">
+                                            </div>
+                                            <label class="layui-form-label"
+                                                   language='TimeGroup.t34'>至</label>
+                                            <div class="layui-input-inline" style="width: 90px;">
+                                                <input type="text" maxlength="5" name="timingOpen_blockEnd_4"
+                                                       value="00:00" lay-verify="required" autocomplete="off"
+                                                       class="layui-input">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label"
+                                                   language='TimeGroup.t35'>时段5</label>
+                                            <div class="layui-input-inline"
+                                                 style="margin-right: 0px; width: 90px;">
+                                                <input type="text" maxlength="5" name="timingOpen_blockBegin_5"
+                                                       value="00:00" lay-verify="required" autocomplete="off"
+                                                       class="layui-input">
+                                            </div>
+                                            <label class="layui-form-label"
+                                                   language='TimeGroup.t36'>至</label>
+                                            <div class="layui-input-inline" style="width: 90px;">
+                                                <input type="text" maxlength="5" name="timingOpen_blockEnd_5"
+                                                       value="00:00" lay-verify="required" autocomplete="off"
+                                                       class="layui-input">
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline layui-inline-space">
+                                            <label class="layui-form-label"
+                                                   language='TimeGroup.t37'>时段6</label>
+                                            <div class="layui-input-inline"
+                                                 style="margin-right: 0px; width: 90px;">
+                                                <input type="text" maxlength="5" name="timingOpen_blockBegin_6"
+                                                       value="00:00" lay-verify="required" autocomplete="off"
+                                                       class="layui-input">
+                                            </div>
+                                            <label class="layui-form-label"
+                                                   language='TimeGroup.t38'>至</label>
+                                            <div class="layui-input-inline" style="width: 90px;">
+                                                <input type="text" maxlength="5" name="timingOpen_blockEnd_6"
+                                                       value="00:00" lay-verify="required" autocomplete="off"
+                                                       class="layui-input">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="layui-form-item">
+                                        <div class="layui-inline">
+                                            <label class="layui-form-label"
+                                                   language='TimeGroup.t39'>时段7</label>
+                                            <div class="layui-input-inline"
+                                                 style="margin-right: 0px; width: 90px;">
+                                                <input type="text" maxlength="5" name="timingOpen_blockBegin_7"
+                                                       value="00:00" lay-verify="required" autocomplete="off"
+                                                       class="layui-input">
+                                            </div>
+                                            <label class="layui-form-label"
+                                                   language='TimeGroup.t40'>至</label>
+                                            <div class="layui-input-inline" style="width: 90px;">
+                                                <input type="text" maxlength="5" name="timingOpen_blockEnd_7"
+                                                       value="00:00" lay-verify="required" autocomplete="off"
+                                                       class="layui-input">
+                                            </div>
+                                        </div>
+                                        <div class="layui-inline layui-inline-space">
+                                            <label class="layui-form-label"
+                                                   language='TimeGroup.t41'>时段8</label>
+                                            <div class="layui-input-inline"
+                                                 style="margin-right: 0px; width: 90px;">
+                                                <input type="text" maxlength="5" name="timingOpen_blockBegin_8"
+                                                       value="00:00" lay-verify="required" autocomplete="off"
+                                                       class="layui-input">
+                                            </div>
+                                            <label class="layui-form-label"
+                                                   language='TimeGroup.t42'>至</label>
+                                            <div class="layui-input-inline" style="width: 90px;">
+                                                <input type="text" maxlength="5" name="timingOpen_blockEnd_8"
+                                                       value="00:00" lay-verify="required" autocomplete="off"
+                                                       class="layui-input">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="layui-col-md12">
+                <div class="layui-card">
+
+                    <div class="layui-card-body">
+                        <div class="layui-btn-container aligncenter">
+                            <button type="submit" class="layui-btn layui-btn-normal" lay-submit
+                                    lay-filter="data_Elevator_Edit_Save_btn" language='TimeGroup.t43'>
+                                <i class="layui-icon">&#xe605;</i> 保存
+                            </button>
+                            <button type="button" class="layui-btn layui-btn-primary" lay-submit lay-filter="data_Elevator_Edit_Close_btn" language='TimeGroup.t44'>
+                                <i class="layui-icon">&#x1006;</i> 取消
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    setLanguage();
+    setAllAttrVal()
+    layui.use(['form', 'upload', 'faceAPI', 'faceTiming', 'laydate'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.$;
+        var faceAPI = layui.faceAPI;
+        var bIniOver = false;
+        var iCurrentWeekid = 0;
+        var laydate = layui.laydate;
+        // 当前弹出层，防止ID被覆盖
+        var parentIndex = layer.index;
+        
+        var timingOpenPanel = layui.faceTiming.CreateTiming($, form);
+
+        /**
+         * 初始化表单，要加上，不然刷新部分组件可能会不加载
+         */
+        form.render();
+        faceAPI.ElevatorTimeGroupEditResult = {
+            result: false
+        };
+
+
+        var timingOpen = faceAPI.TimeGroupEditPage.TimingOpen;
+
+        faceAPI.TimeGroupEditPage.TimingOpen_Use = timingOpen.Use;
+
+        form.val("device_Elevator_Edit_div_filter", faceAPI.TimeGroupEditPage);
+
+        timingOpenPanel.init("timingOpen_edit_div_filter", "timingOpen", timingOpen.Timegroup, laydate);
+
+
+
+
+
+        form.on('submit(data_Elevator_Edit_Save_btn)', function (data) {
+            if (!timingOpenPanel.SaveTimeGroup()) {
+                return false;
+            }
+
+            var postdata = data.field;
+            postdata.Timegroup = timingOpenPanel.getWeekDetail();
+
+            postdata.RelayType = parseInt(postdata.RelayType);
+            postdata.ReleaseTime = parseInt(postdata.ReleaseTime);
+            postdata.TimingOpen_Use = postdata.TimingOpen_Use == '1' ? 1 : 0;
+            postdata.TimingOpen_Open = 3;
+
+
+            faceAPI.ElevatorTimeGroupEditResult.result = true;
+            faceAPI.ElevatorTimeGroupEditResult = { ...faceAPI.ElevatorTimeGroupEditResult, ...postdata };
+
+            layer.close(parentIndex);
+            return false;
+        });
+
+        form.on('submit(data_Elevator_Edit_Close_btn)', function (data) {
+
+            faceAPI.ElevatorTimeGroupEditResult.result = false;
+
+            layer.close(parentIndex);
+            return false;
+        });
+        bIniOver = true;
+
+        faceAPI.CheckInputBox();
+    });
+</script>

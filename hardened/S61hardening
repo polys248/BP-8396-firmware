@@ -1,0 +1,117 @@
+#!/bin/sh
+# /etc/init.d/S61hardening  -- baked-in hardening (survives /data wipe / factory reset).
+# Runs after S60face-recg. Idempotent + guarded so it safely coexists with a legacy
+# /data/stress_test.sh (pidof guards prevent double-starting the services).
+LOG=/data/hardening.log
+
+# Deploy the managed web UI from the read-only rootfs into writable /data, so UI
+# changes ride the normal rootfs OTA. Runs only when the bundled version differs
+# from what's deployed; preserves the writable runtime subdir (enrolled-face
+# thumbnails + aio symlinks under webroot/data). Swap is a same-fs rename.
+deploy_webroot() {
+    SRC=/usr/share/bettapay-webroot
+    DST=/data/webpage/webroot
+    STAMP=/data/.bettapay_rootfs_uiver   # last ROOTFS UI version we deployed
+    NEWVER=$(cat "$SRC/.uiver" 2>/dev/null)
+    [ -d "$SRC" ] && [ -n "$NEWVER" ] || return 0
+    # Deploy only when the FIRMWARE's bundled UI changed (new OTA), not merely when
+    # /data differs -- so a webflash UI hotfix is preserved across reboot. A new
+    # firmware's UI supersedes any hotfix (correct: the image carries it forward).
+    [ "$(cat "$STAMP" 2>/dev/null)" = "$NEWVER" ] && return 0
+    # .uiver is a content hash: if the device already serves this exact UI (e.g. an
+    # identical webflash hotfix), skip the swap and just record the stamp.
+    if [ "$(cat "$DST/.uiver" 2>/dev/null)" = "$NEWVER" ]; then
+        echo "$NEWVER" > "$STAMP"
+        return 0
+    fi
+    echo "deploy webroot -> $NEWVER" >> "$LOG" 2>/dev/null
+    mkdir -p "$(dirname "$DST")"
+    rm -rf "${DST}.new" "${DST}.old"
+    if ! cp -a "$SRC" "${DST}.new"; then
+        echo "webroot cp failed; keeping existing UI" >> "$LOG" 2>/dev/null
+        rm -rf "${DST}.new"; return 1
+    fi
+    # carry the writable runtime data across (do NOT ship or clobber it)
+    rm -rf "${DST}.new/data"
+    if [ -d "$DST/data" ]; then mv "$DST/data" "${DST}.new/data"; fi
+    mkdir -p "${DST}.new/data"
+    [ -d "$DST" ] && mv "$DST" "${DST}.old"
+    mv "${DST}.new" "$DST"
+    rm -rf "${DST}.old"
+    echo "$NEWVER" > "$STAMP"
+    echo "webroot deployed ($NEWVER)" >> "$LOG" 2>/dev/null
+}
+
+start() {
+    echo "=== S61hardening $(date) ===" >> "$LOG" 2>/dev/null
+
+    # (0) loopback -- device doesn't bring up lo at boot; needed for ttproxy + aio.
+    if ! ip addr show lo 2>/dev/null | grep -q '127\.0\.0\.1'; then
+        ifconfig lo 127.0.0.1 netmask 255.0.0.0 up 2>/dev/null \
+          || { ip addr add 127.0.0.1/8 dev lo 2>/dev/null; ip link set lo up 2>/dev/null; }
+        echo "lo up" >> "$LOG" 2>/dev/null
+    fi
+
+    # (0.5) deploy the managed web UI from rootfs -> /data (version-gated)
+    deploy_webroot
+
+    # (1) sever phone-home (blackhole route, fallbacks for busybox ip builds)
+    block_ip() {
+        [ -n "$1" ] || return
+        ip route add blackhole "$1" 2>/dev/null && return
+        ip route add "$1" dev lo  2>/dev/null && return
+        route add -host "$1" lo   2>/dev/null
+    }
+    for ip in 119.23.124.50 47.92.116.62; do block_ip "$ip"; done
+    for host in yun.faceds.cc wc.faceds.cc faceds.cc; do
+        for ip in $(nslookup "$host" 2>/dev/null | awk '/^Address[ 0-9]*:/{print $NF}' | grep -E '^[0-9]+\.'); do
+            block_ip "$ip"
+        done
+    done
+    for p in $(pgrep -f tange 2>/dev/null); do kill -9 "$p" 2>/dev/null; done
+
+    # (2) recreate default /data configs if missing (factory-reset-proof)
+    mkdir -p /data/ttproxy /data/webflash /data/bpagent 2>/dev/null
+    if [ ! -f /data/ttproxy/config ]; then
+        printf 'LISTEN=127.0.0.1:4610\nTARGET=https://api.bettapay.ng\nAUTH_HEADER=\nAUTH_VALUE=\nMEM_MIB=20\n' > /data/ttproxy/config
+        echo "created default ttproxy/config" >> "$LOG" 2>/dev/null
+    fi
+    if [ ! -f /data/webflash/config ]; then
+        printf 'LISTEN=:8090\nTOKEN=\nOTA_URL=https://api.bettapay.ng/functions/v1/fw-manifest\nOTA_INTERVAL=0\nDEVICE_SN=\n' > /data/webflash/config
+        echo "created default webflash/config (TOKEN blank = set to enable upload; OTA bearer from token files)" >> "$LOG" 2>/dev/null
+    fi
+    if [ ! -f /data/bpagent/config ]; then
+        printf 'ENABLED=0\nHUB=wss://remote.bettapay.ng\nSN=\nALLOW_PORTS=23,443,8090\nMEM_MIB=14\n# API_BASE/CLAIM_PATH/ENROLL_PATH/*_TOKEN_FIELD/TLS_PORTS have built-in defaults; override here if needed.\n' > /data/bpagent/config
+        echo "created default bpagent/config (SN auto-reads sysinfo.DeviceSN)" >> "$LOG" 2>/dev/null
+    fi
+
+    # (3) launch services from the rootfs copies, guarded against double-start
+    if ! pidof ttproxy >/dev/null 2>&1; then
+        /usr/bin/ttproxy >> "$LOG" 2>&1 &
+        echo "started ttproxy" >> "$LOG" 2>/dev/null
+    fi
+    if ! pidof webflash >/dev/null 2>&1; then
+        /usr/bin/webflash >> /data/webflash/webflash.log 2>&1 &
+        echo "started webflash" >> "$LOG" 2>/dev/null
+    fi
+    # provisioning: claim a per-device token (background) if a fleet token exists
+    # and we haven't already claimed (or hit a claim fault).
+    if [ -s /data/fleet_token ] || [ -s /etc/bpa/fleet_token ]; then
+        if [ ! -s /data/device_token ] && [ ! -s /data/bpagent/claim_fault ]; then
+            /usr/bin/bpagent claim >> /data/bpagent/claim.log 2>&1 &
+            echo "launched bpagent claim" >> "$LOG" 2>/dev/null
+        fi
+    fi
+    # remote-access tunnel only if explicitly enabled
+    BPEN=$(grep '^ENABLED=' /data/bpagent/config 2>/dev/null | cut -d= -f2)
+    if [ "$BPEN" = "1" ]; then
+        /usr/bin/bpagent serve >> /data/bpagent/bpagent.log 2>&1 &
+        echo "launched bpagent serve" >> "$LOG" 2>/dev/null
+    fi
+}
+
+case "$1" in
+    start) start ;;
+    stop)  ;;
+    *)     ;;
+esac

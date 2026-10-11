@@ -1,0 +1,392 @@
+﻿<style>
+    #device_status_div label {
+        width: 200px;
+    }
+
+
+    .layui-form-pane .layui-input-block {
+        margin-left: 200px;
+        left: -1px;
+    }
+
+    .divpadding {
+        padding-right: 20px
+    }
+
+    .aligncenter {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+<div class="layui-form layuimini-form  layui-form-pane page_devicestatus" id="device_status_div" lay-filter="device_status_div_filter">
+    <div class="layui-bg-gray" style="padding: 10px;">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12">
+                <div class="layui-Card">
+                    <div class="layui-Card-header" language='DeviceStatus.d1'>人员存储信息</div>
+                    <div class="layui-Card-body">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='DeviceStatus.d2'> 人员存储容量</label>
+                                <div class="layui-input-inline">
+                                    <!--<div class="layui-form-mid status-black" name="Person" autoset></div>-->
+                                    <input type="text" name="Person" autocomplete="off" class="layui-input" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline FunctionListFace">
+                                <label class="layui-form-label" language='DeviceStatus.d3'> 人脸存储容量</label>
+                                <div class="layui-input-inline">
+                                    <!--<div class="layui-form-mid status-black" name="Face" autoset></div>-->
+                                    <input type="text" name="Face" autocomplete="off" class="layui-input" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='DeviceStatus.d4'> 卡片存储容量</label>
+                                <div class="layui-input-inline">
+                                    <!--<div class="layui-form-mid status-black" name="Card" autoset></div>-->
+                                    <input type="text" name="Card" autocomplete="off" class="layui-input" disabled>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-inline FunctionListFingerprint">
+                                <label  class="layui-form-label" language='DeviceStatus.d5'> 指纹存储容量</label>
+                                <div class="layui-input-inline">
+                                    <!--<div class="layui-form-mid status-black" name="Fingerprint" autoset></div>-->
+                                    <input type="text" name="Fingerprint" autocomplete="off" class="layui-input"
+                                        disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline FunctionListPalmvein">
+                                <label class="layui-form-label" language='DeviceStatus.d6'> 掌纹存储容量</label>
+                                <div class="layui-input-inline">
+                                    <!--<div class="layui-form-mid status-black" name="PalmVein" autoset></div>-->
+                                    <input type="text" name="PalmVein" autocomplete="off" class="layui-input" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='DeviceStatus.d7'> 密码存储容量</label>
+                                <div class="layui-input-inline">
+                                    <!--<div class="layui-form-mid status-black" name="Pasword" autoset></div>-->
+                                    <input type="text" name="Pasword" autocomplete="off" class="layui-input" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='DeviceStatus.d8'> 管理员存储容量</label>
+                                <div class="layui-input-inline">
+                                    <!--<div class="layui-form-mid status-black" name="Admin" autoset></div>-->
+                                    <input type="text" name="Admin" autocomplete="off" class="layui-input" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md12">
+                <div class="layui-Card">
+                    <div class="layui-Card-header" language='DeviceStatus.d9'>记录存储信息</div>
+                    <div class="layui-Card-body">
+                        <div class="layui-form-item">
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='DeviceStatus.d10'>出入记录存储容量</label>
+                                <div class="layui-input-inline">
+                                    <!--<div class="layui-form-mid status-black" name="VerifyRecord" autoset></div>-->
+                                    <input type="text" name="VerifyRecord" autocomplete="off" class="layui-input"
+                                        disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='DeviceStatus.d18'>门磁记录存储容量</label>
+                                <div class="layui-input-inline">
+                                    <!--<div class="layui-form-mid status-black" name="DoorRecord" autoset></div>-->
+                                    <input type="text" name="DoorRecord" autocomplete="off" class="layui-input"
+                                        disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='DeviceStatus.d11'>系统记录存储容量</label>
+                                <div class="layui-input-inline">
+                                    <!--<div class="layui-form-mid status-black" name="DoorRecord" autoset></div>-->
+                                    <input type="text" name="SystemRecord" autocomplete="off" class="layui-input"
+                                        disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline FunctionListFace">
+                                <label class="layui-form-label" language='DeviceStatus.d12'>现场照片存储容量</label>
+                                <div class="layui-input-inline">
+                                    <!--<div class="layui-form-mid status-black" name="RecordPhoto" autoset></div>-->
+                                    <input type="text" name="RecordPhoto" autocomplete="off" class="layui-input"
+                                        disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-col-md12">
+                <div class="layui-Card">
+                    <div class="layui-Card-header" language='DeviceStatus.d13'>设备状态</div>
+                    <div class="layui-Card-body">
+
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='DeviceStatus.d19'>系统运行天数</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="RunDays" autocomplete="off" class="layui-input" disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='DeviceStatus.d20'> 格式化次数</label>
+                                <div class="layui-input-inline">
+                                    <!--<div class="layui-form-mid status-black" name="Face" autoset></div>-->
+                                    <input type="text" name="FormatCount" autocomplete="off" class="layui-input"
+                                        disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='DeviceStatus.d21'> 看门狗复位次数</label>
+                                <div class="layui-input-inline">
+                                    <!--<div class="layui-form-mid status-black" name="Card" autoset></div>-->
+                                    <input type="text" name="WatchDogCount" autocomplete="off" class="layui-input"
+                                        disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='DeviceStatus.d22'> 开机时间</label>
+                                <div class="layui-input-inline">
+                                    <!--<div class="layui-form-mid status-black" name="Card" autoset></div>-->
+                                    <input type="text" name="BootTime" autocomplete="off" class="layui-input" disabled>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="layui-form-item">
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.d217'> 门磁状态</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="DoorSensorStatus" lay-skin="switch"
+                                        data-lang='lay-text' lay-text="开|关" unchecked value="1" id="DeviceStatus.d17"
+                                        disabled>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='DeviceStatus.d23'> 常开状态</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="KeepOpenStatus" lay-skin="switch" data-lang='lay-text'
+                                        lay-text="开|关" unchecked value="1" id="DeviceStatus.d17" disabled>
+                                </div>
+                            </div>
+                            <!--<div class="layui-inline">
+                                <label class="layui-form-label" language='DeviceStatus.d26'> 锁定状态</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="LockDoorStatus" lay-skin="switch" data-lang='lay-text'
+                                        lay-text="已锁定|未锁定" unchecked value="1" id="DeviceStatus.d27" disabled>
+                                </div>
+                            </div>
+                            -->
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='DeviceStatus.d24'> 继电器状态</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="RelayStatus" lay-skin="switch" data-lang='lay-text'
+                                        lay-text="COM - NO|COM - NC" unchecked value="1" id="DeviceStatus.d25" disabled>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label" language='device.d218'> 报警状态</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="AlarmStatus" autocomplete="off" class="layui-input" disabled>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-col-md12">
+                <div class="layui-Card">
+
+                    <div class="layui-Card-body aligncenter">
+                        <div class="layui-inline">
+                            <button type="button" class="layui-btn layui-bg-red" id="btn_CloseAlarm">
+                                <i class="layui-icon layui-icon-close"></i>
+                                <span language='DeviceStatus.CloseAlarm'> 关闭报警</span>
+                            </button>
+                            <button type="button" class="layui-btn " id="btn_GetStatus">
+                                <i class="layui-icon layui-icon-refresh"></i>
+                                <span language='DeviceStatus.d16'> 刷新设备状态</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    
+    layui.use(['form', 'laydate', 'table', 'miniPage', 'element', 'faceAPI'], function () {
+        setLanguage();
+        setAllAttrVal();
+        var faceAPI = layui.faceAPI;
+        var form = layui.form;
+        var $ = layui.$;
+        form.render();
+        load();
+        $("#btn_GetStatus").on('click', function () {
+            console.log('[ 123 ] >', 123)
+            load();
+        });
+
+        $("#btn_CloseAlarm").on('click', function () {
+            var index = layer.load(2);
+
+            var parameter = {
+                "CloseAlarm": true
+            };
+
+            faceAPI.AjaxPOSTJson({
+                url: '/api/Device/Remote',
+                data: parameter,
+                success: function (rst) {
+                    layer.close(index);
+
+                    // debugger;
+                    if (rst != null && rst.result) {
+                        layer.alert(getLanguage("DeviceStatus.CloseAlarmOverTip"), { icon: 1 });
+                        load();
+
+                    }
+                    else {
+                        layer.alert(getLanguage("DeviceStatus.CloseAlarmErrTip"), { icon: 2 });
+                    };
+
+                }
+            });
+        });
+
+        function load() {
+            var index = layer.load(2);
+            var parameter = {
+                "Status": true,
+                "Storage": true
+            };
+            faceAPI.AjaxPOSTJson({
+                url: '/api/Device/GetDetail',
+                data: parameter,
+                success: function (rst) {
+                    // debugger;
+                    if (rst != null && rst.result) {
+                        var device = rst.content;
+                        device.DoorSensorStatus = device.DoorSensorStatus ? 1 : 0;
+                        device.RelayStatus = device.RelayStatus ? 1 : 0;
+                        device.KeepOpenStatus = device.KeepOpenStatus ? 1 : 0;
+                        device.LockDoorStatus = device.LockDoorStatus ? 1 : 0;
+
+                        if (device.PeopleStorageInfo !== undefined) {
+                            var PeopleStorageInfo = device.PeopleStorageInfo;
+                            device.Person = capacityToString(PeopleStorageInfo.Person);
+                            device.Face = capacityToString(PeopleStorageInfo.Face);
+                            device.Card = capacityToString(PeopleStorageInfo.Card);
+                            device.Fingerprint = capacityToString(PeopleStorageInfo.Fingerprint);
+                            device.PalmVein = capacityToString(PeopleStorageInfo.PalmVein);
+                            device.Pasword = capacityToString(PeopleStorageInfo.Pasword);
+                            device.Admin = capacityToString(PeopleStorageInfo.Admin);
+                        }
+                        if (device.RecordStorageInfo !== undefined) {
+                            var RecordStorageInfo = device.RecordStorageInfo;
+                            device.VerifyRecord = capacityToString(RecordStorageInfo.VerifyRecord);
+                            device.DoorRecord = capacityToString(RecordStorageInfo.DoorRecord);
+                            device.SystemRecord = capacityToString(RecordStorageInfo.SystemRecord);
+                            device.RecordPhoto = capacityToString(RecordStorageInfo.RecordPhoto);
+                        }
+
+                        device.BootTime = faceAPI.unixTimeStampToDateString(device.BootTime)
+
+
+                        var alarmTitleMap = {};
+                        alarmTitleMap["fire"] = getLanguage('device.d234');//"消防报警";
+                        alarmTitleMap["blacklist"] = getLanguage('device.d237');//"黑名单报警";
+                        alarmTitleMap["anti"] = getLanguage('DeviceStatus.d28');//"防拆报警";
+                        alarmTitleMap["illegal"] = getLanguage('device.d377');//"非法验证";
+                        alarmTitleMap["password"] = getLanguage('device.d382');//"胁迫报警密码";
+                        alarmTitleMap["openTimeout"] = getLanguage('device.d236');//"开门超时报警";
+                        alarmTitleMap["doorSensor"] = getLanguage('device.d235');//"门磁报警";
+                        alarmTitleMap["null"] = getLanguage('device.d233');//"无报警";
+
+
+                        if (device.hasOwnProperty("AlarmStatus") == true) {
+                            var alarm = device.AlarmStatus;
+                            if (alarm.length > 0) {
+                                let alarms = alarm.split(",");
+                                let alarmCount = alarms.length;
+                                let alarmStr = [];
+                                for (var i = 0; i < alarmCount; i++) {
+                                    if (alarmTitleMap.hasOwnProperty(alarms[i]))
+                                        alarmStr.push(alarmTitleMap[alarms[i]]);
+                                }
+                                device.AlarmStatus = alarmStr.join(",");
+                            }
+                            else {
+                                device.AlarmStatus = alarmTitleMap["null"];
+                            }
+                        }
+                        else {
+                            device.AlarmStatus = alarmTitleMap["null"];
+                        }
+
+
+
+
+                        form.val("device_status_div_filter", device);
+                    };
+                    layer.close(index);
+                }
+            });
+        }
+
+        function capacityToString(obj) {
+            return obj.Current + "/" + obj.Max;
+        }
+
+        if(faceAPI?.DeviceFunctionList){
+            // faceAPI.DeviceFunctionList.BodyTemperature=false;
+            const {Face,Fingerprint,Palmvein}=faceAPI.DeviceFunctionList
+            console.log('[ faceAPI.DeviceFunctionList ] >', faceAPI.DeviceFunctionList)
+            
+
+            if(!Fingerprint){
+                faceAPI.removeElement('.FunctionListFingerprint');
+            }
+            if(!Face){
+                faceAPI.removeElement('.FunctionListFace');
+            }
+
+            
+
+            if(!Palmvein){
+                faceAPI.removeElement('.FunctionListPalmvein');
+            }
+            // if(!BodyTemperature){
+            //     faceAPI.removeElement('.FunctionListBodyTemperature');
+            // }
+
+            
+
+        }
+
+    });
+
+
+    
+</script>

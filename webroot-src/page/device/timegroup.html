@@ -1,0 +1,298 @@
+﻿<style>
+    .aligncenter {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+<div class="layui-bg-gray" style="padding: 10px;">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                
+
+                <div class="layui-card-body">
+
+                    <!--表格行按钮-->
+                    <script type="text/html" id="barDemo">
+                        <div class="layui-btn-container">
+                            <button class="layui-btn layui-btn-sm" lay-event="edit" language='Elevator.e15' tt="编辑"></button>
+                        </div>
+                    </script>
+
+                    <table class="layui-hide" id="tableTimeGroup" lay-filter="tableTimeGroup"></table>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-btn-container aligncenter">
+                        <button type="submit" class="layui-btn layui-bg-blue" lay-submit
+                                lay-filter="data-batch-btn" language='device.batchbtn'>
+                            批量设置
+                        </button>
+                        <button type="submit" class="layui-btn" lay-submit
+                                lay-filter="data-save-btn" language='device.d224'>
+                            <i class="layui-icon"></i> 保存
+                        </button>
+                        <button type="reset" class="layui-btn layui-btn-danger" id="data-reset-btn" language='timingLock.t2'>
+                            <i class="layui-icon"></i> 刷新
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<script>
+    layui.use(['form',  'table', 'miniPage', 'element', 'faceAPI'], function () {
+        setLanguage();
+        setAllAttrVal();
+        var faceAPI = layui.faceAPI;
+        var form = layui.form;
+        var $ = layui.$;
+        var table = layui.table;
+        var tableId = "tableTimeGroup";
+        var miniPage = layui.miniPage;
+        var openWH = miniPage.getOpenWidthHeight();
+        function LoadData() {
+            var parameter = {
+                "TimeGroups": true
+            };
+            faceAPI.AjaxPOSTJson({
+                data: parameter,
+                url: '/api/Device/GetDetail',
+                success: function (rst) {
+                    var data = [];
+                    if (rst != null && rst.result) {
+                        if(faceAPI?.DeviceFunctionList){
+                            // faceAPI.DeviceFunctionList.TimeGroup=10;
+                            const {TimeGroup} = faceAPI.DeviceFunctionList;
+                            data = rst.content.TimeGroups.slice(0,TimeGroup);
+                        }else{
+                            data = rst.content.TimeGroups;
+                        }
+
+                        
+                    };
+                    LoadTable(data);
+                }
+            });
+
+        }
+        LoadData();
+
+        function LoadTable(data) {
+            
+            table.render({
+                elem: '#' + tableId,
+                //**************************异步请求开始***********************
+                // url: '/api/FaceDevice/GetDeviceDetail?Timegroup=1',
+                data: data,
+                method: 'get',
+                defaultToolbar: ['filter', 'exports', 'print'],
+                cols: [
+                    [{
+                        type: "checkbox",
+                        width: 50
+                    },
+                    {
+                        field: 'Num',
+                        width: 80,
+                        title: getLanguage('TimeGroup.t5'),
+                        sort: true
+                    },
+                    {
+                        field: 'Week1',
+                        title: getLanguage('TimeGroup.t6'),
+                        sort: true
+                    },
+                    {
+                        field: 'Week2',
+                        title: getLanguage('TimeGroup.t7'),
+                        sort: true
+                    },
+                    {
+                        field: 'Week3',
+                        title: getLanguage('TimeGroup.t8'),
+                        sort: true
+                    },
+                    {
+                        field: 'Week4',
+                        title: getLanguage('TimeGroup.t9'),
+                        sort: true
+                    },
+                    {
+                        field: 'Week5',
+                        title: getLanguage('TimeGroup.t10'),
+                        sort: true
+                    },
+                    {
+                        field: 'Week6',
+                        title: getLanguage('TimeGroup.t11'),
+                        sort: true
+                    },
+                    {
+                        field: 'Week7',
+                        title: getLanguage('TimeGroup.t12'),
+                        sort: true
+                    },
+                    {
+                        title: getLanguage('Report.r49'),
+                        minWidth: 150,
+                        toolbar: '#barDemo',
+                        align: "center"
+                    }
+                    ]
+                ],
+                limit: 64,
+                height: openWH[1] - 150,
+                skin: 'line'
+            });
+            setLanguage();
+            setAllAttrVal();
+        }
+        //表格行监听事件
+        table.on('tool(' + tableId + ')', function (obj) {
+            var data = obj.data;
+            OpenEdit(data);
+        });
+        //时段操作
+        function OpenEdit(data) {
+            var content = miniPage.getHrefContent('page/device/timegroup/edittimegroup.html');
+            faceAPI.TimeGroupEditPage = data; //向layer页面传值，传值主要代码
+            faceAPI.TimeGroupEditPageResult = null;
+            var index = layer.open({
+                title: getLanguage('TimeGroup.t49'),
+                type: 1,
+                shade: 0.2,
+                maxmin: false,
+                shadeClose: false,
+                area: ['1060px', '620px'],
+                content: content,
+                end: function (layero, index) {
+                    
+                    var rst = faceAPI.TimeGroupEditPageResult;
+                    if (rst != null && rst.result) {
+                        
+                        var result = faceAPI.TimeGroupEditPageResult.data;
+                        var oldDatas = layui.table.cache[tableId];
+                        var oldDatesLen = oldDatas.length;
+                        for (var i = 0; i < oldDatesLen; i++) {
+                            if (oldDatas[i].Num == result.Num) {
+                                oldDatas[i] = { ...oldDatas[i], ...result };
+                                break;
+                            }
+                        }
+
+                        table.reload(tableId, { data: oldDatas });
+                        setLanguage();
+                        setAllAttrVal();
+                        
+                    };
+
+                }
+            });
+        }
+
+        form.on('submit(data-save-btn)', function (data) {
+
+            layer.confirm(getLanguage('TimeGroup.t50'), { icon: 3 }, function (index, layero, that) {
+                var datas = layui.table.cache[tableId];
+
+                var postdata = {
+                    TimeGroups: datas
+                };
+                //启动遮罩层
+                var waitLayerIndex = layer.load(1, { shade: [0.5, '#FFF'] });
+                faceAPI.AjaxPOSTJson({
+                    data: postdata,
+                    url: '/api/device/UpdateParameter',
+                    success: function (result) {
+                        layer.close(waitLayerIndex);
+
+                        if (result.result == false) {
+                            layer.alert(result.error, { icon: 2 });
+                        }
+                        else {
+                            layer.alert(getLanguage('timingLock.t4'), { icon: 1 });
+                        }
+                    }
+                });
+                layer.close(index);
+            });
+
+        });
+
+        $("#data-reset-btn").on('click', function () {
+
+            layer.confirm(getLanguage('TimeGroup.t51'), { icon: 3, btn: ["Yes", "No"] }, function (index, layero, that) {
+                LoadData();
+                layer.close(index)
+            });
+
+        });
+
+        form.on('submit(data-batch-btn)', function (data) {
+
+            var checkStatus = table.checkStatus(tableId),
+                selectItems = checkStatus.data;
+            if (selectItems.length == 0) {
+                layer.msg(getLanguage('device.ui_timegroup_BatchSetErrTip1'));
+                return;
+
+            }
+
+            var content = miniPage.getHrefContent('page/device/timegroup/edittimegroup.html');
+            faceAPI.TimeGroupEditPage = selectItems[0]; //向layer页面传值，传值主要代码
+            faceAPI.TimeGroupEditPageResult = null;
+            var index = layer.open({
+                title: getLanguage('TimeGroup.t49'),
+                type: 1,
+                shade: 0.2,
+                maxmin: true,
+                shadeClose: true,
+                area: ['1060px', '620px'],
+                content: content,
+                end: function (layero, index) {
+
+                    var rst = faceAPI.TimeGroupEditPageResult;
+                    if (rst != null && rst.result) {
+
+                        var result = faceAPI.TimeGroupEditPageResult.data;
+                        var oldDatas = layui.table.cache[tableId];
+                        var oldDatesLen = oldDatas.length;
+                        delete result.Num;
+
+                        
+                        for (var i = 0; i < oldDatesLen; i++) {
+                            var timegroup = oldDatas[i];
+                            if (timegroup['LAY_CHECKED'] == true) {
+                                oldDatas[i] = { ...timegroup,...result };
+
+                            }
+                        }
+
+                        table.reload(tableId, { data: oldDatas });
+                        setLanguage();
+                        setAllAttrVal();
+
+                    };
+
+                }
+            });
+            
+
+        });
+    });
+
+</script>

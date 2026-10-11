@@ -1,0 +1,545 @@
+﻿<style>
+    #device_VideoCall_div label {
+        width: 250px;
+    }
+
+    .layui-form-pane .layui-input-block {
+        margin-left: 250px;
+        left: -1px;
+    }
+
+    .aligncenter {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+<div class="layui-form layuimini-form  layui-form-pane" id="device_VideoCall_div" lay-filter="device_VideoCall_div_filter">
+    <div class="layui-bg-gray" style="padding: 10px;">
+        <div class="layui-row layui-col-space15">
+
+            <!-- 视频对讲参数 -->
+            <div class="layui-col-md12 FunctionList_VideoCall">
+                <div class="layui-card">
+                    <div class="layui-card-header" language='VideoCall.VideoCall_Title'>视频对讲</div>
+                    <div class="layui-card-body">
+                        <div class="divwidth">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='VideoCall.VideoCall_Use'> 对讲功能</label>
+                                    <div class="layui-input-inline">
+                                        <input type="checkbox" name="VideoCall_Use" lay-skin="switch"
+                                               id="device.d119" data-lang='lay-text' lay-text="启用|禁用" unchecked value="1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='VideoCall.DeviceName'> 本机名称</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" min="0" maxlength="64" name="VideoCall_DeviceName" CheckBytes
+                                               autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='VideoCall.BuildCode'> 楼栋号</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" min="0" maxlength="8" name="VideoCall_BuildCode" OnlyNumber
+                                               autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='VideoCall.LocalCode'> 本机号码</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" min="0" maxlength="8" name="VideoCall_LocalCode" OnlyNumber
+                                               autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='VideoCall.DialMode'>拨号方式</label>
+                                    <div class="layui-input-block">
+                                        <select name="VideoCall_DialMode" required lay-verify="">
+                                            <option value="1" language='VideoCall.DialMode_1' selected>直拨</option>
+                                            <option value="2" language='VideoCall.DialMode_2'>拨号</option>
+                                            <!-- <option value="3" language='VideoCall.DialMode_3'>本楼栋直拨</option> -->
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='VideoCall.DeviceType'>设备类型</label>
+                                    <div class="layui-input-block">
+                                        <select name="VideoCall_DeviceType" required lay-verify="">
+                                            <option value="1" language='VideoCall.DeviceType_1' selected>楼栋机</option>
+                                            <option value="2" language='VideoCall.DeviceType_2'>围墙机</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='VideoCall.VideoCall_HelpCall'> 服务中心</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" maxlength="18" name="VideoCall_Help" class="layui-input" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='VideoCall.VideoCall_SecurityCall'> 安保中心</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" maxlength="18" name="VideoCall_SecurityHelp" class="layui-input" autocomplete="off">
+                                    </div>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SIP 电话参数 -->
+            <!-- <div class="layui-col-md12 FunctionList_SIP">
+                <div class="layui-card">
+                    <div class="layui-card-header" language='VideoCall.SIP_Title'>SIP 电话</div>
+                    <div class="layui-card-body">
+                        <div class="divwidth">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='VideoCall.SIP_Use'> SIP 功能</label>
+                                    <div class="layui-input-inline">
+                                        <input type="checkbox" name="SIP_Use" lay-skin="switch"
+                                               id="device.d119" data-lang='lay-text' lay-text="启用|禁用" unchecked value="1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='VideoCall.SIP_Server'> SIP服务器</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" maxlength="64" name="SIP_Server" class="layui-input" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='VideoCall.SIP_Port'> 端口号</label>
+                                    <div class="layui-input-inline">
+                                        <input type="number" maxlength="5" name="SIP_Port" class="layui-input" autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='VideoCall.SIP_UserName'> 用户名</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" maxlength="32" name="SIP_UserName" class="layui-input" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='VideoCall.SIP_Password'> 密码</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" maxlength="32" name="SIP_Password" class="layui-input" autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='VideoCall.SIP_EmergencyCall'> 紧急电话</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" maxlength="18" name="SIP_EmergencyCall" class="layui-input" autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+
+            <!-- STUN 协议参数 -->
+            <div class="layui-col-md12 FunctionList_STUN">
+                <div class="layui-card">
+                    <div class="layui-card-header" language='VideoCall.STUN_Title'>STUN 协议</div>
+                    <div class="layui-card-body">
+                        <div class="divwidth">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='VideoCall.STUN_Use'> STUN 功能</label>
+                                    <div class="layui-input-inline">
+                                        <input type="checkbox" name="STUN_Use" lay-skin="switch"
+                                               id="device.d119" data-lang='lay-text' lay-text="启用|禁用" unchecked value="1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='VideoCall.SIP_Server'> SIP服务器</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" maxlength="64" name="STUN_Server" class="layui-input" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='VideoCall.SIP_Port'> 端口号</label>
+                                    <div class="layui-input-inline">
+                                        <input type="number" maxlength="5" name="STUN_Port" class="layui-input" autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='VideoCall.SIP_UserName'> 用户名</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" maxlength="32" name="STUN_UserName" class="layui-input" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='VideoCall.SIP_Password'> 密码</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" maxlength="32" name="STUN_Password" class="layui-input" autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- TURN 协议参数 -->
+            <div class="layui-col-md12 FunctionList_TURN">
+                <div class="layui-card">
+                    <div class="layui-card-header" language='VideoCall.TURN_Title'>TURN 协议</div>
+                    <div class="layui-card-body">
+                        <div class="divwidth">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='VideoCall.TURN_Use'> TURN 功能</label>
+                                    <div class="layui-input-inline">
+                                        <input type="checkbox" name="TURN_Use" lay-skin="switch"
+                                               id="device.d119" data-lang='lay-text' lay-text="启用|禁用" unchecked value="1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='VideoCall.SIP_Server'> 服务器</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" maxlength="64" name="TURN_Server" class="layui-input" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='VideoCall.SIP_Port'> 端口号</label>
+                                    <div class="layui-input-inline">
+                                        <input type="number" maxlength="5" name="TURN_Port" class="layui-input" autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='VideoCall.SIP_UserName'> 用户名</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" maxlength="32" name="TURN_UserName" class="layui-input" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label" language='VideoCall.SIP_Password'> 密码</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" maxlength="32" name="TURN_Password" class="layui-input" autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- 按钮 -->
+            <div class="layui-col-md12">
+                <div class="layui-card">
+
+                    <div class="layui-card-body">
+                        <div class="layui-btn-container aligncenter">
+                            <button type="submit" class="layui-btn layui-btn-normal" lay-submit
+                                    lay-filter="data-save-btn" language='device.d224'>
+                                <i class="layui-icon"></i> 保存
+                            </button>
+                            <button type="reset" class="layui-btn layui-btn-danger" id="data-reset-btn" language='timingLock.t2'>
+                                <i class="layui-icon"></i> 刷新
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    layui.use(['form', 'laydate', 'table', 'miniPage', 'element', 'faceAPI'], function () {
+        setLanguage();
+        setAllAttrVal();
+        var faceAPI = layui.faceAPI;
+        var form = layui.form;
+        var $ = layui.$;
+        var formdata;
+
+
+        function LoadData() {
+            var parameter = {
+                "VideoCall": true
+            };
+            faceAPI.AjaxPOSTJson({
+                url: '/api/Device/GetDetail',
+                data: parameter,
+                success: function (rst) {
+                    if (rst != null && rst.result) {
+
+                        formdata = rst.content;
+
+                        form.val("device_VideoCall_div_filter", formdata);
+                    };
+                }
+            });
+        }
+        LoadData();
+        form.render();
+        form.on('submit(data-save-btn)', function (data) {
+            var VideoCall = faceAPI?.DeviceFunctionList?.VideoCall || false;
+            var SIP = faceAPI?.DeviceFunctionList?.SIP || false;
+            var STUN = faceAPI?.DeviceFunctionList?.STUN || false;
+            var TURN = faceAPI?.DeviceFunctionList?.TURN || false;
+
+            var postdata = data.field;
+            if (VideoCall) {
+                //对讲功能  1--启用；0--禁用
+                postdata.VideoCall_Use = postdata.VideoCall_Use == '1' ? 1 : 0;
+                postdata.VideoCall_DialMode = Number(postdata.VideoCall_DialMode);
+                postdata.VideoCall_DeviceType = Number(postdata.VideoCall_DeviceType);
+                if (postdata.VideoCall_Use == 1) {
+                    //检查设备本机名称是否为空
+                    if (checkTextIsEmpty(postdata, "VideoCall_DeviceName")) return;
+ 
+                    //检查设备本机号码是否为空
+                    if (checkTextIsEmpty(postdata, "VideoCall_LocalCode")) return;
+
+                    //检查设备楼栋号是否为空
+                    if (checkTextIsEmpty(postdata, "VideoCall_BuildCode")) return;
+                    
+                    // if (!checkTextIsRoomNumber(postdata, "VideoCall_Help")) return;
+                    // if (!checkTextIsRoomNumber(postdata, "VideoCall_SecurityHelp")) return;
+                    
+                }
+            }
+
+            if (SIP) {
+                postdata.SIP_Use = postdata.SIP_Use == '1' ? 1 : 0;
+                postdata.SIP_Port = Number(postdata.SIP_Port);
+                if (postdata.SIP_Use == 1) {
+                    //检查 SIP 服务器地址是否为空
+                    if (checkTextIsEmpty(postdata, "SIP_Server")) return;
+
+                    //检查SIP 服务器用户名是否为空
+                    if (checkTextIsEmpty(postdata, "SIP_UserName")) return;
+
+                    //检查SIP 服务器用户密码是否为空
+                    if (checkTextIsEmpty(postdata, "SIP_Password")) return;
+                }
+
+               
+
+                if (STUN) {
+                    postdata.STUN_Use = postdata.STUN_Use == '1' ? 1 : 0;
+                    postdata.STUN_Port = Number(postdata.STUN_Port);
+                    if (postdata.STUN_Use == 1) {
+                        //检查 STUN 服务器地址是否为空
+                        if (checkTextIsEmpty(postdata, "STUN_Server")) return;
+
+                        //检查 STUN 服务器用户名是否为空
+                        if (checkTextIsEmpty(postdata, "STUN_UserName")) return;
+
+                        //检查 STUN 服务器用户密码是否为空
+                        if (checkTextIsEmpty(postdata, "STUN_Password")) return;
+                    }
+                }
+                if (TURN) {
+                    postdata.TURN_Use = postdata.TURN_Use == '1' ? 1 : 0;
+                    postdata.TURN_Port = Number(postdata.TURN_Port);
+                    if (postdata.TURN_Use == 1) {
+                        //检查 TURN 服务器地址是否为空
+                        if (checkTextIsEmpty(postdata, "TURN_Server")) return;
+
+                        //检查TURN 服务器用户名是否为空
+                        if (checkTextIsEmpty(postdata, "TURN_UserName")) return;
+
+                        //检查TURN 服务器用户密码是否为空
+                        if (checkTextIsEmpty(postdata, "TURN_Password")) return;
+                    }
+                }
+            }
+
+            //是否确认保存参数？
+            layer.confirm(getLanguage("VideoCall.SaveTip"), { icon: 3 }, function (index, layero, that) {
+                
+                //启动遮罩层
+                var waitLayerIndex = layer.load(1, { shade: [0.5, '#FFF'] });
+
+                faceAPI.AjaxPOSTJson({
+                    data: postdata,
+                    url: '/api/device/UpdateParameter',
+                    success: function (result) {
+                        layer.close(waitLayerIndex)
+                        if (result.result == false) {
+                            layer.alert(result.error, { icon: 2 });
+                        }
+                        else {
+                            //保存成功！
+                            layer.alert(getLanguage("VideoCall.SaveOKTip"), { icon: 1 });
+                        }
+                    }
+                });
+                layer.close(index)
+            });
+
+        });
+        $("#data-reset-btn").on('click', function () {
+
+            //是否刷新页面？
+            layer.confirm(getLanguage("VideoCall.ReloadTip"), { icon: 3, btn: ["Yes", "No"] }, function (index, layero, that) {
+                LoadData();
+                layer.close(index)
+            });
+
+        });
+
+        form.on('switch(OverdueRemind)', function (data) {
+
+
+            var models = form.val("device_VideoCall_div_filter");
+            models.OverdueRemind = models.OverdueRemind == "1" ? 1 : 0;
+            switchDivHide(models.OverdueRemind, "OverdueRemind_Day");
+
+
+            return false;
+        });
+
+        form.on('switch(UseDailyLimit)', function (data) {
+
+
+            var models = form.val("device_VideoCall_div_filter");
+            models.UseDailyLimit = models.UseDailyLimit == "1" ? 1 : 0;
+            switchDivHide(models.UseDailyLimit, "DailyLimit");
+
+
+            return false;
+        });
+
+        function switchDivHide(value, filterName) {
+
+            var elems = $('div[lay-filter="device_VideoCall_div_filter"] div[lay-filter="' + filterName + '"]')
+
+            if (value == 0) {
+                elems.addClass("layui-hide");
+
+            }
+            else {
+                elems.removeClass("layui-hide");
+            }
+            form.render();
+        }
+
+
+
+        faceAPI.ShowMouseTipMessageBox("device_VideoCall_div_filter", layer);
+        faceAPI.CheckInputBox();
+        //去除字符串空白字符
+        function TextTrim(inText) {
+            if (inText == undefined) {
+                return "";
+            }
+            if (inText.length == 0) {
+                return "";
+            }
+            let ret = inText.trim();
+            return ret.replace(/[\f\n\r\t\v]/g, "");
+        }
+        //检查是否空字符串
+        function checkTextIsEmpty(postdata, Key) {
+            postdata[Key] = TextTrim(postdata[Key]);
+            let inText = postdata[Key];
+            if (inText == undefined) {
+                layer.alert(getLanguage("VideoCall." + Key + "Err"), { icon: 2 });
+                print("getLanguage: " + "VideoCall." + Key + "Err");
+                return true;
+            }
+            if (inText.length == 0) {
+                layer.alert(getLanguage("VideoCall." + Key + "Err"), { icon: 2 });
+                return true;
+            }
+
+            return false; //不为空
+        }
+
+        //检查字符串是否为合法的房间和楼栋号组合
+        function checkTextIsRoomNumber(postdata, Key) {
+            postdata[Key] = TextTrim(postdata[Key]);
+            let inText = postdata[Key];
+            if (inText == undefined) {
+                layer.alert(getLanguage("VideoCall." + Key + "Err"), { icon: 2 });
+                return false;
+            }
+            // 去除字符串前后空白字符
+            inText = inText.trim();
+
+            // 检查是否包含多个 '*'
+            if ((inText.match(/\*/g) || []).length > 1) {
+                layer.alert(getLanguage("VideoCall." + Key + "Err"), { icon: 2 });
+                return false;
+            }
+
+            // 按 '*' 分割字符串
+            const parts = inText.split('*');
+
+            // 检查每部分是否为数字且长度不超过8
+            for (let part of parts) {
+                if (!/^\d{1,8}$/.test(part)) {
+                    
+                    layer.alert(getLanguage("VideoCall." + Key + "Err"), { icon: 2 });
+                    return false;
+                }
+            }
+
+            return true; //不为空
+        }
+
+        //检查功能开放情况
+        {
+            var VideoCall = faceAPI?.DeviceFunctionList?.VideoCall || false;
+            var SIP = faceAPI?.DeviceFunctionList?.SIP || false;
+            var STUN = faceAPI?.DeviceFunctionList?.STUN || false;
+            var TURN = faceAPI?.DeviceFunctionList?.TURN || false;
+
+
+
+            if (!VideoCall) {
+                faceAPI.removeElement('.FunctionList_VideoCall');
+            }
+            if (!SIP) {
+                faceAPI.removeElement('.FunctionList_SIP');
+                faceAPI.removeElement('.FunctionList_STUN');
+                faceAPI.removeElement('.FunctionList_TURN');
+            }
+            else {
+                if (!STUN) {
+                    faceAPI.removeElement('.FunctionList_STUN');
+                }
+
+                if (!TURN) {
+                    faceAPI.removeElement('.FunctionList_TURN');
+                }
+            }
+
+
+
+        }
+    });
+</script>

@@ -1,0 +1,389 @@
+﻿<div class="layui-form layuimini-form  layui-form-pane" id="device_SystemImage_div" lay-filter="device_SystemImage_div_filter">
+    <style>
+
+        .aligncenter {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+
+    <div class="layuimini-main">
+        <div class="layui-row">
+            <div class="layui-col-xs3" style="max-width: 200px; min-width: 200px; margin-right: 5px">
+                <ul class="layui-nav layui-nav-tree" style="height: 640px; " lay-filter="nav-SystemImage">
+                    <li class="layui-nav-item layui-nav-itemed">
+                        <a href="javascript:;" language='device.BootImage'>开机图片</a>
+                        <dl class="layui-nav-child layui-this">
+                            <dd><a href="javascript:;" language='device.BootImage' imgType='BootImage'>开机图片</a></dd>
+                        </dl>
+                    </li>
+                    <li class="layui-nav-item  layui-nav-itemed">
+                        <a href="javascript:;" language='device.ScreenImage'>待机图片</a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="javascript:;" language='device.ScreenImage1' imgType='ScreenImage' imgIndex=1>图片1</a></dd>
+                            <dd><a href="javascript:;" language='device.ScreenImage2' imgType='ScreenImage' imgIndex=2>图片2</a></dd>
+                            <dd><a href="javascript:;" language='device.ScreenImage3' imgType='ScreenImage' imgIndex=3>图片3</a></dd>
+                            <dd><a href="javascript:;" language='device.ScreenImage4' imgType='ScreenImage' imgIndex=4>图片4</a></dd>
+                            <dd><a href="javascript:;" language='device.ScreenImage5' imgType='ScreenImage' imgIndex=5>图片5</a></dd>
+                            <dd><a href="javascript:;" language='device.ScreenImage6' imgType='ScreenImage' imgIndex=6>图片6</a></dd>
+                            <dd><a href="javascript:;" language='device.ScreenImage7' imgType='ScreenImage' imgIndex=7>图片7</a></dd>
+                            <dd><a href="javascript:;" language='device.ScreenImage8' imgType='ScreenImage' imgIndex=8>图片8</a></dd>
+                        </dl>
+                    </li>
+                    <li class="layui-nav-item  layui-nav-itemed">
+                        <a href="javascript:;" language='device.RealtimeImage'>现场照片</a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="javascript:;" language='device.RealtimeImage' imgType='Snapshot' imgIndex=1>现场照片</a></dd>
+                        </dl>
+                    </li>
+                </ul>
+            </div>
+            <div class="layui-col-xs3" style="max-width: 360px; min-width: 360px;">
+                <div>
+                    <div class="layui-row" >
+                        <div class="layui-form-item  defcenter">
+                            <img id="SystemImage_showImg"
+                                 src="/NoFindImage.jpg"
+                                 width="360" heigh="640"/>
+                        </div>
+                        <input type="file" id="SystemImage_fileInput" class="layui-hide">
+                    </div>
+                    <div class="layui-row">
+                        <div class="layui-card">
+
+                            <div class="layui-card-body">
+                                <div class="layui-btn-container aligncenter">
+                                    <button type="submit" class="layui-btn layui-btn-normal" lay-submit
+                                            id="SystemImage_saveBtn" 
+                                            lay-filter="data-save-btn">
+                                        <i class="layui-icon layui-icon-upload-drag"></i>
+                                        <span language='device.UploadImage'>上传图片</span>
+                                    </button>
+                                    <button type="reset" class="layui-btn" lay-filter="data-reset-btn" lay-submit>
+                                        <i class="layui-icon layui-icon-refresh"></i>
+                                        <span language='device.d5'>刷新</span>
+                                    </button>
+
+                                    <button type="reset" id="SystemImage_DeleteBtn" 
+                                            class="layui-btn layui-btn-danger" lay-filter="data-del-btn" lay-submit>
+                                        <i class="layui-icon layui-icon-delete"></i>
+                                        <span language='device.d6'>删除</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<script src="/jsLib/crypto-js.js"></script>
+<script>
+    layui.use(['form', 'element', 'miniPage', 'faceAPI'], function () {
+        var $ = layui.jquery,
+            element = layui.element,
+            miniPage = layui.miniPage;
+        var form = layui.form;
+        var faceAPI = layui.faceAPI;
+        setLanguage();
+        setAllAttrVal()
+        var curType = "BootImage";
+        var curIndex = 0;
+
+
+        var SystemWidth = 720;
+        var SystemHeight = 720;
+
+        function GetSystemImageSize() {
+
+            faceAPI.AjaxPOSTJson({
+                url: '/api/System/GetImageSize',
+                success: function (result) {
+                    if (result.result == false) {
+                        layer.alert(result.error, { icon: 2 });
+                    }
+                    else {
+                        var content = result.content;
+                        SystemWidth = content.Width;
+                        SystemHeight = content.Height;
+                        console.log('图片像素：' + SystemWidth + '*' + SystemHeight);
+                    }
+                }
+            });
+        }
+        GetSystemImageSize();
+
+
+        element.render('nav', 'nav-SystemImage')
+        element.on('nav(nav-SystemImage)', function (elem) {
+
+            var imgType = elem.attr('imgType');
+            var imgIndex = elem.attr('imgIndex');
+
+            if (imgType == undefined) return;
+
+
+            $('#SystemImage_DeleteBtn').removeClass("layui-hide");
+            $('#SystemImage_saveBtn').removeClass("layui-hide");
+            if (imgType == "BootImage") {
+                $('#SystemImage_DeleteBtn').addClass("layui-hide");
+            }
+            if (imgIndex == 1) {
+                $('#SystemImage_DeleteBtn').addClass("layui-hide");
+            }
+            if (imgType == "Snapshot") {
+                $('#SystemImage_saveBtn').addClass("layui-hide");
+                $('#SystemImage_DeleteBtn').addClass("layui-hide");
+            }
+            curIndex = imgIndex;
+            curType = imgType;
+            LoadImage(imgType, imgIndex);
+            //console.log(elem); // 得到当前点击的元素 jQuery 对象
+            //console.log(elem.text() + + ' ' + imgType + ' ' + imgIndex);
+        });
+        $('#SystemImage_DeleteBtn').addClass("layui-hide");
+        LoadImage(curType, curIndex);
+
+        function LoadImage(imgType, imgIndex) {
+            if (imgIndex == undefined) imgIndex = 1;
+            //显示加载层
+            var loadIndex = layer.load(1, { shade: [0.6, "#e2e2e2"] }); //0.1透明度的白色背景
+            var postdata = {
+                FileType: imgType,
+                FileIndex: imgIndex
+            }
+
+            var sToken = faceAPI.GetJWTToken();
+            fetch('/api/System/GetFile', {
+                method: 'POST',
+                headers: {
+                    Authorization: "Bearer " + sToken,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(postdata)
+            })
+                .then(response => {
+                    
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    const reader = new FileReader();
+                    reader.onloadend = function () {
+                        const base64data = reader.result;
+                        const img = new Image();
+                        img.src = base64data;
+                        img.onload = function () {
+                            console.log("图片尺寸：" + img.width + '*' + img.height)
+                            
+
+                            var imgEle = $('#SystemImage_showImg');
+                            imgEle.attr({
+                                'src': base64data,
+                                'width': img.width/2,
+                                'height': img.height/2
+                            });
+                            layer.close(loadIndex);
+                        }
+                       
+ 
+                    }
+                    reader.readAsDataURL(blob);
+
+                })
+                .catch(error => {
+                    layer.close(loadIndex);
+                    console.error('There has been a problem with your fetch operation:', error);
+                    document.getElementById('SystemImage_showImg').src = '/NoFindImage.jpg';
+                });
+
+
+
+            return;
+        }
+
+        function Load404Img() {
+            var img = $('#SystemImage_showImg');
+            img.attr({
+                'src': '/NoFindImage.jpg',
+                'width': 360,
+                'height': 640
+            });
+
+        }
+
+
+        form.on('submit(data-reset-btn)', function (data) {
+            //console.log("data-reset-btn");
+            LoadImage(curType, curIndex);
+            return false;
+        });
+
+        form.on('submit(data-del-btn)', function (data) {
+            layer.confirm(getLanguage('device.DeleteSystemImageTip'), { icon: 3 }, function (confirmindex, layero, that) {
+                var postdata = {
+                    FileType: curType,
+                    FileIndex: curIndex
+                }
+                faceAPI.AjaxPOSTJson({
+                    data: postdata,
+                    url: '/api/System/DeleteFile',
+                    success: function (result) {
+                        if (result.result == false) {
+                            layer.alert(result.error, { icon: 2 });
+                        }
+                        else {
+                            
+                            layer.alert(getLanguage('device.DeleteSystemImageOK'), { icon: 1 });
+
+                            document.getElementById('SystemImage_showImg').src = '/NoFindImage.jpg';
+                        }
+                    }
+                });
+                layer.close(confirmindex)
+                return false;
+            });
+            return false;
+        });
+        form.on('submit(data-save-btn)', function (data) {
+            $('#SystemImage_fileInput').click();
+            return false;
+        });
+
+        $('#SystemImage_fileInput').change(function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                //显示加载层
+                var loadIndex = layer.load(1, { shade: [0.6, "#e2e2e2"] }); //0.1透明度的白色背景
+                compressAndUploadImage(file, loadIndex);
+            }
+        });
+        function resizeImage(img, maxWidth, maxHeight) {
+            let width = img.width;
+            let height = img.height;
+
+            // 计算宽高比
+            var aspectRatio1 = maxWidth / width ;
+            var aspectRatio2 = maxHeight / height;
+
+            if (aspectRatio1 > aspectRatio2) {
+                aspectRatio1 = aspectRatio2
+            } 
+            height = Math.round(height * aspectRatio1);
+            width = Math.round(width * aspectRatio1);
+
+            return { width, height };
+        }
+
+        function compressAndUploadImage(file, loadIndex) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = function () {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const maxWidth = SystemWidth; // 设置压缩后的最大宽度
+                    const maxHeight = SystemHeight; // 设置压缩后的最大高度
+       
+
+                    const newSize = resizeImage(img, maxWidth, maxHeight);
+
+                    canvas.width = SystemWidth;
+                    canvas.height = SystemHeight;
+                    // 设置背景色
+                    ctx.fillStyle = '#FFFFFF'; // 你可以将颜色值改为你需要的背景色
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                    // 计算图像居中的位置
+                    const offsetX = (maxWidth - newSize.width) / 2;
+                    const offsetY = (maxHeight - newSize.height) / 2;
+
+                    ctx.drawImage(img, offsetX, offsetY, newSize.width, newSize.height);
+                    console.log('图片最终尺寸:', newSize);
+                    // 预览压缩后的图片
+                    const previewUrl = canvas.toDataURL('image/jpeg', 0.7);
+                    document.getElementById('SystemImage_showImg').src = previewUrl;
+
+                    canvas.toBlob(function (blob) {
+                        // 计算文件的 MD5
+                        const reader = new FileReader();
+                        reader.onloadend = function () {
+                            const wordArray = CryptoJS.lib.WordArray.create(reader.result);
+                            const md5 = CryptoJS.MD5(wordArray).toString();
+                            console.log('文件的MD5:', md5);
+                            uploadImage(blob, md5, loadIndex);
+                        };
+                        reader.readAsArrayBuffer(blob);
+                        
+                    }, 'image/jpeg', 0.7); // 压缩质量为0.7
+                };
+            };
+            reader.readAsDataURL(file);
+        }
+        function uploadImage(blob, md5, loadIndex) {
+            const formData = new FormData();
+            formData.append('FileMD5', md5);
+            formData.append('File', blob, 'compressed_image.jpg');
+            formData.append('FileType', curType);
+            formData.append('FileIndex', curIndex);
+            var sToken = faceAPI.GetJWTToken();
+            fetch('/api/System/UploadFile', {
+                method: 'POST',
+                headers: {
+                    Authorization: "Bearer " + sToken
+                },
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    layer.close(loadIndex);
+                    if (data.result) {
+                        layer.alert(getLanguage('device.UploadSystemImageOK'), { icon: 1 });
+                    }
+                    else {
+                        layer.alert(result.error, { icon: 2 });
+                    }
+                    
+                    
+                    console.log('上传完毕:', data);
+                })
+                .catch(error => {
+                    console.error('上传失败:', error);
+                });
+        }
+
+        bindshowImgClick();
+
+        function bindshowImgClick() {
+            $('#SystemImage_showImg').on('click', function () {
+                var idBar = '#SystemImage_showImg';
+                var src = $(idBar)[0].src;
+                //debugger;
+                var width = $(idBar).width()*2;
+                var height = $(idBar).height()*2;
+                var scaleWH = width / height;
+ 
+                parent.layer.open({
+                    type: 1,
+                    title: false,
+                    closeBtn: 1,
+                    shadeClose: true,
+                    area: [width + 'px', height + 'px'], //宽高
+                    content: '<img  src="' + src + '" />'
+                });
+            });
+        }
+    });
+    setTimeout(() => {
+        setLanguage();
+        setAllAttrVal()
+    }, 100);
+</script>

@@ -1,0 +1,175 @@
+<style>
+
+</style>
+
+<div class="layuimini-main" id="admin-Editiamge">
+
+
+    <div style="width:500px;height:600px;position:relative">
+        
+        <vue-cropper
+            ref="cropper"
+            :img="img"
+            :output-size='0.8'
+            :info='false'
+            :can-scale='true'
+            :auto-crop='true'
+            :auto-crop-width='360'
+            :auto-crop-height='480'
+            :fixed='option.fixed'
+            :fixed-number='option.fixedNumber'
+            :fixed-box='option.fixedBox'
+            :can-move='option.canMove'
+            :can-move-box='option.canMoveBox'
+            :enlarge='1.5'
+            :high='true'
+            :info-true='true'
+            ></vue-cropper>
+            <img style="position:absolute; pointer-events: none;top:0;" src="/images/500.png" alt="" srcset="">
+            <!-- 
+
+                outputSize:'',//	裁剪生成图片的质量	1	0.1 - 1
+                outputType:'',//	裁剪生成图片的格式	jpg (jpg 需要传入jpeg)	jpeg || png || webp
+                info:'',//	裁剪框的大小信息	true	true || false
+                canScale:'',//	图片是否允许滚轮缩放	true	true || false
+                autoCrop:true,//	是否默认生成截图框	false	true || false
+                autoCropWidth:360,//	默认生成截图框宽度	容器的80%	0~max
+                autoCropHeight:480,//	默认生成截图框高度	容器的80%	0~max
+                fixed:true,//	是否开启截图框宽高固定比例	true	true | false
+                fixedNumber:[3,4],//	截图框的宽高比例	[1,// 1]	[宽度,// 高度]
+                full:true,//	是否输出原图比例的截图	false	true | false
+                fixedBox:true,//	固定截图框大小 不允许改变	false	true | false
+                canMove:true,//	上传图片是否可以移动	true	true | false
+                canMoveBox:false,//	截图框能否拖动	true	true | false
+                original:'',//	上传图片按照原始比例渲染	false	true | false
+                centerBox:'',//	截图框是否被限制在图片里面	false	true | false
+                high:'',//	是否按照设备的dpr 输出等比例图片	true	true | false
+                infoTrue:'',//	true 为展示真实输出图片宽高 false 展示看到的截图框宽高	false	true | false
+                maxImgSize:'',//	限制图片最大宽度和高度	2000	0-max
+                enlarge:'',//	图片根据截图框输出比例倍数	1	0-max(建议不要太大不然会卡死的呢)
+                mode:'',//	图片默认渲染方式	contain	contain ,// cover,// 100px,// 100% auto
+                -->
+    </div>
+        
+    <div slot="footer" class="dialog-footer" style="text-align: center;padding-top: 5px;">
+        <div style="color: cornflowerblue;" language='people.p69'>
+            通过鼠标滚轮可以放大缩小图片，通过鼠标点击图片移动图片位置
+        </div>
+        <button class="layui-btn layui-btn-sm layui-btn-normal" @click="finish"><i class="layui-icon">&#xe605;</i>
+            <span language="people.p39">保存</span>
+        </button>
+        <button class="layui-btn layui-btn-sm layui-btn-warm" @click='CloseFn' id="BtnPeopleEditCancelaimg"><i class="layui-icon">&#x1006;</i>
+            <span language="people.p40">取消</span>
+        </button>
+    </div>
+
+</div>
+<!-- <script src="/jsLib/UploadImage.js"></script> -->
+<script src="/lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+<script src="/jsLib/vue.global.js"></script>
+<script src="/jsLib/vue-cropper.umd.js"></script>
+<script>
+    let parentIndex;
+    let faceAPI;
+    const app = Vue.createApp({
+        data() {
+            return {
+                Updata_img:null,
+                img: '',
+                cropbox:{
+                    autoCropWidth:360,
+                    autoCropHeight:480,
+                    fixedNumber:[3,4]
+                },
+                option:{
+                    outputSize:0.3,//	裁剪生成图片的质量	1	0.1 - 1
+                    outputType:'',//	裁剪生成图片的格式	jpg (jpg 需要传入jpeg)	jpeg || png || webp
+                    info:'',//	裁剪框的大小信息	true	true || false
+                    canScale:'',//	图片是否允许滚轮缩放	true	true || false
+                    autoCrop:true,//	是否默认生成截图框	false	true || false
+                    autoCropWidth:360,//	默认生成截图框宽度	容器的80%	0~max
+                    autoCropHeight:480,//	默认生成截图框高度	容器的80%	0~max
+                    fixed:true,//	是否开启截图框宽高固定比例	true	true | false
+                    fixedNumber:[3,4],//	截图框的宽高比例	[1,// 1]	[宽度,// 高度]
+                    full:true,//	是否输出原图比例的截图	false	true | false
+                    fixedBox:true,//	固定截图框大小 不允许改变	false	true | false
+                    canMove:true,//	上传图片是否可以移动	true	true | false
+                    canMoveBox:false,//	截图框能否拖动	true	true | false
+                    original:'',//	上传图片按照原始比例渲染	false	true | false
+                    centerBox:'',//	截图框是否被限制在图片里面	false	true | false
+                    high:'',//	是否按照设备的dpr 输出等比例图片	true	true | false
+                    infoTrue:'',//	true 为展示真实输出图片宽高 false 展示看到的截图框宽高	false	true | false
+                    maxImgSize:'',//	限制图片最大宽度和高度	2000	0-max
+                    enlarge:'',//	图片根据截图框输出比例倍数	1	0-max(建议不要太大不然会卡死的呢)
+                    mode:'',//	图片默认渲染方式	contain	contain ,// cover,// 100px,// 100% auto
+                }
+            }
+        },
+        methods: {
+            CloseFn(){
+                layer.close(parentIndex);
+                if (!this.$refs.video.srcObject) return;
+                this.closeCamera();
+            },
+            finish(){
+                // console.log(cropper.value)
+                this.$refs.cropper.getCropData(data => {
+                    // console.log(data);
+                    // emit('postImg', data)
+                    $("#showPeopleImg").attr("bigimg", "");
+                    $("#showPeopleImg").attr("src", data);
+                    faceAPI.PeopleEditImageResult = true;
+                    layer.close(parentIndex);
+                })
+            },
+            uploadImg(e, b){
+                this.Updata_img = ''
+                var _URL = window.URL || window.webkitURL;
+                let file = null
+                file = e.target.files[0]
+                
+                const img = new Image();
+                img.onload = function () {
+                    this.img = _URL.createObjectURL(file);
+                };
+                img.src = _URL.createObjectURL(file);
+            }
+        },
+        created() {
+            // document.getElementById('uploads').click()
+            
+        },
+        mounted() {
+            // console.log(window['vue-cropper']);
+            let img = window.sessionStorage.getItem('imgEdit');
+            this.img=img;
+        },
+        beforeMount() {
+
+        },
+        beforeUnmount() {
+            
+        }
+    })
+
+    app.component('vue-cropper', window['vue-cropper'].VueCropper)
+    app.mount('#admin-Editiamge')
+ 
+    layui.use(['faceAPI', 'layer'], function () {
+        var $ = layui.$;
+        // 当前弹出层，防止ID被覆盖
+        
+        faceAPI = layui.faceAPI;
+        var loadIndex = 0;
+
+        parentIndex = layer.index;
+        var upload = layui.upload;
+        //取消操作，关闭窗口
+    });
+
+    setTimeout(() => {
+        setLanguage();
+        setAllAttrVal()
+    }, 300)
+
+</script>

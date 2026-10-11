@@ -1,0 +1,310 @@
+﻿<div class="layuimini-container layuimini-page-anim" divname="admin">
+    <div class="layuimini-main">
+
+        <script type="text/html" id="toolbarDemo">
+            <div class="layui-btn-container">
+                <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add">
+                    <span language="people.p2" t="添加"></span>
+                </button>
+                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete">
+                    <span language="people.p3" t="删除"></span>
+                </button>
+            </div>
+        </script>
+
+        <table class="layui-hide" id="HolidayTable" lay-filter="HolidayTableFilter"></table>
+
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">
+                <span language="people.p7">编辑</span>
+            </a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">
+                <span language="people.p8">删除</span>
+            </a>
+        </script>
+
+    </div>
+</div>
+
+<script>
+    layui.use(['table', 'miniPage', 'faceAPI'], function () {
+        var $ = layui.jquery,
+            table = layui.table,
+            miniPage = layui.miniPage;
+        var faceAPI = layui.faceAPI;
+        var openWH = miniPage.getOpenWidthHeight();
+        var tableId = "HolidayTable";
+        table.render({
+            elem: '#HolidayTable',
+            data: [],
+            toolbar: '#toolbarDemo',
+            defaultToolbar: ['filter', 'exports', 'print'],
+            limit: 1000,
+            height: openWH[1] - 60,
+            skin: 'line',
+            cols: [[
+                { type: 'checkbox' },
+                { field: 'Num', width: 140, title: getLanguage('Holiday.h1'), sort: true },
+                { field: 'Date', title: getLanguage('Holiday.h2'), sort: true },
+                { field: 'ht', title: getLanguage('Holiday.h3'), sort: true, templet: getHt },
+                { field: 'cycle', title: getLanguage('Holiday.h4'), sort: true, templet: getCycle },
+                { fixed: 'right', title: getLanguage('people.p18'), toolbar: '#currentTableBar', width: 180 }]]
+        });
+        var dbHolidays = [];
+        function LoadData() {
+            var parameter = {
+                "Holidays": true
+            };
+            faceAPI.AjaxPOSTJson({
+                data: parameter,
+                url: '/api/Device/GetDetail',
+                success: function (rst) {
+                    var formdata = [];
+                    if (rst != null && rst.result) {
+                        formdata = rst.content.Holidays;
+                    }
+                    dbHolidays = formdata;
+                    LoadTable(formdata);
+
+                }
+            });
+
+        }
+
+        function LoadTable(data) {
+            table.reload(tableId, {
+                data: data
+            });
+        }
+
+        LoadData();
+
+
+
+        /**
+         *节假日管控范围类型
+         */
+        function getHt(data) {
+            if (data.Type == 3) {
+                return getLanguage('Holiday.h5');
+            }
+            if (data.Type == 2) {
+                return getLanguage('Holiday.h6');
+            }
+            return getLanguage('Holiday.h7');
+        }
+        /**
+        * 是否每年循环
+        */
+        function getCycle(data) {
+            if (data.Cycle == 1) {
+                return getLanguage('Holiday.h8');
+            }
+            return getLanguage('Holiday.h9');
+        }
+
+
+        /**
+         *工具栏点击事件
+         */
+        table.on('toolbar(HolidayTableFilter)', function (obj) {
+            if (obj.event == "add") {
+                editHoliday();
+            } else if (obj.event == "delete") {
+                
+                var checkStatus = table.checkStatus('HolidayTable'),
+                    data = checkStatus.data;
+                if (data.length == 0) {
+                    layer.msg(getLanguage('Holiday.h10'), { icon: 0 });
+                    return;
+                }
+                var index = layer.confirm(getLanguage('Holiday.h11'), { icon: 3, btn: ["Yes", "No"] }, function () {
+                    var nums = [];
+                    for (var d of data) {
+                        nums.push(d.Num);
+                    }
+                    delteHoliday(nums);
+                    layer.close(index);
+                });
+
+            }
+        });
+        /**
+        *数据行点击事件
+        */
+        table.on('tool(HolidayTableFilter)', function (obj) {
+            if (obj.event == "edit") {
+                editHoliday(obj.data);
+
+            } else if (obj.event == "delete") {
+                var index = layer.confirm(getLanguage('Holiday.h11'), { icon: 3, btn: ["Yes", "No"] }, function () {
+                    delteHoliday([obj.data.Num]);
+                    layer.close(index);
+                });
+            }
+        });
+
+        function editHoliday(data) {
+            var content = miniPage.getHrefContent('page/device/holiday/holidayEdit.html');
+
+            var title = getLanguage('Holiday.h12');
+            var bIsAdd = true;
+            var iHollidayLen = dbHolidays.length;
+            if (data !== undefined) {
+                title = getLanguage('Holiday.h13');
+                bIsAdd = false;
+            }
+            else {
+
+                dbHolidays.sort(function (a, b) {
+                    return a.Num - b.Num;
+                });
+                //查询一个编号
+                var iNum = 1;
+
+                for (var i = 0; i < iHollidayLen; i++) {
+                    if (dbHolidays[i].Num != iNum)
+                        break;
+                    iNum++;
+                }
+                data = {
+                    Num: iNum
+                };
+
+            }
+
+            faceAPI.holiday = data;//向layer页面传值，传值主要代码
+            var index = layer.open({
+                title: title,
+                type: 1,
+                shade: 0.2,
+                maxmin: true,
+                shadeClose: true,
+                area: ['400px', '350px'],
+                content: content,
+                end: function (layero, index) {
+
+                    if (faceAPI.holidayResult == true) {
+                        data = faceAPI.holiday
+
+                        if (bIsAdd) {
+                            dbHolidays.push(faceAPI.holiday);
+                        }
+                        else {
+                            for (var i = 0; i < dbHolidays.length; i++) {
+                                if (dbHolidays[i].Num == data.Num) {
+
+                                    dbHolidays[i] = { ...dbHolidays[i], ...data };
+                                    break;
+                                }
+                            }
+
+                        }
+                        if (bIsAdd) {
+                            dbHolidays.sort(function (a, b) {
+                                return a.Num - b.Num;
+                            });
+
+                        }
+
+                        //开始提交
+                        //启动遮罩层
+                        var waitLayerIndex = layer.load(1, { shade: [0.5, '#FFF'] });
+                        var postdata = {
+                            Holidays: dbHolidays
+                        };
+                        faceAPI.AjaxPOSTJson({
+                            data: postdata,
+                            url: '/api/device/UpdateParameter',
+                            success: function (result) {
+                                layer.close(waitLayerIndex)
+
+                                if (result.result == false) {
+                                    layer.alert(result.error, { icon: 2 });
+                                }
+                                else {
+                                    layer.alert(getLanguage('timingLock.t4'), { icon: 1 });
+
+                                    var tableBox = $('.layui-table-main')[0]
+                                    var oldTop = tableBox.scrollTop;
+
+
+                                    LoadTable(dbHolidays);
+
+                                    //这里必须使用setTimeout
+                                    setTimeout(function () {
+                                        var tableBox = $('.layui-table-main')[0]
+                                        if (bIsAdd) {
+                                            tableBox.scrollTop = tableBox.scrollHeight - tableBox.offsetHeight; // 滚动到底部
+                                        }
+                                        else {
+                                            tableBox.scrollTop = oldTop;
+
+                                        }
+                                    }, 1000)
+                                }
+                            }
+                        });
+
+                       
+
+
+                    }
+                }
+            });
+        }
+
+        function delteHoliday(nums) {
+            dbHolidays.sort(function (a, b) {
+                return a.Num - b.Num;
+            });
+            var len;
+            for (var i = 0; i < nums.length; i++) {
+                len = dbHolidays.length;
+                for (var j = 0; j < len; j++) {
+                    if (dbHolidays[j].Num == nums[i]) {
+                        dbHolidays.splice(j, 1);
+                        break;
+                    }
+                }
+            }
+
+            dbHolidays.sort(function (a, b) {
+                return a.Num - b.Num;
+            });
+            len = dbHolidays.length;
+            for (var j = 0; j < len; j++) {
+                dbHolidays[j].Num = j + 1;
+            }
+
+            //开始提交
+            var iWaitIndex = layer.load(2);
+            var postdata = {
+                Holidays: dbHolidays
+            };
+            faceAPI.AjaxPOSTJson({
+                data: postdata,
+                url: '/api/device/UpdateParameter',
+                success: function (result) {
+                    if (result.result == false) {
+                        layer.alert(result.error, { icon: 2 });
+                    }
+                    else {
+                        layer.alert(getLanguage('timingLock.t4'), { icon: 1 });
+
+                        LoadTable(dbHolidays);
+                    }
+
+                    layer.close(iWaitIndex);
+
+                    
+                }
+            });
+
+        }
+    });
+    setTimeout(() => {
+        setLanguage();
+        setAllAttrVal()
+    }, 100);
+</script>

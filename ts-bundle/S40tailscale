@@ -1,0 +1,17 @@
+#!/bin/sh
+# Permanent init script.  Bake into the rootfs at /etc/init.d/S40tailscale
+# (runs before S60face-recg via rcS).  Use this INSTEAD of /data/stress_test.sh
+# once the rootfs repack flow is validated.
+case "$1" in
+    start)
+        [ -x /data/tailscale/run.sh ] && /data/tailscale/run.sh &
+        ;;
+    stop)
+        if pidof tailscaled >/dev/null 2>&1; then
+            /data/tailscale/tailscale --socket=/data/tailscale/tailscaled.sock down 2>/dev/null
+            kill "$(pidof tailscaled)" 2>/dev/null
+        fi
+        ;;
+    *)
+        echo "usage: $0 {start|stop}"; exit 1 ;;
+esac

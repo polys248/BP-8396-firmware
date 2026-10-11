@@ -1,0 +1,124 @@
+﻿
+
+<div class="layuimini-main" id="Feature-Detail">
+
+    <form class="layui-form layui-form-pane" lay-filter="people_Feature_div_filter">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">
+                    <span language="people.p101">特征码类型</span>
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" name="TypeName" autocomplete="off" disabled
+                           class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">
+                    <span language="people.p102">特征码序号</span>
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" name="num" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span language="people.FeatureContent">特征码内容</span>
+            </label>
+            <textarea name="data"  class="layui-textarea" rows="18" ></textarea>
+        </div>
+
+
+        <div class="layui-form-item defcenter" >
+            <div class="layui-inline">
+                <button class="layui-btn layui-btn-normal" 
+                        id="BtnFeature_save"
+                        lay-submit
+                        lay-filter="BtnFeature_save">
+                    <i class="layui-icon">&#xe605;</i>
+                    <span language="people.p39">保存</span>
+                </button>
+
+                <button class="layui-btn layui-btn-warm" id="BtnFeature_EditCancel">
+                    <i class="layui-icon">&#x1006;</i>
+                    <span language="people.CloseButton">关闭</span>
+                </button>
+            </div>
+        </div>
+    </form>
+
+</div>
+<script>
+
+    layui.use(['faceAPI', 'form', 'layer'], function () {
+        var $ = layui.jquery;
+        var form = layui.form,
+            layer = layui.layer;
+        var faceAPI = layui.faceAPI;
+        
+
+
+        var fromdata = faceAPI.PeopleFeatureWindowData;
+
+        var typeMap = [];
+        typeMap[1] = "people.FaceFeature";//人脸特征码
+        typeMap[2] = "people.p107";//指纹特征码
+        typeMap[3] = "people.p106";//掌静脉特征码
+
+        fromdata.TypeName = getLanguage(typeMap[fromdata.type]);
+        
+        var parentIndex = layer.index;
+
+        form.val("people_Feature_div_filter", fromdata);
+
+        $('#BtnFeature_EditCancel' ).on('click', function () {
+            layer.close(parentIndex);
+            return false;
+        });
+
+        faceAPI.PeopleFeatureWindowData.Save = false;
+
+        form.on("submit(BtnFeature_save)", function (data) {
+            var postdata = data.field;
+            if (postdata.data.length < 300) {
+                layer.alert(getLanguage("people.FeatureCodeError"), { icon: 2 });
+                return false;
+            }
+            
+            if (!isBase64(postdata.data)) {
+                layer.alert(getLanguage("people.FeatureCodeError"), { icon: 2 });
+                return false;
+            }
+            if (fromdata.data != postdata.data) {
+                layer.confirm(getLanguage("people.SaveFeatureTip"), { icon: 3, btn: ["Yes", "No"] }, function (index, layero, that) {
+
+                    faceAPI.PeopleFeatureWindowData.data = postdata.data
+                    faceAPI.PeopleFeatureWindowData.Save = true;
+
+                    layer.close(index);
+                    layer.close(parentIndex);
+                });
+            }
+            else {
+                
+                layer.close(parentIndex);
+            }
+            return false;
+        });
+    });
+
+    function isBase64(str) {
+        try {
+            return btoa(atob(str)) == str;
+        } catch (e) {
+            return false;
+        }
+    }
+
+
+    setTimeout(() => {
+        setLanguage();
+        setAllAttrVal()
+    }, 300)
+</script>

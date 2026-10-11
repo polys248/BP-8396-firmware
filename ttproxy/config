@@ -1,0 +1,18 @@
+# ttproxy settings  (/data/ttproxy/config)  KEY=VALUE, sourced by the proxy.
+
+# Local plaintext endpoint aio talks to (keep 4610 unless you change aio too).
+LISTEN=127.0.0.1:4610
+
+# Your real backend (HTTPS). Scheme MUST be https.
+TARGET=https://api.bettapay.ng
+
+# Optional: add an auth header the proxy injects on every request, so your
+# Supabase function can require a secret beyond the device SN. Leave blank for
+# HTTPS-only (no auth change). Example:
+#   AUTH_HEADER=Authorization
+#   AUTH_VALUE=Bearer REPLACE_WITH_A_LONG_RANDOM_SECRET
+AUTH_HEADER=
+AUTH_VALUE=
+
+# Hard memory cap (MiB). Device has only ~73 MB RAM; keep this small.
+MEM_MIB=20

@@ -1,0 +1,310 @@
+<style>
+    #device_Face_div label {
+        width: 250px;
+    }
+
+    .layui-form-pane .layui-input-block {
+        margin-left: 250px;
+        left: -1px;
+    }
+
+    .divwidth {
+        width: 1850px;
+    }
+
+    .divpadding {
+        padding-right: 20px
+    }
+
+    .aligncenter {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+<div class="layui-form layuimini-form  layui-form-pane" id="device_Face_div" lay-filter="device_Face_div_filter">
+    <div class="layui-bg-gray" style="padding: 10px;">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12 FunctionListFace" >
+                <div class="layui-card">
+                    <div class="layui-card-header" language='Facerecognition.f1' >人脸检测</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form-item">
+                            <!-- <div class="layui-inline">
+                                <label class="layui-form-label" language='device.d142'> 识别距离</label>
+                                <div class="layui-input-inline">
+                                    <select name="FaceDistance" required lay-verify="">
+                                        <option language='device.d143' value="3" selected>远</option>
+                                        <option language='device.d144' value="2">中</option>
+                                        <option language='device.d145' value="1">近</option>
+                                    </select>
+                                </div>
+                            </div> -->
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.d146'> 识别阈值 </label>
+                                <div class="layui-input-inline">
+                                    <input type="number" max="99" min="50" name="FaceThreshold" maxlength="2"
+                                        autocomplete="off" class="layui-input" lay-verify="required"
+                                        id="device.d147,device.d148,device.d149"
+                                        data-lang='placeholder,lay-reqText,tipMsg' placeholder="请输入人脸识别阈值"
+                                        lay-reqText="请输入人脸识别阈值" tipShow="1" tipMsg="人脸识别阈值，必填<br/> 取值范围 1 -- 99">
+                                </div>
+                            </div>
+                            <!-- <div class="layui-inline FunctionListFingerprint">
+                                <label class="layui-form-label" language='device.d322'> 指纹对比阈值 </label>
+                                <div class="layui-input-inline">
+                                    <input type="number" max="99" min="1" name="FPComparison"
+                                        autocomplete="off" class="layui-input" lay-verify="required"  maxlength="2"
+                                        id="device.d323,device.d323,device.d324"
+                                        data-lang='placeholder,lay-reqText,tipMsg' placeholder="请输入指纹对比阈值"
+                                        lay-reqText="请输入指纹对比阈值" tipShow="1" tipMsg="指纹对比阈值，必填<br/> 取值范围 1 -- 100">
+                                </div>
+                            </div> -->
+
+                        </div>
+                        <div class="layui-form-item">
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.d150'> 活体检测</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="FaceIR" lay-skin="switch" id="device.d402"
+                                        data-lang="lay-text" lay-text="启用|禁用" checked value="1">
+
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.d152'> 活体阈值 </label>
+                                <div class="layui-input-inline">         
+                                    <input type="number" max="6" min="1" name="FaceIRThreshold"
+                                           autocomplete="off" class="layui-input" lay-verify="required" maxlength="2">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md12 FunctionListFaceMask">
+                <div class="layui-card">
+                    <div class="layui-card-header" language='device.d157'>口罩检测</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.d157'>口罩检测</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="FaceMask" lay-skin="switch" id="device.d158"
+                                        data-lang="lay-text" lay-text="启用|禁用" unchecked value="1">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.d159'> 口罩阈值</label>
+                                <div class="layui-input-inline">
+                                    <input type="number" max="99" min="1" name="FaceMaskThreshold"
+                                        autocomplete="off" class="layui-input"  maxlength="2"
+                                        id="device.d160,device.d161,device.d162"
+                                        data-lang='placeholder,lay-reqText,tipMsg' placeholder="请输入口罩检测阈值"
+                                        lay-reqText="请输入口罩检测阈值" tipShow="1" tipMsg="口罩检测阈值， 取值范围 1 -- 99，必填">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-col-md12 FunctionListBodyTemperature">
+                <div class="layui-card">
+                    <div class="layui-card-header" language='device.d164'>体温检测</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.d164'>体温检测</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="UseBodyTemperature" lay-skin="switch" id="device.d165"
+                                        data-lang="lay-text" lay-text="启用|禁用" unchecked value="1">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.d166'>温度补偿</label>
+                                <div class="layui-input-inline">
+                                    <input type="number" min="-10.0" max="10.0" step="0.1" name="TemperatureCompensate" maxlength="5"
+                                        autocomplete="off" class="layui-input"
+                                        id="device.d167,device.d168,device.d169"
+                                        data-lang='placeholder,lay-reqText,tipMsg' placeholder="请输入温度补偿值"
+                                        lay-reqText="请输入温度补偿值" tipShow="1"
+                                        tipMsg="温度补偿值，必填<br/>取值范围 -10 -- 10,可输入小数<br/>示例：0.52">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.d170'>报警阈值</label>
+                                <div class="layui-input-inline">
+                                    <input type="number" min="37.0" max="50.0" step="0.1"
+                                        name="TemperatureAlarmThreshold" autocomplete="off" class="layui-input" maxlength="5"
+                                        id="device.d171,device.d172,device.d173"
+                                        data-lang='placeholder,lay-reqText,tipMsg'
+                                        placeholder="请输入高温报警阈值" lay-reqText="请输入高温报警阈值" tipShow="1"
+                                        tipMsg="高温报警阈值，必填<br/>取值范围 37 -- 50,可输入小数<br/>单位:摄氏度<br/>示例：37.6">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.d174'>华氏度</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="UseFahrenheitDisplay" lay-skin="switch"
+                                        id="device.d175" data-lang="lay-text" lay-text="启用|禁用" unchecked value="1">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label" language='device.d325'> 在UI上是否显示体温</label>
+                                <div class="layui-input-inline">
+                                    <input type="checkbox" name="TemperatureDisplay" lay-skin="switch" id="device.d151"
+                                        data-lang="lay-text" lay-text="启用|禁用" checked value="1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-md12">
+                <div class="layui-card">
+
+                    <div class="layui-card-body">
+                        <div class="layui-btn-container aligncenter">
+                            <button type="submit" class="layui-btn layui-btn-normal" lay-submit
+                                lay-filter="data-save-btn" language='device.d224'>
+                                <i class="layui-icon"></i> 保存
+                            </button>
+                            <button type="reset" class="layui-btn layui-btn-danger" id="data-reset-btn" language='Facerecognition.f2'>
+                                <i class="layui-icon"></i> 刷新
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'element', 'faceAPI'], function () {
+        setLanguage();
+        setAllAttrVal();
+        var faceAPI = layui.faceAPI;
+        var form = layui.form;
+        var $ = layui.$;
+      
+        var formdata;
+        function LoadData() {
+            var parameter = {
+                "Face": true,
+                "BodyTemperature": true,
+            };
+            faceAPI.AjaxPOSTJson({
+                data: parameter,
+                url: '/api/Device/GetDetail',
+                success: function (result) {
+                    if (result != null && result.result) {
+
+                        formdata = result.content;
+                        form.val("device_Face_div_filter", formdata);
+                    };
+                }
+            });
+
+        }
+        LoadData();
+        form.on('submit(data-save-btn)', function (data) {
+
+            layer.confirm(getLanguage("Facerecognition.f3"), { icon: 3 }, function (index, layero, that) {
+                var postdata = data.field;
+
+                postdata.FaceIR = postdata.FaceIR == "1" ? 1 : 0;
+                postdata.FaceIRThreshold = Number(postdata.FaceIRThreshold);
+
+                postdata.FaceDistance = Number(postdata.FaceDistance);
+
+                postdata.FPComparison = Number(postdata.FPComparison);
+                postdata.FaceThreshold = Number(postdata.FaceThreshold);
+                
+                
+                postdata.FaceMask = postdata.FaceMask == "1" ? 1 : 0;
+                postdata.FaceMaskThreshold = Number(postdata.FaceMaskThreshold);
+
+                postdata.UseBodyTemperature = postdata.UseBodyTemperature == "1" ? 1 : 0;
+                postdata.UseFahrenheitDisplay = postdata.UseFahrenheitDisplay == "1" ? 1 : 0;
+                postdata.TemperatureDisplay = postdata.TemperatureDisplay == "1" ? 1 : 0;
+                
+                // 检查体温检测功能是否开启，开启时才需要温度补偿值和报警阈值
+                if(postdata.UseBodyTemperature == 1) {
+                    postdata.TemperatureCompensate = Number(postdata.TemperatureCompensate);
+                    postdata.TemperatureAlarmThreshold = Number(postdata.TemperatureAlarmThreshold);
+                } else {
+                    // 体温检测关闭时，设置默认值以避免验证错误
+                    postdata.TemperatureCompensate = 0;
+                    postdata.TemperatureAlarmThreshold = 37.5;
+                }
+
+                //启动遮罩层
+                var waitLayerIndex = layer.load(1, { shade: [0.5, '#FFF'] });
+
+                faceAPI.AjaxPOSTJson({
+                    data: postdata,
+                    url: '/api/device/UpdateParameter',
+                    success: function (result) {
+                        layer.close(waitLayerIndex);
+
+                        if (result.result == false) {
+                            layer.alert(result.error, { icon: 2 });
+                        }
+                        else {
+                            formdata = data.field;
+                            layer.alert(getLanguage("Facerecognition.f4"), { icon: 1 });
+                        }
+                    }
+                });
+                layer.close(index);
+            });
+
+        });
+        $("#data-reset-btn").on('click', function () {
+            layer.confirm(getLanguage("Facerecognition.f5"), { icon: 3 ,btn:["Yes","No"]}, function (index, layero, that) {
+                LoadData();
+                layer.close(index)
+            });
+        });
+
+        faceAPI.ShowMouseTipMessageBox("device_Face_div_filter", layer);
+        faceAPI.CheckInputBox();
+
+
+
+
+        if(faceAPI?.DeviceFunctionList){
+            // faceAPI.DeviceFunctionList.BodyTemperature=false;
+            const {Face,FaceMask,SafetyHelmet,Fingerprint,BodyTemperature}=faceAPI.DeviceFunctionList
+            console.log('[ faceAPI.DeviceFunctionList ] >', faceAPI.DeviceFunctionList)
+            
+
+            if(!Fingerprint){
+                faceAPI.removeElement('.FunctionListFingerprint');
+            }
+            if(!Face){
+                faceAPI.removeElement('.FunctionListFace');
+            }
+
+            
+
+            if(!FaceMask){
+                faceAPI.removeElement('.FunctionListFaceMask');
+            }
+            if(!BodyTemperature){
+                faceAPI.removeElement('.FunctionListBodyTemperature');
+            }
+
+            
+
+        }
+    });
+</script>

@@ -1,0 +1,1 @@
+import{_ as e,d as r,o as t,g as a,bV as n}from"./index.js";const o=e(r({name:"redirect",beforeCreate(){const{params:e,query:r}=this.$route,{path:t}=e;this.$router.replace({path:"/"+t.join("/"),query:r})},render:function(){return n()}}),[["render",function(e,r,n,o,s,i){return t(),a("div")}]]);export{o as default};

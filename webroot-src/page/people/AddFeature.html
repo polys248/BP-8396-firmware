@@ -1,0 +1,339 @@
+﻿<div class="layuimini-main" id="add_people_feature">
+    <style>
+        .defcenter {
+            text-align: center;
+        }
+
+        .lay-step {
+            padding-left: 100px;
+        }
+    </style>
+
+    <div class="layui-card" id="page_AddFeature">
+        <div class="layui-card-body" style="padding-top: 40px;">
+            <div class="layui-carousel" id="stepForm_add_feature" lay-filter="stepForm_add_feature"
+                style="margin: 0 auto;">
+                <div carousel-item>
+
+
+                    <div>
+                        <form class="layui-form" style="margin: 0 auto;max-width: 800px;padding-top: 40px;">
+                            <div class="layui-card">
+                                <div class="layui-card-header">
+                                    <h2 language="people.SelectFeatureType">选择特征码类型</h2>
+                                </div>
+                                <div class="layui-card-body">
+                                    <div class="layui-form-block">
+                                        <div class="layui-form-item FunctionListFace">
+                                            <input type="radio" name="type" value="1" title="人脸" checked
+                                                id="people.FeatureType1" data-lang='title'>
+                                        </div>
+                                        <div class="layui-form-item FunctionListFingerprint">
+                                            <input type="radio" name="type" value="2" title="指纹"
+                                                id="people.FeatureType2" data-lang='title'>
+                                        </div>
+                                        <div class="layui-form-item FunctionListPalmvein">
+                                            <input type="radio" name="type" value="3" title="掌静脉"
+                                                id="people.FeatureType3" data-lang='title'>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class=" defcenter">
+                                        <button type="button" class="layui-btn layui-btn-primary" lay-submit
+                                            lay-filter="btnSelectOver" language="people.NextStep">
+                                            下一步
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+
+
+                    <div>
+                        <form class="layui-form" style="margin: 0 auto;max-width: 800px;padding-top: 40px;">
+                            <div class="layui-card">
+                                <div class="layui-card-header">
+                                    <h2 language="people.InputFeatureCode">请输入特征码</h2>
+                                </div>
+                                <div class="layui-card-body">
+                                    <div>
+                                        <textarea name="data" class="layui-textarea" rows="18"></textarea>
+                                    </div>
+                                    <div class="layui-panel defcenter">
+                                        <button type="button" class="layui-btn layui-btn-primary pre"
+                                            language="people.PreviousStep">
+                                            上一步
+                                        </button>
+                                        <button type="button" class="layui-btn layui-btn-primary" lay-submit
+                                            lay-filter="btnAddFeatureOver">
+                                            <i class="layui-icon">&#xe605;</i>
+                                            <span language="people.p39">保存</span>
+                                        </button>
+                                        <button class="layui-btn" lay-submit lay-filter="btnAddFeatureCancel">
+                                            <i class="layui-icon">&#x1006;</i>
+                                            <span language="people.CloseButton">关闭</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    setLanguage();
+    setAllAttrVal();
+
+    layui.use(
+        ['faceAPI', 'form', 'layer', 'step'],
+        function () {
+            var $ = layui.jquery;
+            var form = layui.form,
+                layer = layui.layer;
+            var faceAPI = layui.faceAPI;
+            var step = layui.step;
+
+            var fromdata = faceAPI.PeopleFeatureWindowData;
+            var parentIndex = layer.index;
+            fromdata.Save = false;
+
+            /**
+             * 初始化表单，要加上，不然刷新部分组件可能会不加载
+             */
+            form.render();
+
+            step.render({
+                elem: '#stepForm_add_feature',
+                filter: 'stepForm_add_feature',
+                width: '100%', //设置容器宽度
+                stepWidth: '600px',
+                height: '550px',
+                stepItems: [{
+                    title: getLanguage("people.SelectFeatureType1")//"选择特征码类型"
+                }, {
+                    title: getLanguage("people.InputFeatureCode1")//"输入特征码"
+                }]
+            });
+
+
+            $('.pre').click(function () {
+                step.pre('#stepForm_add_feature');
+                return false;
+            });
+
+
+
+            form.on('submit(btnSelectOver)', function (data) {
+                //console.log(data.field)
+                fromdata.type = data.field.type;
+
+                step.next('#stepForm_add_feature');
+                return false;
+            });
+
+            form.on('submit(btnAddFeatureOver)', function (data) {
+                var base64data = data.field.data;
+
+                if (base64data.length < 300) {
+                    layer.alert(getLanguage("people.FeatureCodeError"), { icon: 2 });
+                    return false;
+                }
+
+                if (!isBase64(base64data)) {
+                    layer.alert(getLanguage("people.FeatureCodeError"), { icon: 2 });
+                    return false;
+                }
+                var bSave = false;
+
+                if (fromdata.type == 1) {
+                    //保存人脸特征码
+                    bSave = SaveFaceFeature(base64data);
+                }
+
+                if (fromdata.type == 2) {
+                    //保存指纹特征码
+                    bSave = SaveFingerprintFeature(base64data);
+                }
+
+                if (fromdata.type == 3) {
+                    //保存掌静脉特征码
+                    bSave = SavePalmFeature(base64data);
+                }
+
+
+
+                faceAPI.PeopleFeatureWindowData.Save = bSave;
+                if (bSave) {
+                    layer.close(parentIndex);
+                }
+
+                return false;
+
+            });
+
+            function SaveFaceFeature(base64data) {
+                var Features = faceAPI.PeopleFeatureWindowData.Features;
+                //检查是否已存在人脸特征码
+                var size = Features.length;
+                for (var i = size - 1; i >= 0; i--) {
+
+                    if (Features[i].type == 1) {
+                        layer.confirm(getLanguage("people.FaceSaveTip"), { icon: 3, btn: ["Yes", "No"] }, function (index, layero, that) {
+
+                            Features[i].data = base64data;
+
+                            faceAPI.PeopleFeatureWindowData.Save = true;
+                            layer.close(index);
+                            layer.close(parentIndex);
+
+                        });
+
+
+                        return false;
+                    }
+
+                }
+
+
+                Features.push({
+                    type: 1,
+                    num: 1,
+                    name: getLanguage("people.FaceFeature"),
+                    data: base64data,
+                });
+
+                return true;
+            }
+
+            function SaveFingerprintFeature(base64data) {
+                var Features = faceAPI.PeopleFeatureWindowData.Features;
+                //查询是否已存在指纹特征码
+                var iFingerprintCount = 0;
+                var numArr = [];
+                var size = Features.length;
+                for (var i = size - 1; i >= 0; i--) {
+
+                    if (Features[i].type == 2) {
+                        iFingerprintCount++;
+                        numArr[Features[i].num] = 1;
+                    }
+
+                }
+
+                //每个人不能超过5个指纹
+                if (iFingerprintCount >= 5) {
+                    layer.alert(getLanguage("people.FingerprintCountError"), { icon: 2 });
+                    return false;
+                }
+
+                var iNewNum = 0;
+                for (var i = 0; i < 9; i++) {
+                    if (numArr[i] != 1) {
+                        iNewNum = i;
+                        break;
+                    }
+                }
+                var featureName = getLanguage("people.p96");
+                Features.push({
+                    type: 2,
+                    num: iNewNum,
+                    name: featureName + iNewNum,
+                    data: base64data,
+                });
+
+                return true;
+            }
+
+            function SavePalmFeature(base64data) {
+                var Features = faceAPI.PeopleFeatureWindowData.Features;
+                //查询是否已存在掌静脉特征码
+                var iPalmCount = 0;
+                var numArr = [];
+                var size = Features.length;
+
+                for (var i = size - 1; i >= 0; i--) {
+
+                    if (Features[i].type == 3) {
+                        iPalmCount++;
+                        numArr[Features[i].num] = 1;
+                    }
+
+                }
+
+                //每个人不能超过2个掌静脉
+                if (iPalmCount >= 2) {
+                    layer.alert(getLanguage("people.PalmCountError"), { icon: 2 });
+                    return false;
+                }
+
+                var iNewNum = 0;
+                for (var i = 1; i <= 2; i++) {
+                    if (numArr[i] != 1) {
+                        iNewNum = i;
+                        break;
+                    }
+                }
+                var featureName = getLanguage("people.p97");
+                Features.push({
+                    type: 3,
+                    num: iNewNum,
+                    name: featureName + iNewNum,
+                    data: base64data,
+                });
+
+                return true;
+            }
+
+            form.on('submit(btnAddFeatureCancel)', function (data) {
+
+                layer.close(parentIndex);
+                return false;
+            });
+
+
+            if (faceAPI?.DeviceFunctionList) {
+                // faceAPI.DeviceFunctionList.BodyTemperature=false;
+                const { Face, Fingerprint, Palmvein } = faceAPI.DeviceFunctionList
+                console.log('[ faceAPI.DeviceFunctionList ] >', faceAPI.DeviceFunctionList)
+
+
+                if (!Fingerprint) {
+                    faceAPI.removeElement('.FunctionListFingerprint');
+                }
+                if (!Face) {
+                    faceAPI.removeElement('.FunctionListFace');
+                }
+
+
+
+                if (!Palmvein) {
+                    faceAPI.removeElement('.FunctionListPalmvein');
+                }
+
+
+            }
+
+        }
+    );
+
+
+
+    function isBase64(str) {
+        try {
+            return btoa(atob(str)) == str;
+        } catch (e) {
+            return false;
+        }
+    }
+</script>
