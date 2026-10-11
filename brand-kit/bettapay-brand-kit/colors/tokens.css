@@ -1,0 +1,76 @@
+/* BettaPay color tokens — verbatim from src/index.css (the source of truth).
+   All values are HSL triplets consumed as hsl(var(--token)). */
+
+:root {
+  /* Core */
+  --background: 0 0% 98%;            /* #FAFAFA */
+  --foreground: 158 64% 10%;         /* #092A1E */
+  --primary: 158 64% 14%;            /* #0D3B2A */
+  --primary-foreground: 0 0% 98%;
+  --primary-variant: 158 45% 20%;    /* #1C4A39 */
+  --primary-glow: 158 35% 30%;       /* #326754 */
+  --card: 0 0% 100%;
+  --card-foreground: 158 64% 10%;
+  --secondary: 158 20% 95%;          /* #F0F5F3 */
+  --secondary-foreground: 158 64% 14%;
+  --muted: 158 15% 96%;              /* #F3F6F5 */
+  --muted-foreground: 158 20% 45%;   /* #5C8A79 — secondary text 14px+, fails AA for small text */
+  --accent: 158 15% 95%;             /* #F0F4F3 */
+  --accent-foreground: 158 64% 14%;
+  --border: 158 20% 85%;             /* #D1E0DB */
+  --input: 158 15% 94%;
+  --ring: 158 64% 14%;
+  --radius: 0.5rem;
+
+  /* Status */
+  --success: 142 76% 36%;            /* #16A249 */
+  --success-foreground: 0 0% 98%;
+  --warning: 43 96% 56%;             /* #FBBD23 */
+  --warning-foreground: 0 0% 9%;
+  --info: 210 100% 56%;              /* #1F8FFF */
+  --info-foreground: 0 0% 98%;
+  --destructive: 0 84.2% 60.2%;      /* #EF4444 */
+  --destructive-foreground: 210 40% 98%;
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-variant)));
+  --gradient-hero: linear-gradient(135deg, hsl(158 64% 14%), hsl(158 45% 20%), hsl(210 100% 30%));
+  --gradient-card: linear-gradient(180deg, hsl(0 0% 100%), hsl(158 15% 98%));
+
+  /* Shadows (green-tinted, never gray) */
+  --shadow-elegant: 0 4px 20px -4px hsl(var(--primary) / 0.15);
+  --shadow-card: 0 2px 10px -2px hsl(var(--primary) / 0.1);
+  --shadow-glow: 0 0 30px hsl(var(--primary-glow) / 0.3);
+
+  /* Motion */
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: all 0.2s ease-out;
+}
+
+.dark {
+  --background: 158 15% 6%;          /* #0D1210 */
+  --foreground: 158 15% 95%;         /* #F0F4F3 */
+  --card: 158 15% 8%;                /* #111715 */
+  --card-foreground: 158 15% 95%;
+  --primary: 158 50% 60%;            /* #66CCA7 — primary flips light in dark mode */
+  --primary-foreground: 158 15% 6%;
+  --primary-variant: 158 45% 55%;    /* #59C09A */
+  --primary-glow: 158 40% 65%;
+  --secondary: 158 15% 12%;
+  --secondary-foreground: 158 15% 95%;
+  --muted: 158 15% 12%;
+  --muted-foreground: 158 15% 70%;   /* #A7BEB6 */
+  --accent: 158 15% 15%;
+  --accent-foreground: 158 15% 95%;
+  --border: 158 15% 20%;             /* #2B3B35 */
+  --input: 158 15% 12%;
+  --ring: 158 50% 60%;
+  --success: 142 76% 50%;            /* #1FE066 */
+  --success-foreground: 158 15% 6%;
+  --warning: 43 96% 60%;             /* #FBC337 */
+  --warning-foreground: 0 0% 9%;
+  --info: 210 100% 60%;              /* #3399FF */
+  --info-foreground: 158 15% 6%;
+  --destructive: 0 62.8% 30.6%;      /* #7F1D1D */
+  --destructive-foreground: 210 40% 98%;
+}

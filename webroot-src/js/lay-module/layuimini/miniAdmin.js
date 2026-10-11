@@ -83,7 +83,14 @@ layui.define(["jquery", "miniMenu", "element", "miniPage", "miniTheme"], functio
          * @param data
          */
         renderLogo: function (data) {
-            var html = '<a href="javascript:;"><h1 language=\'DeviceSN\'>' + data.title + '</h1>';
+            // BettaPay: show the brand lockup (not the SN) in the header; keep the
+            // device serial as a small muted caption beside it for support.
+            var sn = '';
+            try { sn = (typeof getLanguageDeviceSN === 'function' ? (getLanguageDeviceSN() || '') : ''); } catch (e) {}
+            var html = '<a href="javascript:;">' +
+                '<img src="images/bettapay-lockup-dark.svg" alt="BettaPay">' +
+                (sn ? '<span class="bp-sn">' + sn + '</span>' : '') +
+                '</a>';
             $('.layuimini-logo').html(html);
         },
 

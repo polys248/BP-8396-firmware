@@ -1,0 +1,43 @@
+{
+  "brand": "BettaPay",
+  "source": "src/index.css (HSL custom properties are the source of truth; hex values are derived)",
+  "light": {
+    "background":        { "hsl": "0 0% 98%",     "hex": "#FAFAFA" },
+    "foreground":        { "hsl": "158 64% 10%",  "hex": "#092A1E" },
+    "primary":           { "hsl": "158 64% 14%",  "hex": "#0D3B2A" },
+    "primary-variant":   { "hsl": "158 45% 20%",  "hex": "#1C4A39" },
+    "primary-glow":      { "hsl": "158 35% 30%",  "hex": "#326754" },
+    "secondary":         { "hsl": "158 20% 95%",  "hex": "#F0F5F3" },
+    "muted":             { "hsl": "158 15% 96%",  "hex": "#F3F6F5" },
+    "muted-foreground":  { "hsl": "158 20% 45%",  "hex": "#5C8A79" },
+    "accent":            { "hsl": "158 15% 95%",  "hex": "#F0F4F3" },
+    "border":            { "hsl": "158 20% 85%",  "hex": "#D1E0DB" },
+    "success":           { "hsl": "142 76% 36%",  "hex": "#16A249" },
+    "warning":           { "hsl": "43 96% 56%",   "hex": "#FBBD23" },
+    "info":              { "hsl": "210 100% 56%", "hex": "#1F8FFF" },
+    "destructive":       { "hsl": "0 84.2% 60.2%","hex": "#EF4444" }
+  },
+  "dark": {
+    "background":        { "hsl": "158 15% 6%",   "hex": "#0D1210" },
+    "card":              { "hsl": "158 15% 8%",   "hex": "#111715" },
+    "foreground":        { "hsl": "158 15% 95%",  "hex": "#F0F4F3" },
+    "primary":           { "hsl": "158 50% 60%",  "hex": "#66CCA7" },
+    "primary-variant":   { "hsl": "158 45% 55%",  "hex": "#59C09A" },
+    "muted-foreground":  { "hsl": "158 15% 70%",  "hex": "#A7BEB6" },
+    "border":            { "hsl": "158 15% 20%",  "hex": "#2B3B35" },
+    "success":           { "hsl": "142 76% 50%",  "hex": "#1FE066" },
+    "warning":           { "hsl": "43 96% 60%",   "hex": "#FBC337" },
+    "info":              { "hsl": "210 100% 60%", "hex": "#3399FF" },
+    "destructive":       { "hsl": "0 62.8% 30.6%","hex": "#7F1D1D" }
+  },
+  "logo": {
+    "gradient-top":      { "hsl": "158 42% 34%",  "hex": "#327B60" },
+    "gradient-bottom":   { "hsl": "158 64% 16%",  "hex": "#0F4330" },
+    "tile":              { "hsl": "150 45% 95%",  "hex": "#EDF8F2" }
+  },
+  "gradients": {
+    "gradient-primary": "linear-gradient(135deg, #0D3B2A, #1C4A39)",
+    "gradient-hero":    "linear-gradient(135deg, #0D3B2A, #1C4A39, #004D99)",
+    "gradient-card":    "linear-gradient(180deg, #FFFFFF, #F3F6F5)"
+  }
+}

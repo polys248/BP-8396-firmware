@@ -1,62 +1,66 @@
 /* ============================================================================
    BettaPay theme — loaded AFTER layui + layuimini to override the vendor blue.
-   Palette taken from bettapay.ng: dark green->blue gradient, green accents.
+   Palette: official brand kit (deep-green primary, vivid green actions).
+     primary  #0D3B2A   variant #1C4A39   glow #326754
+     action/success #16A249   hero grad #0D3B2A→#1C4A39→#004D99   tile #EDF8F2
    ============================================================================ */
 :root{
-  --bp-green:#2ea043;
-  --bp-green-700:#22813a;
-  --bp-teal:#1f9d7a;
-  --bp-dark:#0f3d2e;
-  --bp-dark-2:#0c3326;
-  --bp-grad:linear-gradient(135deg,#0e3b2e 0%,#12624a 55%,#164e74 100%);
+  --bp-primary:#0D3B2A;
+  --bp-variant:#1C4A39;
+  --bp-glow:#326754;
+  --bp-action:#16A249;
+  --bp-action-700:#12833c;
+  --bp-tile:#EDF8F2;
+  --bp-hero:linear-gradient(135deg,#0D3B2A 0%,#1C4A39 55%,#004D99 100%);
+  --bp-bg:#FAFAFA;
 }
 
-/* ---- Admin shell: brand dark-green header + sidebar ---- */
+/* ---- Admin shell: brand deep-green header + sidebar ---- */
 .layui-layout-admin .layui-header,
-.layui-layout-admin .layui-logo{ background-color:var(--bp-dark) !important; }
+.layui-layout-admin .layui-logo{ background-color:var(--bp-primary) !important; }
 .layui-bg-black,
 .layui-side.layui-bg-black,
 .layuimini-menu-left,
 .layui-side,
-.layui-nav-tree{ background-color:var(--bp-dark) !important; }
+.layui-nav-tree{ background-color:var(--bp-primary) !important; }
+.layui-body{ background-color:var(--bp-bg); }
 
 /* sidebar hover / active */
-.layui-nav-tree .layui-nav-item a:hover{ background-color:var(--bp-green-700) !important; color:#fff !important; }
+.layui-nav-tree .layui-nav-item a:hover{ background-color:var(--bp-variant) !important; color:#fff !important; }
 .layui-nav-tree .layui-this,
 .layui-nav-tree .layui-this>a,
-.layui-nav-tree .layui-nav-child dd.layui-this a{ background-color:var(--bp-green) !important; color:#fff !important; }
-.layui-nav-tree .layui-nav-bar{ background-color:var(--bp-green) !important; }
+.layui-nav-tree .layui-nav-child dd.layui-this a{ background-color:var(--bp-action) !important; color:#fff !important; }
+.layui-nav-tree .layui-nav-bar{ background-color:var(--bp-action) !important; }
+/* header top nav hover */
+.layui-layout-admin .layui-header .layui-nav .layui-nav-item a:hover{ color:#8fe3c2 !important; }
+.layui-layout-admin .layui-header .layui-nav .layui-this:after,
+.layui-layout-admin .layui-header .layui-nav-bar{ background-color:var(--bp-action) !important; }
 
-/* header nav hover */
-.layui-layout-admin .layui-header .layui-nav .layui-nav-item a:hover{ color:#d6ffe9 !important; }
+/* ---- Primary / action buttons -> vivid brand green ---- */
+.layui-btn-normal{ background-color:var(--bp-action) !important; border-color:var(--bp-action) !important; }
+.layui-btn-normal:hover{ background-color:var(--bp-action-700) !important; }
+.layui-btn:not(.layui-btn-danger):not(.layui-btn-warm):not(.layui-btn-primary).layui-btn-normal{ color:#fff !important; }
 
-/* ---- Primary buttons / tabs / links -> brand green ---- */
-.layui-btn-normal{ background-color:var(--bp-green) !important; }
-.layui-btn-normal:hover{ background-color:var(--bp-green-700) !important; }
-.layui-tab-brief>.layui-tab-title .layui-this{ color:var(--bp-green) !important; }
-.layui-tab-brief>.layui-tab-title .layui-this:after{ border-bottom-color:var(--bp-green) !important; }
+/* tabs / checkboxes / links */
+.layui-tab-brief>.layui-tab-title .layui-this{ color:var(--bp-action) !important; }
+.layui-tab-brief>.layui-tab-title .layui-this:after{ border-bottom-color:var(--bp-action) !important; }
 .layui-form-checked[lay-skin=primary] i,
-.layui-form-checked i{ border-color:var(--bp-green) !important; background-color:var(--bp-green) !important; }
-a:hover{ color:var(--bp-green); }
+.layui-form-checked i{ border-color:var(--bp-action) !important; background-color:var(--bp-action) !important; }
+a:hover{ color:var(--bp-action); }
+.layuimini-loader-inner{ border-top-color:var(--bp-action) !important; border-bottom-color:var(--bp-action) !important; }
 
-/* loading spinner */
-.layuimini-loader-inner{ border-top-color:var(--bp-green) !important; border-bottom-color:var(--bp-green) !important; }
-
-/* ---- BettaPay logo lockup (header + login) ---- */
-.bp-logo{ display:inline-flex; align-items:center; gap:10px; height:60px; line-height:60px; white-space:nowrap; }
-.bp-logo-mark{ flex:0 0 auto; display:block; }
-.bp-logo-text{ font-size:20px; font-weight:700; color:#fff; letter-spacing:.3px;
-  font-family:Avenir,"Helvetica Neue",Arial,Helvetica,sans-serif; }
+/* ---- BettaPay logo lockup in the header (set by miniAdmin.renderLogo) ---- */
+.layui-layout-admin .layuimini-logo a{ display:inline-flex; align-items:center; height:60px; gap:12px; padding:0 16px; }
+.layui-layout-admin .layuimini-logo img{ height:30px; display:block; }
+.bp-sn{ color:#9fd9c3; font-size:12px; font-weight:500; white-space:nowrap; }
 
 /* ============================================================================
    Login page (body gets class="bp-login")
    ============================================================================ */
-body.bp-login{ background:var(--bp-grad) !important; }
-body.bp-login .login-form{ border-radius:10px; box-shadow:0 12px 42px rgba(0,0,0,.28); padding:22px 24px; }
-body.bp-login .logo-title{ padding:6px 0 10px; }
-body.bp-login .logo-title .bp-logo{ height:auto; line-height:1.1; justify-content:center; }
-body.bp-login .logo-title .bp-logo-text{ color:var(--bp-dark); font-size:24px; }
-body.bp-login .bp-subtitle{ text-align:center; color:#5b6b63; font-size:13px; font-weight:600;
-  letter-spacing:.4px; margin-top:8px; }
+body.bp-login{ background:var(--bp-hero) !important; }
+body.bp-login .login-form{ border-radius:10px; box-shadow:0 12px 42px rgba(9,42,30,.35); padding:24px 24px 20px; }
+body.bp-login .logo-title{ padding:4px 0 10px; text-align:center; }
+body.bp-login .logo-title img.bp-login-logo{ height:44px; display:inline-block; }
+body.bp-login .bp-subtitle{ text-align:center; color:#5C8A79; font-size:13px; font-weight:600; letter-spacing:.3px; margin-top:10px; }
 body.bp-login #deviceSn{ text-align:center; color:#9aa3ab; font-size:12px; font-weight:500; margin-top:2px; }
-body.bp-login .layui-btn-normal{ background-color:var(--bp-green) !important; border-color:var(--bp-green) !important; }
+body.bp-login .layui-btn-normal{ background-color:var(--bp-action) !important; border-color:var(--bp-action) !important; }

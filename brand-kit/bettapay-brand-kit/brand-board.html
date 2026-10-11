@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BettaPay Brand Board</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #F3F6F5; color: #092A1E; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; }
+  .page { max-width: 1120px; margin: 0 auto; padding: 48px 16px 80px; display: flex; flex-direction: column; gap: 28px; }
+  .masthead { padding: 8px 4px 4px; }
+  .masthead h1 { margin: 8px 0 6px; font-size: 44px; font-weight: 700; letter-spacing: -0.01em; }
+  .board { background: #FFFFFF; border: 1px solid #D1E0DB; border-radius: 18px; padding: 48px; display: flex; flex-direction: column; gap: 30px; }
+  @media (max-width: 720px) { .board { padding: 28px 20px; } }
+  .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #3F5D53; }
+  h2 { margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -0.01em; }
+  .lede { margin: 0; font-size: 15px; line-height: 1.55; color: #3F5D53; max-width: 720px; }
+  .mono { font-family: ui-monospace, 'SF Mono', Menlo, monospace; }
+  .panel { border: 1px solid #D1E0DB; border-radius: 12px; padding: 26px; }
+  .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  .grid4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+  @media (max-width: 860px) { .grid4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .grid3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 560px) { .grid2, .grid3, .grid4 { grid-template-columns: minmax(0, 1fr); } }
+  .mark { display: block; }
+  .swatch { border: 1px solid #D1E0DB; border-radius: 10px; overflow: hidden; }
+  .swatch .chip { height: 64px; }
+  .swatch .meta { padding: 10px 12px; }
+  .swatch .meta b { display: block; font-size: 13px; font-weight: 600; }
+  .swatch .meta span { font-size: 11px; color: #3F5D53; }
+  .dark-panel { background: #0D1210; border-radius: 14px; padding: 26px; }
+  .dark-panel .swatch { border-color: #2B3B35; }
+  .dark-panel .meta b { color: #F0F4F3; }
+  .dark-panel .meta span { color: #A7BEB6; }
+  .caption { font-size: 12px; color: #3F5D53; }
+  .foot { border-top: 1px solid #D1E0DB; padding-top: 16px; font-size: 12px; line-height: 1.7; color: #3F5D53; }
+  .foot b { color: #092A1E; font-weight: 600; }
+  .typerow { display: flex; align-items: baseline; gap: 24px; padding: 15px 0; border-bottom: 1px solid #D1E0DB; }
+  .typerow:last-child { border-bottom: none; }
+  .typerow .spec { width: 130px; flex: none; font-size: 11px; color: #3F5D53; font-family: ui-monospace, 'SF Mono', Menlo, monospace; }
+  .btn { font-family: inherit; font-size: 14px; font-weight: 500; height: 40px; padding: 0 16px; border-radius: 6px; border: none; cursor: default; }
+  .badge { font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 999px; display: inline-block; }
+  .dont { border: 1px solid #D1E0DB; border-radius: 12px; overflow: hidden; }
+  .dont .stage { height: 150px; background: #FAFAFA; display: flex; align-items: center; justify-content: center; gap: 10px; }
+  .dont .label { padding: 12px 16px; display: flex; gap: 8px; align-items: flex-start; font-size: 13px; line-height: 1.4; }
+  .dont .label svg { flex: none; margin-top: 1px; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="bpg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="hsl(158, 42%, 34%)"/>
+      <stop offset="1" stop-color="hsl(158, 64%, 16%)"/>
+    </linearGradient>
+    <symbol id="bpmark" viewBox="0 0 512 512">
+      <rect width="512" height="512" rx="96" fill="hsl(150, 45%, 95%)"/>
+      <path d="M 276.7846096908265,98 Q 256,86 235.21539030917347,98 L 127.82824023990307,160 Q 107.04363054907654,172 107.04363054907654,196 L 107.04363054907657,320 Q 107.04363054907657,344 127.8282402399031,356 L 235.21539030917344,418 Q 255.99999999999997,430 276.7846096908265,418 L 384.17175976009685,356.00000000000006 Q 404.9563694509234,344.00000000000006 404.9563694509234,320.00000000000006 L 404.9563694509235,196 Q 404.9563694509235,172 384.17175976009696,160 Z M 268.12435565298216,169 Q 256,162 243.87564434701787,169 L 184.98591688967602,203 Q 172.8615612366939,210 172.8615612366939,224 L 172.8615612366939,292 Q 172.8615612366939,306 184.98591688967602,313 L 243.87564434701784,347 Q 255.99999999999997,354 268.1243556529821,347 L 327.01408311032395,313.00000000000006 Q 339.1384387633061,306.00000000000006 339.1384387633061,292.00000000000006 L 339.1384387633061,224 Q 339.1384387633061,210 327.01408311032395,203 Z" fill="url(#bpg)" fill-rule="evenodd"/>
+      <path d="M 64,274 L 218,302" fill="none" stroke="hsl(150, 45%, 95%)" stroke-width="40" stroke-linecap="round"/>
+      <path d="M 448,242 L 294,214" fill="none" stroke="hsl(150, 45%, 95%)" stroke-width="40" stroke-linecap="round"/>
+      <rect x="230" y="232" width="52" height="52" rx="10" fill="url(#bpg)"/>
+      <path d="M 96,0 H 416 Q 512,0 512,96 V 416 Q 512,512 416,512 H 96 Q 0,512 0,416 V 96 Q 0,0 96,0 Z M 276.7846096908265,98 Q 256,86 235.21539030917347,98 L 127.82824023990307,160 Q 107.04363054907654,172 107.04363054907654,196 L 107.04363054907657,320 Q 107.04363054907657,344 127.8282402399031,356 L 235.21539030917344,418 Q 255.99999999999997,430 276.7846096908265,418 L 384.17175976009685,356.00000000000006 Q 404.9563694509234,344.00000000000006 404.9563694509234,320.00000000000006 L 404.9563694509235,196 Q 404.9563694509235,172 384.17175976009696,160 Z" fill="hsl(150, 45%, 95%)" fill-rule="evenodd"/>
+    </symbol>
+    <symbol id="xmark" viewBox="0 0 16 16">
+      <path d="M3 3 L13 13 M13 3 L3 13" stroke="#B3261E" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="page">
+
+  <header class="masthead">
+    <div class="eyebrow">Brand Board · October 2026</div>
+    <h1>BettaPay</h1>
+    <p class="lede">Nigerian payroll &amp; HR. One hue carries the brand — deep green at 158° — set in the native system type stack. Component files for everything on this page sit beside it in this kit.</p>
+  </header>
+
+  <!-- 01 LOGO -->
+  <section class="board">
+    <div>
+      <div class="eyebrow">01</div>
+      <h2>Logo</h2>
+      <p class="lede">The mark is a hexagonal S-fold — a payslip folding through a hex badge — in the brand gradient on a pale green tile. The tile, its corner radius and the gradient are part of the mark.</p>
+    </div>
+    <div class="panel" style="background:#FAFAFA; display:flex; flex-direction:column; align-items:center; gap:28px; padding:40px">
+      <svg class="mark" width="160" height="160" role="img" aria-label="BettaPay mark"><use href="#bpmark"/></svg>
+      <div style="display:flex; align-items:center; gap:16px">
+        <svg class="mark" width="56" height="56" aria-hidden="true"><use href="#bpmark"/></svg>
+        <div style="font-size:44px; font-weight:700; color:#0D3B2A; letter-spacing:-0.01em">BettaPay</div>
+      </div>
+      <div class="caption">Primary lockup — mark + wordmark, system UI stack at weight 700, Primary green.</div>
+    </div>
+    <div class="grid2">
+      <div class="panel" style="display:flex; flex-direction:column; align-items:center; gap:12px">
+        <div style="display:flex; align-items:center; gap:10px">
+          <svg class="mark" width="36" height="36" aria-hidden="true"><use href="#bpmark"/></svg>
+          <div style="font-size:26px; font-weight:700; color:#0D3B2A">BettaPay</div>
+        </div>
+        <div class="caption">On light — wordmark Primary #0D3B2A</div>
+      </div>
+      <div class="panel" style="background:#0D1210; border-color:#0D1210; display:flex; flex-direction:column; align-items:center; gap:12px">
+        <div style="display:flex; align-items:center; gap:10px">
+          <svg class="mark" width="36" height="36" aria-hidden="true"><use href="#bpmark"/></svg>
+          <div style="font-size:26px; font-weight:700; color:#F0F4F3">BettaPay</div>
+        </div>
+        <div class="caption" style="color:#A7BEB6">On dark — wordmark Foreground #F0F4F3</div>
+      </div>
+      <div class="panel" style="background:linear-gradient(135deg,#0D3B2A,#1C4A39,#004D99); border-color:#0D3B2A; display:flex; flex-direction:column; align-items:center; gap:12px">
+        <div style="display:flex; align-items:center; gap:10px">
+          <svg class="mark" width="36" height="36" aria-hidden="true"><use href="#bpmark"/></svg>
+          <div style="font-size:26px; font-weight:700; color:#FFFFFF">BettaPay</div>
+        </div>
+        <div class="caption" style="color:#D1E0DB">On hero gradient — wordmark white</div>
+      </div>
+      <div class="panel" style="background:#EDF8F2; display:flex; flex-direction:column; align-items:center; gap:12px">
+        <svg class="mark" width="52" height="52" aria-hidden="true"><use href="#bpmark"/></svg>
+        <div class="caption">Mark alone on brand tint — app chrome, avatars, favicons</div>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="panel" style="display:flex; flex-direction:column; gap:16px">
+        <div class="eyebrow">Clearspace</div>
+        <div style="display:flex; justify-content:center; padding:8px 0">
+          <div style="position:relative; width:184px; height:184px; display:flex; align-items:center; justify-content:center; border:1.5px dashed #5C8A79; border-radius:10px">
+            <svg class="mark" width="124" height="124" aria-hidden="true"><use href="#bpmark"/></svg>
+            <div style="position:absolute; top:3px; left:50%; transform:translateX(-50%); font-size:11px; font-weight:600; color:#3F5D53">&#188;&#8201;x</div>
+            <div style="position:absolute; left:6px; top:50%; transform:translateY(-50%); font-size:11px; font-weight:600; color:#3F5D53">&#188;&#8201;x</div>
+          </div>
+        </div>
+        <p class="lede" style="font-size:13px">Keep at least &#188; of the tile's height (x) clear on every side. The tile's corner radius (18.75% of its size) is part of the mark — never crop or re-round it.</p>
+      </div>
+      <div class="panel" style="display:flex; flex-direction:column; gap:16px">
+        <div class="eyebrow">Minimum size</div>
+        <div style="display:flex; align-items:flex-end; gap:28px; padding:8px 0">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:8px"><svg class="mark" width="24" height="24" aria-hidden="true"><use href="#bpmark"/></svg><span class="caption">24 px</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:8px"><svg class="mark" width="32" height="32" aria-hidden="true"><use href="#bpmark"/></svg><span class="caption">32 px</span></div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:8px"><svg class="mark" width="48" height="48" aria-hidden="true"><use href="#bpmark"/></svg><span class="caption">48 px</span></div>
+        </div>
+        <p class="lede" style="font-size:13px">Never below 24 px (favicon). Prefer 32 px and up in UI chrome; the inner fold stays legible from 32 px.</p>
+      </div>
+    </div>
+    <div class="foot"><b>Component files:</b> <span class="mono">logo/brand-mark.svg</span> (canonical) · <span class="mono">logo/favicon.png</span> · <span class="mono">logo/lockup-light.svg</span> · <span class="mono">logo/lockup-dark.svg</span> — rendered in-app by <span class="mono">src/components/brand/BrandLogo.tsx</span></div>
+  </section>
+
+  <!-- 02 COLOR -->
+  <section class="board">
+    <div>
+      <div class="eyebrow">02</div>
+      <h2>Color</h2>
+      <p class="lede">One hue carries the brand: Nigerian green at 158°. Everything neutral is a desaturated tint of it. Tokens live as HSL custom properties (<span class="mono">colors/tokens.css</span>) — always use the semantic token, never the raw hex.</p>
+    </div>
+    <div>
+      <div class="eyebrow" style="margin-bottom:12px">Light mode — core</div>
+      <div class="grid4">
+        <div class="swatch"><div class="chip" style="background:#0D3B2A"></div><div class="meta"><b>primary</b><span>158 64% 14% · #0D3B2A</span></div></div>
+        <div class="swatch"><div class="chip" style="background:#1C4A39"></div><div class="meta"><b>primary-variant</b><span>158 45% 20% · #1C4A39</span></div></div>
+        <div class="swatch"><div class="chip" style="background:#326754"></div><div class="meta"><b>primary-glow</b><span>158 35% 30% · #326754</span></div></div>
+        <div class="swatch"><div class="chip" style="background:#092A1E"></div><div class="meta"><b>foreground</b><span>158 64% 10% · #092A1E</span></div></div>
+        <div class="swatch"><div class="chip" style="background:#FAFAFA; border-bottom:1px solid #D1E0DB"></div><div class="meta"><b>background</b><span>0 0% 98% · #FAFAFA</span></div></div>
+        <div class="swatch"><div class="chip" style="background:#F0F5F3; border-bottom:1px solid #D1E0DB"></div><div class="meta"><b>secondary</b><span>158 20% 95% · #F0F5F3</span></div></div>
+        <div class="swatch"><div class="chip" style="background:#5C8A79"></div><div class="meta"><b>muted-foreground</b><span>158 20% 45% · #5C8A79</span></div></div>
+        <div class="swatch"><div class="chip" style="background:#D1E0DB"></div><div class="meta"><b>border</b><span>158 20% 85% · #D1E0DB</span></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="eyebrow" style="margin-bottom:12px">Status</div>
+      <div class="grid4">
+        <div class="swatch"><div class="chip" style="height:48px; background:#16A249"></div><div class="meta"><b>success</b><span>142 76% 36% · #16A249</span></div></div>
+        <div class="swatch"><div class="chip" style="height:48px; background:#FBBD23"></div><div class="meta"><b>warning</b><span>43 96% 56% · #FBBD23</span></div></div>
+        <div class="swatch"><div class="chip" style="height:48px; background:#1F8FFF"></div><div class="meta"><b>info</b><span>210 100% 56% · #1F8FFF</span></div></div>
+        <div class="swatch"><div class="chip" style="height:48px; background:#EF4444"></div><div class="meta"><b>destructive</b><span>0 84% 60% · #EF4444</span></div></div>
+      </div>
+    </div>
+    <div class="dark-panel">
+      <div class="eyebrow" style="color:#A7BEB6; margin-bottom:12px">Dark mode — primary flips light</div>
+      <div class="grid4">
+        <div class="swatch"><div class="chip" style="height:48px; background:#66CCA7"></div><div class="meta"><b>primary</b><span>158 50% 60% · #66CCA7</span></div></div>
+        <div class="swatch"><div class="chip" style="height:48px; background:#0D1210; border-bottom:1px solid #2B3B35"></div><div class="meta"><b>background</b><span>158 15% 6% · #0D1210</span></div></div>
+        <div class="swatch"><div class="chip" style="height:48px; background:#111715"></div><div class="meta"><b>card</b><span>158 15% 8% · #111715</span></div></div>
+        <div class="swatch"><div class="chip" style="height:48px; background:#F0F4F3"></div><div class="meta"><b>foreground</b><span>158 15% 95% · #F0F4F3</span></div></div>
+        <div class="swatch"><div class="chip" style="height:48px; background:#A7BEB6"></div><div class="meta"><b>muted-foreground</b><span>158 15% 70% · #A7BEB6</span></div></div>
+        <div class="swatch"><div class="chip" style="height:48px; background:#2B3B35"></div><div class="meta"><b>border</b><span>158 15% 20% · #2B3B35</span></div></div>
+        <div class="swatch"><div class="chip" style="height:48px; background:#1FE066"></div><div class="meta"><b>success</b><span>142 76% 50% · #1FE066</span></div></div>
+        <div class="swatch"><div class="chip" style="height:48px; background:#3399FF"></div><div class="meta"><b>info</b><span>210 100% 60% · #3399FF</span></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="eyebrow" style="margin-bottom:12px">Gradients</div>
+      <div class="grid3">
+        <div class="swatch"><div class="chip" style="height:72px; background:linear-gradient(135deg,#0D3B2A,#1C4A39)"></div><div class="meta"><b>gradient-primary</b><span>135° · primary → primary-variant</span></div></div>
+        <div class="swatch"><div class="chip" style="height:72px; background:linear-gradient(135deg,#0D3B2A,#1C4A39,#004D99)"></div><div class="meta"><b>gradient-hero</b><span>135° · greens → deep blue #004D99</span></div></div>
+        <div class="swatch"><div class="chip" style="height:72px; background:linear-gradient(180deg,#327B60,#0F4330)"></div><div class="meta"><b>logo gradient</b><span>#327B60 → #0F4330 on tile #EDF8F2</span></div></div>
+      </div>
+    </div>
+    <div class="foot"><b>Contrast:</b> body text uses foreground on background (16.2:1). muted-foreground #5C8A79 is for secondary text at 14 px+ only — it sits near 3.3:1 on white, so never use it for small essential copy. White text goes on primary, primary-variant and the gradients, not on success/warning/info fills smaller than badges.</div>
+  </section>
+
+  <!-- 03 TYPOGRAPHY -->
+  <section class="board">
+    <div>
+      <div class="eyebrow">03</div>
+      <h2>Typography</h2>
+      <p class="lede">BettaPay sets everything in the native system UI stack — no webfont. It loads instantly on the low-bandwidth connections many Nigerian SMEs run on, and payroll tables read like the OS the person already trusts.</p>
+    </div>
+    <div class="panel" style="background:#FAFAFA; display:flex; align-items:center; gap:32px; flex-wrap:wrap">
+      <div style="font-size:100px; font-weight:700; line-height:1; color:#0D3B2A">Aa</div>
+      <div style="display:flex; flex-direction:column; gap:8px; min-width:260px">
+        <div style="font-size:18px; font-weight:600">System UI stack</div>
+        <div class="caption mono" style="font-size:13px">system-ui, -apple-system, 'Segoe UI', sans-serif</div>
+        <div class="caption" style="font-size:13px">Weights in use: 400 regular · 500 medium · 600 semibold · 700 bold</div>
+      </div>
+    </div>
+    <div class="panel" style="padding:6px 26px">
+      <div class="typerow"><div class="spec">30px · 700</div><div style="font-size:30px; font-weight:700">Employee Management</div></div>
+      <div class="typerow"><div class="spec">24px · 600</div><div style="font-size:24px; font-weight:600">Employee Directory</div></div>
+      <div class="typerow"><div class="spec">16px · 400</div><div style="font-size:16px">Body — manage your workforce and employee information.</div></div>
+      <div class="typerow"><div class="spec">14px · 400</div><div style="font-size:14px">Small body — table cells, descriptions, form help text.</div></div>
+      <div class="typerow"><div class="spec">12px · 400</div><div style="font-size:12px; color:#5C8A79">Caption in muted-foreground — timestamps, counts, footnotes.</div></div>
+      <div class="typerow"><div class="spec">14px · caps</div><div style="font-size:14px; text-transform:uppercase; letter-spacing:0.1em; color:#3F5D53">Eyebrow label — tracking-widest</div></div>
+    </div>
+    <div class="grid2">
+      <div class="panel" style="display:flex; flex-direction:column; gap:12px">
+        <div class="eyebrow">Currency</div>
+        <div style="font-size:30px; font-weight:700; font-variant-numeric:tabular-nums">&#8358;1,250,000.00</div>
+        <p class="lede" style="font-size:13px">All naira amounts render through <span class="mono">formatNaira</span> (lib/tax/format.ts). One deliberate exception: jsPDF payslips print the <span class="mono">NGN</span> prefix because PDF base fonts lack &#8358;.</p>
+      </div>
+      <div class="panel" style="display:flex; flex-direction:column; gap:12px">
+        <div class="eyebrow">Dates</div>
+        <div style="font-size:30px; font-weight:700">12 Jan 2024</div>
+        <p class="lede" style="font-size:13px">Dates display in West Africa Time via <span class="mono">formatDate</span> / <span class="mono">formatMonthYear</span> (lib/datetime/wat.ts) — day, short month, year, no ordinal suffixes.</p>
+      </div>
+    </div>
+    <div class="foot"><b>Rules:</b> headings bold with tight tracking, never all-caps except eyebrow labels. Numbers in payroll tables take <span class="mono">tabular-nums</span> so columns of naira align. Don't introduce a webfont without revisiting page weight on 3G.</div>
+  </section>
+
+  <!-- 04 UI ELEMENTS -->
+  <section class="board">
+    <div>
+      <div class="eyebrow">04</div>
+      <h2>UI Elements</h2>
+      <p class="lede">shadcn/ui on Tailwind semantic tokens. The base radius is 0.5rem; shadows are green-tinted, never gray. Build with <span class="mono">bg-background / bg-card / text-muted-foreground</span> — never <span class="mono">bg-white</span> or a raw hex, so dark mode holds.</p>
+    </div>
+    <div class="grid2">
+      <div class="panel" style="display:flex; flex-direction:column; gap:18px">
+        <div class="eyebrow">Buttons</div>
+        <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center">
+          <button class="btn" style="background:#0D3B2A; color:#FAFAFA">Add Employee</button>
+          <button class="btn" style="background:#F0F5F3; color:#0D3B2A">Secondary</button>
+          <button class="btn" style="background:#FFFFFF; color:#092A1E; border:1px solid #D1E0DB">Outline</button>
+          <button class="btn" style="background:transparent; color:#0D3B2A">Ghost</button>
+          <button class="btn" style="background:#EF4444; color:#FFFFFF">Terminate</button>
+        </div>
+        <div class="caption">40 px tall, radius 6 px, weight 500. Destructive actions confirm through an AlertDialog, never a native confirm().</div>
+        <div class="eyebrow">Status badges</div>
+        <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center">
+          <span class="badge" style="background:#16A249; color:#FAFAFA">Active</span>
+          <span class="badge" style="background:#FBBD23; color:#171717">Pending</span>
+          <span class="badge" style="background:#1F8FFF; color:#FAFAFA">Invited</span>
+          <span class="badge" style="background:#EF4444; color:#FFFFFF">Terminated</span>
+          <span class="badge" style="background:#F0F5F3; color:#0D3B2A">Draft</span>
+        </div>
+      </div>
+      <div class="panel" style="background:#FAFAFA; display:flex; flex-direction:column; gap:18px">
+        <div class="eyebrow">Card &amp; form</div>
+        <div style="background:linear-gradient(180deg,#FFFFFF,#F3F6F5); border:1px solid #D1E0DB; border-radius:8px; padding:20px; box-shadow:0 2px 10px -2px rgba(13,59,42,0.1); display:flex; flex-direction:column; gap:8px">
+          <div style="font-size:13px; font-weight:500; color:#5C8A79">Total Employees</div>
+          <div style="font-size:28px; font-weight:700">42</div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px">
+          <label for="bb-email" style="font-size:13px; font-weight:500">Work email</label>
+          <input id="bb-email" type="email" placeholder="ada@company.ng" style="font-family:inherit; font-size:14px; height:40px; padding:0 12px; border-radius:6px; border:1px solid #D1E0DB; background:#FFFFFF; color:#092A1E; width:100%">
+        </div>
+        <div class="caption">Cards: radius 8 px, gradient-card fill, shadow-card. Focus rings use the ring token (primary).</div>
+      </div>
+    </div>
+    <div class="grid3">
+      <div class="panel" style="display:flex; flex-direction:column; gap:14px; align-items:center">
+        <div style="width:150px; height:64px; background:#FFFFFF; border:1px solid #D1E0DB; border-radius:8px; box-shadow:0 2px 10px -2px rgba(13,59,42,0.1)"></div>
+        <div style="text-align:center"><div style="font-size:13px; font-weight:600">shadow-card</div><div class="caption mono" style="font-size:11px">0 2px 10px -2px primary/10%</div></div>
+      </div>
+      <div class="panel" style="display:flex; flex-direction:column; gap:14px; align-items:center">
+        <div style="width:150px; height:64px; background:#FFFFFF; border:1px solid #D1E0DB; border-radius:8px; box-shadow:0 4px 20px -4px rgba(13,59,42,0.15)"></div>
+        <div style="text-align:center"><div style="font-size:13px; font-weight:600">shadow-elegant</div><div class="caption mono" style="font-size:11px">0 4px 20px -4px primary/15%</div></div>
+      </div>
+      <div class="panel" style="display:flex; flex-direction:column; gap:14px; align-items:center">
+        <div style="width:150px; height:64px; background:#FFFFFF; border:1px solid #D1E0DB; border-radius:8px; box-shadow:0 0 30px rgba(50,103,84,0.3)"></div>
+        <div style="text-align:center"><div style="font-size:13px; font-weight:600">shadow-glow</div><div class="caption mono" style="font-size:11px">0 0 30px primary-glow/30% — logo only</div></div>
+      </div>
+    </div>
+    <div class="foot"><b>Radius scale:</b> inputs &amp; buttons 6 px (radius − 2) · cards &amp; tables 8 px (--radius: 0.5rem) · panels 12–16 px · badges full. <b>Motion:</b> transition-smooth 0.3s cubic-bezier(0.4, 0, 0.2, 1) for layout, transition-fast 0.2s ease-out for hovers.</div>
+  </section>
+
+  <!-- 05 LOGO USAGE -->
+  <section class="board">
+    <div>
+      <div class="eyebrow">05</div>
+      <h2>Logo Usage</h2>
+      <p class="lede">Always place the mark from <span class="mono">logo/brand-mark.svg</span> (in app code, via the <span class="mono">BrandLogo</span> component). The six below are the ways it most often goes wrong.</p>
+    </div>
+    <div class="grid3">
+      <div class="dont">
+        <div class="stage"><svg class="mark" width="150" height="72" preserveAspectRatio="none" aria-label="Stretched mark" role="img"><use href="#bpmark"/></svg></div>
+        <div class="label"><svg width="16" height="16" aria-hidden="true"><use href="#xmark"/></svg><div><b>Don't stretch.</b> Scale uniformly only.</div></div>
+      </div>
+      <div class="dont">
+        <div class="stage"><svg class="mark" width="100" height="100" style="filter:hue-rotate(160deg) saturate(1.6)" aria-label="Recolored mark" role="img"><use href="#bpmark"/></svg></div>
+        <div class="label"><svg width="16" height="16" aria-hidden="true"><use href="#xmark"/></svg><div><b>Don't recolor.</b> The green gradient and tile are fixed.</div></div>
+      </div>
+      <div class="dont">
+        <div class="stage"><svg class="mark" width="100" height="100" style="transform:rotate(-18deg)" aria-label="Rotated mark" role="img"><use href="#bpmark"/></svg></div>
+        <div class="label"><svg width="16" height="16" aria-hidden="true"><use href="#xmark"/></svg><div><b>Don't rotate or tilt</b> — the fold reads upright.</div></div>
+      </div>
+      <div class="dont">
+        <div class="stage" style="background:repeating-linear-gradient(45deg,#16A249 0 22px,#FBBD23 22px 44px,#1F8FFF 44px 66px)"><svg class="mark" width="100" height="100" aria-label="Mark on a busy background" role="img"><use href="#bpmark"/></svg></div>
+        <div class="label"><svg width="16" height="16" aria-hidden="true"><use href="#xmark"/></svg><div><b>Don't place on busy or clashing fills.</b> Use the approved backgrounds.</div></div>
+      </div>
+      <div class="dont">
+        <div class="stage"><svg class="mark" width="100" height="100" style="filter:drop-shadow(0 0 16px #E040FB)" aria-label="Mark with added glow" role="img"><use href="#bpmark"/></svg></div>
+        <div class="label"><svg width="16" height="16" aria-hidden="true"><use href="#xmark"/></svg><div><b>Don't add effects.</b> Only the token shadow-glow, and only in hero contexts.</div></div>
+      </div>
+      <div class="dont">
+        <div class="stage"><svg class="mark" width="44" height="44" aria-hidden="true"><use href="#bpmark"/></svg><span style="font-family:Georgia,'Times New Roman',serif; font-style:italic; font-size:30px; color:#0D3B2A">BettaPay</span></div>
+        <div class="label"><svg width="16" height="16" aria-hidden="true"><use href="#xmark"/></svg><div><b>Don't restyle the wordmark.</b> System stack, weight 700, no italics.</div></div>
+      </div>
+    </div>
+    <div class="panel" style="background:#EDF8F2; display:flex; gap:14px; align-items:flex-start">
+      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" style="flex:none; margin-top:2px"><path d="M4 10.5 L8.5 15 L16 5.5" stroke="#0D3B2A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      <div style="font-size:14px; line-height:1.6"><b>Do:</b> use the SVG untouched on background, white, dark, brand tint or the hero gradient · keep &#188;-tile clearspace · hold the 24 px floor · regenerate both <span class="mono">brand-mark.svg</span> and <span class="mono">favicon.png</span> together from the parametric builder (kept in the rebrand commit history) if the mark ever changes.</div>
+    </div>
+  </section>
+
+  <footer class="caption" style="padding:4px">BettaPay brand kit · colors from src/index.css · mark from public/brand-mark.svg · generated October 2026</footer>
+
+</div>
+</body>
+</html>
