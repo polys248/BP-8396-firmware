@@ -155,30 +155,41 @@
             }
         });
 
-        // ---- live camera (snapshot polling; pauses when the tab is hidden) ----
+        // ---- live camera (snapshot polling; fail-fast w/ backoff; pauses when hidden) ----
         (function () {
-            var on = false, timer = null, busy = false, lastUrl = null;
+            var on = false, timer = null, busy = false, lastUrl = null, fails = 0;
             var img = document.getElementById('camImg'), ph = document.getElementById('camPh'),
                 btn = document.getElementById('camToggle'), st = document.getElementById('camStatus');
             if (!btn) return;
             function stop() { on = false; if (timer) { clearTimeout(timer); timer = null; } btn.textContent = 'Start live view'; st.textContent = ''; }
-            function schedule() { if (on) timer = setTimeout(tick, 1000); }
+            function schedule() { if (on) timer = setTimeout(tick, fails > 2 ? 5000 : 1000); }
             function tick() {
                 if (!on) return;
                 if (busy || document.hidden) { schedule(); return; }
                 busy = true;
-                fetch('/api/System/GetFile', { method: 'POST', headers: { Authorization: 'Bearer ' + faceAPI.GetJWTToken(), 'Content-Type': 'application/json' }, body: JSON.stringify({ FileType: 'Snapshot', FileIndex: 1 }) })
+                var ctrl = new AbortController();
+                var to = setTimeout(function () { ctrl.abort(); }, 6000); // fail fast; never pile up
+                fetch('/api/System/GetFile', {
+                    method: 'POST', signal: ctrl.signal,
+                    headers: { Authorization: 'Bearer ' + faceAPI.GetJWTToken(), 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ FileType: 'Snapshot', FileIndex: 1 })
+                })
                     .then(function (r) { if (!r.ok) throw 0; return r.blob(); })
                     .then(function (b) {
+                        clearTimeout(to);
                         var u = URL.createObjectURL(b);
                         img.src = u; img.style.display = 'block'; ph.style.display = 'none'; st.textContent = 'live';
                         if (lastUrl) URL.revokeObjectURL(lastUrl); lastUrl = u;
-                        busy = false; schedule();
+                        fails = 0; busy = false; schedule();
                     })
-                    .catch(function () { st.textContent = 'no signal'; busy = false; schedule(); });
+                    .catch(function () {
+                        clearTimeout(to); fails++;
+                        st.textContent = fails > 2 ? 'no signal (not reachable over remote tunnel — try on the LAN)' : 'connecting…';
+                        busy = false; schedule();
+                    });
             }
             btn.addEventListener('click', function () {
-                if (on) { stop(); } else { on = true; btn.textContent = 'Stop live view'; st.textContent = 'starting…'; tick(); }
+                if (on) { stop(); } else { on = true; fails = 0; btn.textContent = 'Stop live view'; st.textContent = 'starting…'; tick(); }
             });
         })();
     });

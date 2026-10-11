@@ -258,20 +258,26 @@
                 })
 
             }
-            // BettaPay: never let a failed startup call hang the loading overlay —
-            // render the admin shell regardless so the UI always comes up.
-            try {
-                await getSNFn().then(async (result) => {
-                    if (result.result == true) {
-                        SetLanguageDeviceSN(result.content);
-                        setLanguage();
-                        $("#deviceSn").html(result.content);
-                        await GetFuncList();
-                    }
-                });
-            } catch (e) {
-                console.warn('[bettapay] startup API failed, rendering anyway:', e);
-            }
+            // BettaPay: render the admin shell even if a startup call is slow, hung,
+            // or failed. A hung request (common over the remote tunnel) must never block
+            // miniAdmin.render — otherwise the loading overlay spins forever. Cap the
+            // wait at 8s, then render regardless (menu shows all items if FunctionList
+            // hasn't returned; it's reconciled when it does).
+            await Promise.race([
+                (async () => {
+                    try {
+                        await getSNFn().then(async (result) => {
+                            if (result.result == true) {
+                                SetLanguageDeviceSN(result.content);
+                                setLanguage();
+                                $("#deviceSn").html(result.content);
+                                await GetFuncList();
+                            }
+                        });
+                    } catch (e) { console.warn('[bettapay] startup API error:', e); }
+                })(),
+                new Promise(function (r) { setTimeout(r, 8000); })
+            ]);
             // faceAPI.DeviceFunctionList.Face=false;
             // faceAPI.DeviceFunctionList.Lift=false;
             // faceAPI.DeviceFunctionList.WIFI=false;
