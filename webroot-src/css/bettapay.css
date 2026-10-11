@@ -39,6 +39,16 @@
 /* ---- Primary / action buttons -> vivid brand green ---- */
 .layui-btn-normal{ background-color:var(--bp-action) !important; border-color:var(--bp-action) !important; }
 .layui-btn-normal:hover{ background-color:var(--bp-action-700) !important; }
+/* Refresh / Reset are non-destructive -> neutral outlined, not danger-red.
+   (Delete and other genuinely destructive layui-btn-danger buttons stay red.) */
+.layui-btn[lay-filter="btn-data-refresh"],
+.layui-btn[lay-filter="data-reset-btn"]{
+  background:#fff !important; color:#0D3B2A !important; border:1px solid #D1E0DB !important;
+}
+.layui-btn[lay-filter="btn-data-refresh"]:hover,
+.layui-btn[lay-filter="data-reset-btn"]:hover{
+  background:#EDF8F2 !important; border-color:var(--bp-action) !important;
+}
 .layui-btn:not(.layui-btn-danger):not(.layui-btn-warm):not(.layui-btn-primary).layui-btn-normal{ color:#fff !important; }
 
 /* tabs / checkboxes / links */
