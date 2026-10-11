@@ -22,7 +22,8 @@ live outside the repo.
 | `build_rootfs_tier1d.sh` | Test/dev rootfs image builder (dormant provisioning). |
 | `build_webroot_pkg.sh` | Builds a web-UI package (`.tgz`) for webflash upload / OTA. |
 | `ui_hash.sh` | Content-hash of `webroot-src` used as the UI version (`.uiver`), so firmware bundle and UI package stay in sync. |
-| Docs | `FIRMWARE_CLAIM_CONTRACT.md`, `SERVER_SPEC*.md`, `OTA_BUILD_TEST.md`, `DEPLOY.txt`. |
+| `PROVISIONING.md` | **Carton-to-fielded-unit provisioning runbook** (PkgBurnPro flash → zero-touch first boot → server-side reader registration → verify). |
+| Docs | `PROVISIONING.md`, `FIRMWARE_CLAIM_CONTRACT.md`, `SERVER_SPEC*.md`, `OTA_BUILD_TEST.md`, `DEPLOY.txt` (legacy `/data` bundle). |
 
 ## Build (in WSL)
 
