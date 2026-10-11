@@ -33,6 +33,12 @@
         display: flex; align-items: center; justify-content: center; font-size: 19px; flex: 0 0 auto; }
     .bp-quick .qt { font-weight: 700; font-size: 15px; }
     .bp-quick .qs { font-size: 12px; color: #5C8A79; margin-top: 2px; }
+    .bp-cam { max-width: 520px; background: #fff; border: 1px solid #D1E0DB; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px -2px rgba(13, 59, 42, .1); }
+    .bp-cam-view { position: relative; width: 100%; height: 360px; background: #0b0f0d; display: flex; align-items: center; justify-content: center; }
+    .bp-cam-view img { max-width: 100%; max-height: 100%; object-fit: contain; display: none; }
+    .bp-cam-ph { color: #5C8A79; font-size: 13px; }
+    .bp-cam-bar { display: flex; align-items: center; gap: 12px; padding: 10px 12px; }
+    .bp-cam-status { font-size: 12px; color: #5C8A79; }
 </style>
 
 <div class="bp-dash">
@@ -69,10 +75,22 @@
 
     <div class="bp-sec">Quick actions</div>
     <div class="bp-quick">
-        <a lay-href="page/people/people.html"><span class="ico"><i class="fa fa-users"></i></span><span><div class="qt">People</div><div class="qs">Enroll &amp; manage</div></span></a>
-        <a lay-href="page/report/Identify.html"><span class="ico"><i class="fa fa-list-alt"></i></span><span><div class="qt">Records</div><div class="qs">Identification log</div></span></a>
-        <a lay-href="page/device/doorsetting.html"><span class="ico"><i class="fa fa-lock"></i></span><span><div class="qt">Door Access</div><div class="qs">Access control</div></span></a>
-        <a lay-href="page/device/SystemSetting.html"><span class="ico"><i class="fa fa-cog"></i></span><span><div class="qt">Settings</div><div class="qs">Device configuration</div></span></a>
+        <a layuimini-href="page/people/people.html" data-title="People"><span class="ico"><i class="fa fa-users"></i></span><span><div class="qt">People</div><div class="qs">Enroll &amp; manage</div></span></a>
+        <a layuimini-href="page/report/Identify.html" data-title="Records"><span class="ico"><i class="fa fa-list-alt"></i></span><span><div class="qt">Records</div><div class="qs">Identification log</div></span></a>
+        <a layuimini-href="page/device/doorsetting.html" data-title="Door Access"><span class="ico"><i class="fa fa-lock"></i></span><span><div class="qt">Door Access</div><div class="qs">Access control</div></span></a>
+        <a layuimini-href="page/device/SystemSetting.html" data-title="Settings"><span class="ico"><i class="fa fa-cog"></i></span><span><div class="qt">Settings</div><div class="qs">Device configuration</div></span></a>
+    </div>
+
+    <div class="bp-sec">Live camera</div>
+    <div class="bp-cam">
+        <div class="bp-cam-view">
+            <img id="camImg" alt="camera">
+            <div class="bp-cam-ph" id="camPh">Live view is off</div>
+        </div>
+        <div class="bp-cam-bar">
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="camToggle">Start live view</button>
+            <span class="bp-cam-status" id="camStatus"></span>
+        </div>
     </div>
 </div>
 
@@ -136,5 +154,32 @@
                 else { loadToday(Date.now()); } // fall back to browser time only if device time missing
             }
         });
+
+        // ---- live camera (snapshot polling; pauses when the tab is hidden) ----
+        (function () {
+            var on = false, timer = null, busy = false, lastUrl = null;
+            var img = document.getElementById('camImg'), ph = document.getElementById('camPh'),
+                btn = document.getElementById('camToggle'), st = document.getElementById('camStatus');
+            if (!btn) return;
+            function stop() { on = false; if (timer) { clearTimeout(timer); timer = null; } btn.textContent = 'Start live view'; st.textContent = ''; }
+            function schedule() { if (on) timer = setTimeout(tick, 1000); }
+            function tick() {
+                if (!on) return;
+                if (busy || document.hidden) { schedule(); return; }
+                busy = true;
+                fetch('/api/System/GetFile', { method: 'POST', headers: { Authorization: 'Bearer ' + faceAPI.GetJWTToken(), 'Content-Type': 'application/json' }, body: JSON.stringify({ FileType: 'Snapshot', FileIndex: 1 }) })
+                    .then(function (r) { if (!r.ok) throw 0; return r.blob(); })
+                    .then(function (b) {
+                        var u = URL.createObjectURL(b);
+                        img.src = u; img.style.display = 'block'; ph.style.display = 'none'; st.textContent = 'live';
+                        if (lastUrl) URL.revokeObjectURL(lastUrl); lastUrl = u;
+                        busy = false; schedule();
+                    })
+                    .catch(function () { st.textContent = 'no signal'; busy = false; schedule(); });
+            }
+            btn.addEventListener('click', function () {
+                if (on) { stop(); } else { on = true; btn.textContent = 'Stop live view'; st.textContent = 'starting…'; tick(); }
+            });
+        })();
     });
 </script>
