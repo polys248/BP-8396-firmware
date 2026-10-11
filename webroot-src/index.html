@@ -208,6 +208,9 @@
             var faceAPI;
 
             $ = layui.jquery;
+            // BettaPay: always fetch page fragments fresh so a UI update isn't masked by
+            // the browser's AJAX cache (adds a cache-buster to GETs; POST APIs unaffected).
+            $.ajaxSetup({ cache: false });
             var layer = layui.layer,
                 miniAdmin = layui.miniAdmin,
                 faceAPI = layui.faceAPI;
