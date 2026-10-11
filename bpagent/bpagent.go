@@ -518,6 +518,7 @@ func handleSession(client *http.Client, sn, tun, id string, port int, sendCtl fu
 		logln("session", id, "open_failed port", port, "-", reason)
 		sendCtl(map[string]interface{}{"t": "open_failed", "id": id, "port": port, "reason": reason})
 	}
+	t0 := time.Now()
 	if !allowPorts[port] {
 		openFailed("port not allowed: " + strconv.Itoa(port))
 		return
@@ -528,16 +529,23 @@ func handleSession(client *http.Client, sn, tun, id string, port int, sendCtl fu
 		return
 	}
 	defer rawtcp.Close()
+	dialMs := time.Since(t0).Milliseconds()
 	// For HTTPS-only local services (device UI on 443), terminate TLS here and relay
-	// plaintext over the tunnel. Loopback to the device's own self-signed cert, so
-	// skip verification; the tunnel itself is the authenticated/encrypted channel.
+	// plaintext over the tunnel. Loopback to the device's own self-signed cert, so skip
+	// verification. Bound the handshake (8s) so a slow/overloaded device web server fails
+	// fast with open_failed instead of hanging until the hub gives up (~15s).
 	var tcp net.Conn = rawtcp
+	var hsMs int64
 	if tlsPorts[port] {
+		hs := time.Now()
+		rawtcp.SetDeadline(time.Now().Add(8 * time.Second))
 		tc := tls.Client(rawtcp, &tls.Config{InsecureSkipVerify: true, ServerName: "localhost"})
 		if err := tc.Handshake(); err != nil {
 			openFailed("tls handshake failed: " + err.Error())
 			return
 		}
+		rawtcp.SetDeadline(time.Time{}) // clear; relay phase runs without a deadline
+		hsMs = time.Since(hs).Milliseconds()
 		tcp = tc
 	}
 	q := url.Values{"id": {id}, "sn": {sn}, "token": {tun}}
@@ -566,12 +574,15 @@ func handleSession(client *http.Client, sn, tun, id string, port int, sendCtl fu
 	// NOT tear the session down when the request direction ends — only when the DEVICE
 	// closes its side. That guarantees every byte of the declared Content-Length reaches
 	// the proxy before we close.
-	io.Copy(nc, tcp)
+	n, _ := io.Copy(nc, tcp)
 
 	// Device closed: close the tunnel session cleanly (proper close frame, not CloseNow)
 	// so the proxy sees the close and the length is honoured. This also unblocks the
 	// request goroutine's read above, so it exits without leaking.
 	nc.Close()
+	// Per-session timing so a stall can be correlated with the hub logs (is the device
+	// leg — loopback connect or TLS handshake — slow, or the relay?).
+	logln("session", id, "port", port, "dialMs", dialMs, "hsMs", hsMs, "respBytes", n, "totalMs", time.Since(t0).Milliseconds())
 }
 
 func main() {
