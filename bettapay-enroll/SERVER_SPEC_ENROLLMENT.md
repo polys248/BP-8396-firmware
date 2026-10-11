@@ -1,5 +1,29 @@
 # BettaPay org-enrollment backend — implementation guide (server team)
 
+> ## ⚠ SCOPE LOCK — both directions confirmed on the existing protocol (2026-10-11)
+> Server team verified against the test project: **export carries `FaceFeature` + MD5 + FP/palm
+> arrays + photo (nothing stripped), and their `AddPeople` replays the whole record.** So the
+> feature rides the attendance protocol end-to-end and **ships no device code** —
+> **`bpenroll`, `enroll-push` and `enroll-pull` are all dropped**, along with the `org` /
+> `org_user` sections and any plaintext-token lookup (those below are historical; don't build
+> from them). What the server builds: move biometrics/photo/PIN/ID into per-tenant encrypted
+> storage, replay the full record to every reader of the tenant, protect stored biometrics from a
+> detail-less push, auto-fan-out on capture, sanitize text server-side, gate by the attendance
+> add-on, and purge + `DeletePeople` on termination. **PIN + ID number ARE synced in v1**
+> (supersedes the "PINs not synced in v1" note below).
+>
+> Three firmware questions answered (full detail in `MSG_SERVER_PUSHPEOPLE_ANSWERS.md`):
+> - **MD5 = hash of the DECODED bytes, hex, UPPERCASE** (Photo: the image file via
+>   `CreateFileMD5_Hex`; FaceFeature: the raw template via `CreateBytesMD5_Hex` over the blob).
+>   Never hash the base64 text, or every record looks changed.
+> - **Photo (and FaceFeature) accept a URL OR inline base64** — `AddDownloadPhoto`/`AddDownloadFace`
+>   test `HTTPUtil::IsHttpUrl`; URL ⇒ device downloads it (must be reachable from the terminal and
+>   outlive the retry queue), non-URL ⇒ base64. Avatar URLs are fine; no need to inline.
+> - **UserID-only push = device has NO record for that id** (a tombstone; `FindByUserID` miss).
+>   The device always includes the full record when it has one, so **don't call back to fetch**;
+>   key off the op-code field. **Ack every push with `200 {"code":1}`** or the device re-sends the
+>   whole queue indefinitely.
+>
 > ## ⚠ REVISION — aligned with BettaPay's multi-tenant model (2026-10-11)
 > Server-team review settled the architecture. **Do not create `org` / `org_user` tables.**
 > Reuse the existing entities; only the biometric data + sync state are new:
