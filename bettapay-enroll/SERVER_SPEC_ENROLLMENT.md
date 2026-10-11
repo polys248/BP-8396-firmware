@@ -38,9 +38,32 @@
 >   face/finger/palm feature. If the employee isn't on the device yet (attendance hasn't pushed
 >   them), **skip and retry next pull** (don't create). Tombstone / termination → remove the
 >   local biometric.
-> - **Open device-side item I'm verifying:** the exact local API to *update* an existing
->   person's biometric (`People/Edit` vs a `People/New` upsert vs a feature-attach call) —
->   confirming before building the import path.
+> - **Biometric-update path — VERIFIED (2026-10-11), and it's better than expected:**
+>   The device's **person record already stores the biometrics as first-class columns** —
+>   the people-table upsert is `INSERT ... (userid, name, cardid, password, fingerprint_1,
+>   fingerprint_2, fingerprint_3, department, authority, palm_record_id_right,
+>   palm_record_id_left, face_feat, face_points, face_norm, …) ON CONFLICT(userid) DO UPDATE
+>   SET … face_feat=excluded.face_feat, …`. And the **attendance docking command that already
+>   pushes employees — `AddPeople` (`HTTPClient_HTTPv2::DownloadAddPeople`) — writes to that
+>   same upsert, including the biometric fields.** So:
+>   - **IMPORT (backend → device) should ride the existing `AddPeople` command, not a new agent.**
+>     BettaPay already pushes each employee via `AddPeople` with `UserID = employee uuid`; once
+>     it has the template, it just populates `face_feat` (+ `face_points`, `face_norm`, the
+>     fingerprint/palm fields) in that same command. aio upserts it and the recogniser picks it
+>     up. No admin JWT, no local HTTP call, no person-creation race. **Please confirm your
+>     `AddPeople` JSON schema exposes the face-feature field** (the device clearly supports it;
+>     you may just not be populating it yet) — if so, import needs *zero* new device code.
+>   - **EXPORT (device → backend, after a local capture)** is the only genuinely new device job:
+>     `bpenroll` reads the just-enrolled person's `face_feat`/`face_points`/`face_norm` (+ finger/
+>     palm) from the people DB **directly (root, no JWT)**, keyed by `userid = employee uuid`, and
+>     POSTs to `enroll-push`.
+>   - A face template is the **triple `face_feat` + `face_points` + `face_norm`** (not a single
+>     blob), plus `fingerprint_1..3` and the palm refs — sync all parts together.
+>   - The local web `POST /api/People/New` (multipart `PeopleJson` + optional `Photo` file, with
+>     `FaceFeature`/`Fingerprints[]`/`Palmveins[]`) is a working upsert too, **but it needs the
+>     admin JWT**, so it's a fallback, not the primary path.
+> - **Still to confirm device-side:** the people-DB path/table name for the export read, and
+>   that `face_feat`/`points`/`norm` map cleanly to/from whatever BettaPay carries in `AddPeople`.
 >
 > The sections below keep the crypto, edge-function shapes, wire contract, deployment and
 > tests — **read them with `org → tenant`, `org_user → employees`, `user_key → employee uuid`,
