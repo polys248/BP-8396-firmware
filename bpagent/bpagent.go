@@ -53,6 +53,11 @@ var (
 	sessInflight int64 // atomic: sessions currently holding a slot
 )
 
+// buildID is stamped at build time via -ldflags "-X main.buildID=..." and logged
+// at startup, so the running agent's build is identifiable in the log (and matches
+// the number reported to the hub team). Defaults to "dev" for un-stamped builds.
+var buildID = "dev"
+
 //go:embed cacert.pem
 var caPEM []byte
 
@@ -607,7 +612,16 @@ func handleSession(client *http.Client, sn, tun, id string, port int, sendCtl fu
 	nc.Close()
 	// Per-session timing so a stall can be correlated with the hub logs (is the device
 	// leg — loopback connect or TLS handshake — slow, or the relay?).
-	logln("session", id, "port", port, "waitMs", waitMs, "inflight", inflight, "dialMs", dialMs, "hsMs", hsMs, "respBytes", n, "totalMs", time.Since(t0).Milliseconds())
+	totalMs := time.Since(t0).Milliseconds()
+	logln("session", id, "port", port, "waitMs", waitMs, "inflight", inflight, "dialMs", dialMs, "hsMs", hsMs, "respBytes", n, "totalMs", totalMs)
+	// Mirror the same metrics to the hub on the control channel, keyed by the hub's own
+	// session id, so one stall is one search across both logs. Purely additive — the
+	// byte-exact data relay above is untouched; this rides the existing control socket.
+	sendCtl(map[string]interface{}{
+		"t": "session_done", "id": id, "port": port,
+		"waitMs": waitMs, "inflight": inflight, "dialMs": dialMs,
+		"hsMs": hsMs, "respBytes": n, "totalMs": totalMs,
+	})
 }
 
 func main() {
@@ -626,6 +640,7 @@ func main() {
 		}
 	}
 	sessionSem = make(chan struct{}, maxSessions)
+	logln("bpagent build", buildID, "mode", mode, "maxSessions", maxSessions)
 	if mode == "claim" {
 		runClaim()
 	} else {
