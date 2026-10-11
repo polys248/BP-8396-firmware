@@ -91,16 +91,40 @@
     layui.use(['jquery', 'faceAPI'], function () {
         var $ = layui.jquery, faceAPI = layui.faceAPI;
 
-        // ---- live clock, seeded from device time then ticked locally ----
-        var clockBase = null, clockSyncAt = null;
+        // ---- live clock: seeded from the DEVICE's own time + timezone, then ticked
+        // locally. Rendered in the device's zone (not the operator's browser), so it
+        // matches what the unit shows on-screen no matter where it's viewed from. ----
+        var clockBase = null, clockSyncAt = null, tzOffMin = null; // tzOffMin null = unknown -> browser-local
         function pad(n) { return (n < 10 ? '0' : '') + n; }
         var MO = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        // Parse the device UTCTimeZone ("UTC+01:00" / "UTC-05:30" / "UTC") to minutes east of UTC.
+        function parseTz(z) {
+            if (z === 0) return 0;
+            if (typeof z !== 'string') return null;
+            if (/^\s*UTC\s*$/i.test(z)) return 0;
+            var m = z.match(/UTC\s*([+-])\s*(\d{1,2}):?(\d{2})?/i);
+            if (!m) return null;
+            var mins = parseInt(m[2], 10) * 60 + (m[3] ? parseInt(m[3], 10) : 0);
+            return m[1] === '-' ? -mins : mins;
+        }
+        function devNow() { return new Date(clockBase.getTime() + (Date.now() - clockSyncAt)); }
+        // When tzOffMin is known, clockBase already carries the offset, so the device-local
+        // wall fields are the Date's UTC fields (browser TZ never applied). Else fall back
+        // to the browser's local fields.
+        function parts(dt) {
+            return (tzOffMin !== null)
+                ? { H: dt.getUTCHours(), Mi: dt.getUTCMinutes(), S: dt.getUTCSeconds(), D: dt.getUTCDate(), Mo: dt.getUTCMonth(), Y: dt.getUTCFullYear() }
+                : { H: dt.getHours(), Mi: dt.getMinutes(), S: dt.getSeconds(), D: dt.getDate(), Mo: dt.getMonth(), Y: dt.getFullYear() };
+        }
         function renderClock() {
             if (clockBase === null) return;
-            var now = new Date(clockBase.getTime() + (Date.now() - clockSyncAt));
-            document.getElementById('dashClock').textContent = pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
-            document.getElementById('dashDate').textContent = pad(now.getDate()) + ' ' + MO[now.getMonth()] + ' ' + now.getFullYear();
+            var p = parts(devNow());
+            document.getElementById('dashClock').textContent = pad(p.H) + ':' + pad(p.Mi) + ':' + pad(p.S);
+            document.getElementById('dashDate').textContent = pad(p.D) + ' ' + MO[p.Mo] + ' ' + p.Y;
         }
+        // Seed with browser time immediately so the clock never blanks; GetDetail below
+        // snaps it to the device's time + zone as soon as it returns.
+        clockBase = new Date(); clockSyncAt = Date.now();
         setInterval(renderClock, 1000);
 
         // ---- SN (local cache first, then confirm from API) ----
@@ -113,12 +137,19 @@
             data: { PageIndex: 1, PageSize: 1 },
             success: function (rst) { if (rst && rst.result && rst.content && rst.content.TotalCount != null) document.getElementById('statPeople').textContent = Number(rst.content.TotalCount).toLocaleString(); }
         });
-        // Identifications "today" uses the DEVICE clock (seeded from GetDetail.SystemTime
-        // below), so the day boundary matches the device, not the operator's browser TZ.
-        function loadToday(deviceNowMs) {
-            var d = new Date(deviceNowMs);
-            var begin = Math.floor(new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0).getTime() / 1000);
-            var end = Math.floor(new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59).getTime() / 1000);
+        // Identifications "today": day boundary in the DEVICE's zone (so it matches the
+        // unit's day, not the operator's browser). Records are queried by the UTC epoch of
+        // the device-local midnight -- the same convention the vendor report uses.
+        function loadToday() {
+            if (clockBase === null) return;
+            var p = parts(devNow()), begin, end;
+            if (tzOffMin !== null) {
+                begin = Math.floor((Date.UTC(p.Y, p.Mo, p.D, 0, 0, 0) - tzOffMin * 60000) / 1000);
+                end = Math.floor((Date.UTC(p.Y, p.Mo, p.D, 23, 59, 59) - tzOffMin * 60000) / 1000);
+            } else {
+                begin = Math.floor(new Date(p.Y, p.Mo, p.D, 0, 0, 0).getTime() / 1000);
+                end = Math.floor(new Date(p.Y, p.Mo, p.D, 23, 59, 59).getTime() / 1000);
+            }
             faceAPI.AjaxPOSTJson({
                 url: '/api/Record/Identify/Search',
                 data: {
@@ -133,7 +164,9 @@
         // ---- device detail -> info cards + clock seed (never hangs; best-effort) ----
         faceAPI.AjaxPOSTJson({
             url: '/api/Device/GetDetail',
-            data: { "SystemInfo": true, "Language": true },
+            // "UI" returns SystemTime + UTCTimeZone (for the clock); "SystemInfo" returns
+            // the firmware/engine version fields the cards below bind to.
+            data: { "UI": true, "SystemInfo": true, "Language": true },
             success: function (rst) {
                 if (!rst || !rst.result || !rst.content) return;
                 var c = rst.content;
@@ -142,9 +175,17 @@
                     if (v === undefined || v === null || v === '') { this.style.display = 'none'; }
                     else { this.querySelector('.val').textContent = v; }
                 });
+                tzOffMin = parseTz(c.UTCTimeZone);
                 var ts = c.SystemTime ? (typeof c.SystemTime === 'number' ? c.SystemTime : parseInt(c.SystemTime, 10)) : NaN;
-                if (!isNaN(ts)) { clockBase = new Date(ts * 1000); clockSyncAt = Date.now(); renderClock(); loadToday(ts * 1000); }
-                else { loadToday(Date.now()); } // fall back to browser time only if device time missing
+                if (!isNaN(ts)) {
+                    // clockBase = device-local wall time carried in a Date's UTC fields.
+                    clockBase = new Date(ts * 1000 + (tzOffMin || 0) * 60000);
+                    clockSyncAt = Date.now();
+                } else {
+                    tzOffMin = null; // no device time -> keep the browser-time fallback seeded above
+                }
+                renderClock();
+                loadToday();
             }
         });
 

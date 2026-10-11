@@ -106,7 +106,7 @@
                     <!-- 设置PC版本号 -->
 
                     <li class="layui-nav-item" lay-unselect>
-                        <span>BettaPay UI 1.0</span>
+                        <span id="bpUiVer" title="Deployed UI version">BettaPay UI</span>
                     </li>
                     <li class="layui-nav-item" lay-unselect>
                         <a href="javascript:;" data-refresh="刷新"><i class="fa fa-refresh"></i></a>
@@ -211,6 +211,25 @@
             // BettaPay: always fetch page fragments fresh so a UI update isn't masked by
             // the browser's AJAX cache (adds a cache-buster to GETs; POST APIs unaffected).
             $.ajaxSetup({ cache: false });
+
+            // BettaPay: show the ACTUAL deployed UI version in the header (label + short
+            // content hash) instead of a static string, read from the webroot's .uilabel
+            // / .uiver that the build writes. So what you see matches what's really served
+            // -- a mismatch (e.g. an OTA pushing an old UI) is visible at a glance.
+            (function () {
+                var lbl = null, hsh = null, left = 2;
+                function finish() {
+                    if (--left > 0) return;
+                    var el = document.getElementById('bpUiVer');
+                    if (!el) return;
+                    var txt = lbl || 'BettaPay UI';
+                    if (hsh) txt += (lbl ? ' · ' : ' ') + hsh.slice(0, 8);
+                    el.textContent = txt;
+                    if (hsh) el.title = 'UI content version ' + hsh + (lbl ? ' (' + lbl + ')' : '');
+                }
+                $.ajax({ type: 'get', url: '.uilabel', dataType: 'text', success: function (d) { lbl = (d || '').trim() || null; }, complete: finish });
+                $.ajax({ type: 'get', url: '.uiver', dataType: 'text', success: function (d) { hsh = (d || '').trim() || null; }, complete: finish });
+            })();
             var layer = layui.layer,
                 miniAdmin = layui.miniAdmin,
                 faceAPI = layui.faceAPI;
