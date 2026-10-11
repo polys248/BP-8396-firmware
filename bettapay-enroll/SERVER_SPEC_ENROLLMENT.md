@@ -62,8 +62,32 @@
 >   - The local web `POST /api/People/New` (multipart `PeopleJson` + optional `Photo` file, with
 >     `FaceFeature`/`Fingerprints[]`/`Palmveins[]`) is a working upsert too, **but it needs the
 >     admin JWT**, so it's a fallback, not the primary path.
-> - **Still to confirm device-side:** the people-DB path/table name for the export read, and
->   that `face_feat`/`points`/`norm` map cleanly to/from whatever BettaPay carries in `AddPeople`.
+> - **DB + protocol — now confirmed (2026-10-11):**
+>   - **People DB:** `/data/user.db`, table **`user_data_info`** — columns `id` (autoinc),
+>     `userid`, `name`, `cardid`, `password`, `fingerprint_1..3`, `department`, `authority`,
+>     `palm_record_id_right/left`, `face_feat`, `face_points`, `face_norm`, `timestamp`,
+>     `opening_time_period`, `valid_times`, `YearOfMonth`, `ShiftID`. aio reads it
+>     **incrementally by `id`** (`… WHERE id > ? ORDER BY id ASC LIMIT ?`), so a cursor export
+>     is natural. Key = `userid` (= employee uuid). Records log is `user_record_info`.
+>   - **`AddPeople` carries the face field, same name as the web API.** The docking parser
+>     (`HTTPClient_HTTPv2::DownloadAddPeople` and the MQTT twin) consumes a `PeopleList` whose
+>     items use **`FaceFeature` (base64) + `FaceFeatureMD5`, `Fingerprints`, `Palmveins`,
+>     `UserID`, `Name`, `CardNum`, `Department`, `Authority`, `opening_time_period`, …** — the
+>     *same* field names as `/api/People/New`. aio unpacks `FaceFeature` into the DB's
+>     `face_feat`/`face_points`/`face_norm` internally, so **the portable sync unit is the single
+>     `FaceFeature` base64** (don't ship the three DB blobs separately). **=> Import is just
+>     BettaPay populating `FaceFeature`+`FaceFeatureMD5` in the `AddPeople` it already sends.**
+>   - **Export may also be protocol-native.** aio has `PeopleHttpRequestUpload::SavePeopleData`
+>     + `people_push_cache_http.json`/`…_mqtt.json` — a **device→backend people upload**. If your
+>     reader-gateway's people-upload already includes `FaceFeature`, you receive captured
+>     enrollments without new device code; if it strips biometrics, `bpenroll` reads
+>     `user_data_info` (face_feat etc., by `userid`) and POSTs `enroll-push`. **Please confirm
+>     whether your `SavePeopleData`/people-upload handler carries `FaceFeature`.**
+> - **Net:** both directions can ride the existing attendance people-sync once `FaceFeature` is
+>   populated — potentially **no new device code at all**, with `bpenroll` only needed if the
+>   upload path strips biometrics. A definitive field-by-field decode of
+>   `DownloadAddPeopleResponseProcessCore` is available if you want it (needs aio re-loaded in
+>   Ghidra), but the string evidence above is unambiguous that `FaceFeature` is in the schema.
 >
 > The sections below keep the crypto, edge-function shapes, wire contract, deployment and
 > tests — **read them with `org → tenant`, `org_user → employees`, `user_key → employee uuid`,
