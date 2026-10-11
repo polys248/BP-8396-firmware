@@ -11,17 +11,18 @@ LOG=/data/hardening.log
 deploy_webroot() {
     SRC=/usr/share/bettapay-webroot
     DST=/data/webpage/webroot
-    STAMP=/data/.bettapay_rootfs_uiver   # last ROOTFS UI version we deployed
+    STAMP=/data/.bettapay_rootfs_uiver   # informational only now (no longer gates deploy)
     NEWVER=$(cat "$SRC/.uiver" 2>/dev/null)
     [ -d "$SRC" ] && [ -n "$NEWVER" ] || return 0
-    # Deploy only when the FIRMWARE's bundled UI changed (new OTA), not merely when
-    # /data differs -- so a webflash UI hotfix is preserved across reboot. A new
-    # firmware's UI supersedes any hotfix (correct: the image carries it forward).
-    [ "$(cat "$STAMP" 2>/dev/null)" = "$NEWVER" ] && return 0
-    # .uiver is a content hash: if the device already serves this exact UI (e.g. an
-    # identical webflash hotfix), skip the swap and just record the stamp.
+    # The firmware's bundled UI is AUTHORITATIVE. Gate ONLY on what is actually served
+    # -- DST/.uiver, a content hash written atomically with the UI in the same swap --
+    # never on a side stamp. A stamp can diverge from DST (a webflash hotfix updates
+    # DST/.uiver but not the stamp; a partial prior swap) and then mask a stale UI, so a
+    # new image's correct UI never gets deployed. That was the prod-1.0.3 revert bug.
+    # Deploy whenever the deployed content differs from the bundle. Consequence: a
+    # webflash UI hotfix does NOT survive a reboot -- the flashed image's UI wins.
     if [ "$(cat "$DST/.uiver" 2>/dev/null)" = "$NEWVER" ]; then
-        echo "$NEWVER" > "$STAMP"
+        echo "$NEWVER" > "$STAMP" 2>/dev/null
         return 0
     fi
     echo "deploy webroot -> $NEWVER" >> "$LOG" 2>/dev/null
