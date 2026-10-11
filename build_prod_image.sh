@@ -15,7 +15,9 @@
 #   chmod 600 /root/prod_fleet_token
 #   bash /mnt/c/Users/Isaac/fw-tools/build_prod_image.sh [fleet_token_file] [FW_VERSION]
 #       fleet_token_file : default /root/prod_fleet_token
-#       FW_VERSION       : default prod-$(date)  (used in /etc/fw_build + as OTA version)
+#       FW_VERSION       : default prod-$(date)  (written to /etc/fw_build, the webroot
+#                          .uilabel, and a top-level .fwver in recovery.zip that the
+#                          OTA form auto-reads; vendor upgrade.json is left untouched)
 #   # when done:  shred -u /root/prod_fleet_token
 # ============================================================================
 set -euo pipefail
@@ -98,14 +100,19 @@ python3 - "$PWD/rootfs_prod.img" "$OUTDIR" "$FW_VERSION" <<'PY'
 import os,sys,json,zipfile,hashlib
 img,outdir,ver=sys.argv[1],sys.argv[2],sys.argv[3]
 tmp=os.path.join(outdir,"_prod_tmp.zip")
+# Vendor manifest stays EXACTLY as the spec defines it (no version key inside).
 man={"list":[{"partition":"root_sq","image":"rootfs_squashfs.img"}]}
 with zipfile.ZipFile(tmp,"w",zipfile.ZIP_STORED) as z:
-    z.writestr("upgrade.json",json.dumps(man,indent=2)); z.write(img,"rootfs_squashfs.img")
+    z.writestr("upgrade.json",json.dumps(man,indent=2))
+    # Top-level version marker, mirroring .uiver in the UI bundles. The OTA form reads
+    # this; it is NOT in the vendor "list", so the device recovery never looks at it.
+    z.writestr(".fwver",ver+"\n")
+    z.write(img,"rootfs_squashfs.img")
 d=open(tmp,"rb").read(); md5=hashlib.md5(d).hexdigest()
 final=os.path.join(outdir,f"n7v9_p1-{md5}.zip"); os.replace(tmp,final)
 print(f"\nPROD recovery.zip: {os.path.basename(final)}")
 print(f"  size {len(d):,}  md5 {md5}")
-print(f"  -> publish this md5 in firmware_releases as version '{ver}'")
+print(f"  .fwver in package = '{ver}'  (OTA form reads it; md5 = release id)")
 PY
 
 echo
