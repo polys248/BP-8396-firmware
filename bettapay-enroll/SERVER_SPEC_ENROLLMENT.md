@@ -13,12 +13,12 @@
 > (supersedes the "PINs not synced in v1" note below).
 >
 > Three firmware questions answered (full detail in `MSG_SERVER_PUSHPEOPLE_ANSWERS.md`):
-> - **MD5 = hash of the DECODED bytes, hex** (Photo: the image file via `CreateFileMD5_Hex`;
->   FaceFeature: the raw template via `CreateBytesMD5_Hex` over the blob). Never hash the base64
->   text, or every record looks changed. **Case (corrected):** the stock UI sends `PhotoMD5` as
->   **lowercase** hex (`edit.html:1138`), so use lowercase for server-originated photos;
->   `FaceFeatureMD5` is `ToUpper`'d by the device before compare so its case is don't-care.
->   Authoritative source = the device-stored values captured by `replay_kit/` (`vectors`).
+> - **MD5 = hash of the DECODED bytes, hex; CASE-INSENSITIVE** (Photo: the image file via
+>   `CreateFileMD5_Hex`, compared with `strcasecmp` in `check_file_md5` — which is also the photo
+>   re-download skip; FaceFeature: the raw template via `CreateBytesMD5_Hex`, incoming value
+>   `ToUpper`'d before compare). Never hash the base64 text, or every record looks changed.
+>   **Either case works for both fields — uppercase is correct, no change needed.** (The stock UI
+>   happens to send `PhotoMD5` lowercase; the `strcasecmp` is why that also works.)
 > - **Photo (and FaceFeature) accept a URL OR inline base64** — `AddDownloadPhoto`/`AddDownloadFace`
 >   test `HTTPUtil::IsHttpUrl`; URL ⇒ device downloads it (must be reachable from the terminal and
 >   outlive the retry queue), non-URL ⇒ base64. Avatar URLs are fine; no need to inline.

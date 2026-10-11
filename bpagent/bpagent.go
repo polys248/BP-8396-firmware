@@ -35,9 +35,22 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/coder/websocket"
+)
+
+// Bound concurrent tunnel sessions. A burst (the web UI opens many asset
+// connections at once) must not exhaust the 73 MB device's RAM/fds with
+// simultaneous loopback dials + TLS handshakes + relays. Sessions beyond the
+// limit QUEUE on the semaphore (cheap parked goroutines) rather than being
+// refused, so the UI never sees a dropped connection; only the expensive live
+// phase is capped. Tunable via cfg MAX_SESSIONS (default 24).
+var (
+	maxSessions  = 24
+	sessionSem   chan struct{}
+	sessInflight int64 // atomic: sessions currently holding a slot
 )
 
 //go:embed cacert.pem
@@ -523,6 +536,18 @@ func handleSession(client *http.Client, sn, tun, id string, port int, sendCtl fu
 		openFailed("port not allowed: " + strconv.Itoa(port))
 		return
 	}
+	// Acquire a session slot. This blocks (queues) if maxSessions are already
+	// active rather than refusing, so the web UI's parallel asset requests still
+	// go through. A parked goroutine is cheap; a live session is not.
+	qStart := time.Now()
+	sessionSem <- struct{}{}
+	defer func() { <-sessionSem }()
+	waitMs := time.Since(qStart).Milliseconds()
+	inflight := atomic.AddInt64(&sessInflight, 1)
+	defer atomic.AddInt64(&sessInflight, -1)
+	if waitMs > 50 {
+		logln("session", id, "port", port, "queued", waitMs, "ms; inflight", inflight, "of", maxSessions)
+	}
 	rawtcp, err := net.DialTimeout("tcp", "127.0.0.1:"+strconv.Itoa(port), 5*time.Second)
 	if err != nil {
 		openFailed("local dial failed: " + err.Error())
@@ -582,7 +607,7 @@ func handleSession(client *http.Client, sn, tun, id string, port int, sendCtl fu
 	nc.Close()
 	// Per-session timing so a stall can be correlated with the hub logs (is the device
 	// leg — loopback connect or TLS handshake — slow, or the relay?).
-	logln("session", id, "port", port, "dialMs", dialMs, "hsMs", hsMs, "respBytes", n, "totalMs", time.Since(t0).Milliseconds())
+	logln("session", id, "port", port, "waitMs", waitMs, "inflight", inflight, "dialMs", dialMs, "hsMs", hsMs, "respBytes", n, "totalMs", time.Since(t0).Milliseconds())
 }
 
 func main() {
@@ -595,6 +620,12 @@ func main() {
 		}
 	}
 	loadConfig(conf)
+	if v := cfg["MAX_SESSIONS"]; v != "" {
+		if n, err := strconv.Atoi(v); err == nil && n > 0 {
+			maxSessions = n
+		}
+	}
+	sessionSem = make(chan struct{}, maxSessions)
 	if mode == "claim" {
 		runClaim()
 	} else {

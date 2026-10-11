@@ -45,15 +45,13 @@ it recognizes the new UserID as the same face. That closes the "a replayed templ
 recognizes" question on identical hardware; A→B across different sensors waits for a
 second unit.
 
-## MD5 case — what we actually know
-- **PhotoMD5:** the stock web UI computes `MD5(decoded image bytes)` as **lowercase**
-  hex (`page/people/edit.html:1138`). Match that for server-originated photos. (Our
-  earlier "uppercase for both" note to the server was imprecise — see correction in
-  `../SERVER_SPEC_ENROLLMENT.md`.)
+## MD5 case — CASE-INSENSITIVE on the device
+- **PhotoMD5:** `check_file_md5` compares with `strcasecmp`, so case is irrelevant;
+  uppercase or lowercase both work. (This function is also the photo re-download skip.)
 - **FaceFeatureMD5:** the device `ToUpper`s the incoming value before comparing, so
-  the sender's case is don't-care; the device's own stored form is uppercase.
-- Either way, `vectors` above reports the device's exact stored strings — treat those
-  as ground truth over any inference.
+  case is irrelevant there too.
+- So the hex MD5 of the decoded bytes in **either case** is accepted. `vectors` above
+  still reports the device's exact stored strings if you want ground truth.
 
 ## Notes
 - `--base-url` takes the scheme explicitly. The hardened build redirects :80→HTTPS and
