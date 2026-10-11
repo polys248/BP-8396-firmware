@@ -69,14 +69,31 @@
 >     `opening_time_period`, `valid_times`, `YearOfMonth`, `ShiftID`. aio reads it
 >     **incrementally by `id`** (`… WHERE id > ? ORDER BY id ASC LIMIT ?`), so a cursor export
 >     is natural. Key = `userid` (= employee uuid). Records log is `user_record_info`.
->   - **`AddPeople` carries the face field, same name as the web API.** The docking parser
->     (`HTTPClient_HTTPv2::DownloadAddPeople` and the MQTT twin) consumes a `PeopleList` whose
->     items use **`FaceFeature` (base64) + `FaceFeatureMD5`, `Fingerprints`, `Palmveins`,
->     `UserID`, `Name`, `CardNum`, `Department`, `Authority`, `opening_time_period`, …** — the
->     *same* field names as `/api/People/New`. aio unpacks `FaceFeature` into the DB's
->     `face_feat`/`face_points`/`face_norm` internally, so **the portable sync unit is the single
->     `FaceFeature` base64** (don't ship the three DB blobs separately). **=> Import is just
->     BettaPay populating `FaceFeature`+`FaceFeatureMD5` in the `AddPeople` it already sends.**
+>   - **`AddPeople` schema — fully decoded (2026-10-11, `People::FromJson` @0020f778 +
+>     `PeopleFeatureCode::FromJson` @0020e604 + `…ProcessCore`).** The docking parser consumes
+>     `{ "PeopleList": [ {person}, … ] }` (confirmed literal). Each person carries — biometric
+>     keys **confirmed by name**, demographics confirmed by position/type:
+>     - `UserID` (string **or** number — number is auto-stringified), `Name` (+ ~5 demographic
+>       strings: Code/Dept/CardNum/Password/… — `Name` and four others are `SanitizeInput`'d
+>       on-device), plus access-control ints (Timegroup/OpenTimes/ExpirationDate/ValidTimes/…).
+>     - `Photo` (base64) + `PhotoMD5`.
+>     - **`FaceFeature`** (base64) + **`FaceFeatureMD5`**.
+>     - **`Fingerprints`** and **`Palmveins`** — each an **array of `{ Num:int, Data:string }`**
+>       (`PeopleFeatureCode`).
+>     aio unpacks `FaceFeature` into the DB's `face_feat`/`face_points`/`face_norm` internally, so
+>     **the portable sync unit is the single `FaceFeature` base64** (don't ship the three DB blobs
+>     separately). **=> Import is just BettaPay populating `FaceFeature`+`FaceFeatureMD5` in the
+>     `AddPeople` it already sends.**
+>   - **Incremental sync is MD5-gated — the push MUST include the MD5s.** On a `UserID` that
+>     already exists, aio uppercases `FaceFeatureMD5` and `memcmp`s it against the stored value;
+>     **equal ⇒ it skips re-pulling that template** (same per-item for fingerprint/palm `Data`).
+>     Omit the MD5s and every sync re-downloads every template; include them and sync is
+>     incremental for free.
+>   - **Biometric blocks are capability-gated.** Each modality is parsed only if the unit
+>     advertises it (internal face/FP/palm/card flags). Pushing a palmvein to a face-only device
+>     is silently ignored, not an error — so a one-size payload is safe across mixed fleets.
+>   - **Sanitize server-side anyway.** The on-device `SanitizeInput` on text fields is a
+>     convenience, not a guarantee; these values land directly in local SQLite.
 >   - **Export may also be protocol-native.** aio has `PeopleHttpRequestUpload::SavePeopleData`
 >     + `people_push_cache_http.json`/`…_mqtt.json` — a **device→backend people upload**. If your
 >     reader-gateway's people-upload already includes `FaceFeature`, you receive captured
@@ -85,9 +102,8 @@
 >     whether your `SavePeopleData`/people-upload handler carries `FaceFeature`.**
 > - **Net:** both directions can ride the existing attendance people-sync once `FaceFeature` is
 >   populated — potentially **no new device code at all**, with `bpenroll` only needed if the
->   upload path strips biometrics. A definitive field-by-field decode of
->   `DownloadAddPeopleResponseProcessCore` is available if you want it (needs aio re-loaded in
->   Ghidra), but the string evidence above is unambiguous that `FaceFeature` is in the schema.
+>   upload path strips biometrics. The field-by-field decode of the `AddPeople` parser is now
+>   complete (above); no further RE is needed to wire the push.
 >
 > The sections below keep the crypto, edge-function shapes, wire contract, deployment and
 > tests — **read them with `org → tenant`, `org_user → employees`, `user_key → employee uuid`,
