@@ -1986,7 +1986,7 @@ const EnglighLang = {
         },
         "homeInfo": {
             "title": "Home",
-            "href": "page/device/SystemInfo.html"
+            "href": "page/dashboard.html"
         },
         "menuInfo[0]": {
             "child[4]": {

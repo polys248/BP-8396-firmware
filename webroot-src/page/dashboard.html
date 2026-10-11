@@ -1,0 +1,109 @@
+<style>
+    /* BettaPay dashboard (loaded into the shell; styles are self-contained) */
+    .bp-dash { padding: 20px; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; }
+    .bp-hero {
+        background: linear-gradient(135deg, #0D3B2A 0%, #1C4A39 55%, #004D99 100%);
+        color: #fff; border-radius: 12px; padding: 22px 26px;
+        display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+        box-shadow: 0 8px 28px rgba(9, 42, 30, .25);
+    }
+    .bp-hero-left { display: flex; align-items: center; gap: 16px; }
+    .bp-hero img { height: 52px; filter: drop-shadow(0 2px 6px rgba(0, 0, 0, .25)); }
+    .bp-hero h2 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -.2px; }
+    .bp-hero .sub { font-size: 13px; color: #bfe8d6; margin-top: 5px; display: flex; align-items: center; gap: 12px; }
+    .bp-status { display: inline-flex; align-items: center; gap: 7px; }
+    .bp-dot { width: 9px; height: 9px; border-radius: 50%; background: #16A249; box-shadow: 0 0 0 3px rgba(22, 162, 73, .3); }
+    .bp-clock { text-align: right; }
+    .bp-clock .t { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.1; }
+    .bp-clock .d { font-size: 12px; color: #bfe8d6; margin-top: 2px; }
+    .bp-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; margin-top: 18px; }
+    .bp-card { background: #fff; border: 1px solid #D1E0DB; border-radius: 10px; padding: 16px 18px; box-shadow: 0 2px 10px -2px rgba(13, 59, 42, .1); }
+    .bp-card .lbl { font-size: 11px; color: #5C8A79; font-weight: 700; text-transform: uppercase; letter-spacing: .09em; }
+    .bp-card .val { font-size: 19px; font-weight: 700; color: #0D3B2A; margin-top: 7px; word-break: break-word; }
+    .bp-sec { font-size: 14px; font-weight: 700; color: #0D3B2A; margin: 26px 0 12px; }
+    .bp-quick { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; }
+    .bp-quick a { display: flex; align-items: center; gap: 13px; background: #fff; border: 1px solid #D1E0DB;
+        border-radius: 10px; padding: 15px 16px; color: #0D3B2A; text-decoration: none; transition: all .15s ease-out; }
+    .bp-quick a:hover { border-color: #16A249; box-shadow: 0 6px 18px -6px rgba(22, 162, 73, .35); transform: translateY(-1px); }
+    .bp-quick .ico { width: 42px; height: 42px; border-radius: 10px; background: #EDF8F2; color: #16A249;
+        display: flex; align-items: center; justify-content: center; font-size: 19px; flex: 0 0 auto; }
+    .bp-quick .qt { font-weight: 700; font-size: 15px; }
+    .bp-quick .qs { font-size: 12px; color: #5C8A79; margin-top: 2px; }
+</style>
+
+<div class="bp-dash">
+    <div class="bp-hero">
+        <div class="bp-hero-left">
+            <img src="images/bettapay-mark.svg" alt="BettaPay">
+            <div>
+                <h2>BettaPay Biometric Scanner</h2>
+                <div class="sub">
+                    <span class="bp-status"><span class="bp-dot"></span>Online</span>
+                    <span>SN&nbsp; <b id="dashSn" style="color:#eafff5">—</b></span>
+                </div>
+            </div>
+        </div>
+        <div class="bp-clock">
+            <div class="t" id="dashClock">--:--:--</div>
+            <div class="d" id="dashDate">—</div>
+        </div>
+    </div>
+
+    <div class="bp-cards" id="dashCards">
+        <div class="bp-card" data-field="FirmwareVerson"><div class="lbl">Software</div><div class="val">—</div></div>
+        <div class="bp-card" data-field="FaceVerson"><div class="lbl">Facial Engine</div><div class="val">—</div></div>
+        <div class="bp-card" data-field="PalmveinVerson"><div class="lbl">Palm-Vein</div><div class="val">—</div></div>
+        <div class="bp-card" data-field="FingerprintVerson"><div class="lbl">Fingerprint</div><div class="val">—</div></div>
+        <div class="bp-card" data-field="DeviceName"><div class="lbl">Device Name</div><div class="val">—</div></div>
+        <div class="bp-card" data-field="Manufacturer"><div class="lbl">Manufacturer</div><div class="val">—</div></div>
+    </div>
+
+    <div class="bp-sec">Quick actions</div>
+    <div class="bp-quick">
+        <a lay-href="page/people/people.html"><span class="ico"><i class="fa fa-users"></i></span><span><div class="qt">People</div><div class="qs">Enroll &amp; manage</div></span></a>
+        <a lay-href="page/report/Identify.html"><span class="ico"><i class="fa fa-list-alt"></i></span><span><div class="qt">Records</div><div class="qs">Identification log</div></span></a>
+        <a lay-href="page/device/doorsetting.html"><span class="ico"><i class="fa fa-lock"></i></span><span><div class="qt">Door Access</div><div class="qs">Access control</div></span></a>
+        <a lay-href="page/device/SystemSetting.html"><span class="ico"><i class="fa fa-cog"></i></span><span><div class="qt">Settings</div><div class="qs">Device configuration</div></span></a>
+    </div>
+</div>
+
+<script>
+    layui.use(['jquery', 'faceAPI'], function () {
+        var $ = layui.jquery, faceAPI = layui.faceAPI;
+
+        // ---- live clock, seeded from device time then ticked locally ----
+        var clockBase = null, clockSyncAt = null;
+        function pad(n) { return (n < 10 ? '0' : '') + n; }
+        var MO = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        function renderClock() {
+            if (clockBase === null) return;
+            var now = new Date(clockBase.getTime() + (Date.now() - clockSyncAt));
+            document.getElementById('dashClock').textContent = pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
+            document.getElementById('dashDate').textContent = pad(now.getDate()) + ' ' + MO[now.getMonth()] + ' ' + now.getFullYear();
+        }
+        setInterval(renderClock, 1000);
+
+        // ---- SN (local cache first, then confirm from API) ----
+        try { var sn = (typeof getLanguageDeviceSN === 'function' ? (getLanguageDeviceSN() || '') : ''); if (sn) document.getElementById('dashSn').textContent = sn; } catch (e) { }
+        $.ajax({ type: 'get', url: '/api/GetDeviceSN', success: function (r) { if (r && r.result && r.content) document.getElementById('dashSn').textContent = r.content; } });
+
+        // ---- device detail -> info cards + clock seed (never hangs; best-effort) ----
+        faceAPI.AjaxPOSTJson({
+            url: '/api/Device/GetDetail',
+            data: { "SystemInfo": true, "Language": true },
+            success: function (rst) {
+                if (!rst || !rst.result || !rst.content) return;
+                var c = rst.content;
+                $('#dashCards .bp-card').each(function () {
+                    var f = this.getAttribute('data-field'), v = c[f];
+                    if (v === undefined || v === null || v === '') { this.style.display = 'none'; }
+                    else { this.querySelector('.val').textContent = v; }
+                });
+                if (c.SystemTime) {
+                    var ts = (typeof c.SystemTime === 'number' ? c.SystemTime : parseInt(c.SystemTime, 10));
+                    if (!isNaN(ts)) { clockBase = new Date(ts * 1000); clockSyncAt = Date.now(); renderClock(); }
+                }
+            }
+        });
+    });
+</script>
