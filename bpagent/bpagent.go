@@ -604,23 +604,30 @@ func handleSession(client *http.Client, sn, tun, id string, port int, sendCtl fu
 	// NOT tear the session down when the request direction ends — only when the DEVICE
 	// closes its side. That guarantees every byte of the declared Content-Length reaches
 	// the proxy before we close.
-	n, _ := io.Copy(nc, tcp)
+	n, cerr := io.Copy(nc, tcp)
 
 	// Device closed: close the tunnel session cleanly (proper close frame, not CloseNow)
 	// so the proxy sees the close and the length is honoured. This also unblocks the
 	// request goroutine's read above, so it exits without leaking.
 	nc.Close()
 	// Per-session timing so a stall can be correlated with the hub logs (is the device
-	// leg — loopback connect or TLS handshake — slow, or the relay?).
+	// leg — loopback connect or TLS handshake — slow, or the relay?). copyErr is the
+	// response-relay error (was dropped): if respBytes is short AND copyErr is set, the
+	// device/agent leg truncated; if respBytes is the full body and the browser still got
+	// less, the truncation is downstream of the agent (hub).
 	totalMs := time.Since(t0).Milliseconds()
-	logln("session", id, "port", port, "waitMs", waitMs, "inflight", inflight, "dialMs", dialMs, "hsMs", hsMs, "respBytes", n, "totalMs", totalMs)
+	ce := ""
+	if cerr != nil {
+		ce = cerr.Error()
+	}
+	logln("session", id, "port", port, "waitMs", waitMs, "inflight", inflight, "dialMs", dialMs, "hsMs", hsMs, "respBytes", n, "totalMs", totalMs, "copyErr", ce)
 	// Mirror the same metrics to the hub on the control channel, keyed by the hub's own
 	// session id, so one stall is one search across both logs. Purely additive — the
 	// byte-exact data relay above is untouched; this rides the existing control socket.
 	sendCtl(map[string]interface{}{
 		"t": "session_done", "id": id, "port": port,
 		"waitMs": waitMs, "inflight": inflight, "dialMs": dialMs,
-		"hsMs": hsMs, "respBytes": n, "totalMs": totalMs,
+		"hsMs": hsMs, "respBytes": n, "totalMs": totalMs, "copyErr": ce,
 	})
 }
 
