@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Biometric Terminal — ODM RFQ / Sourcing Brief</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm; }
+  * { box-sizing: border-box; }
+  body { font: 11pt/1.5 "Segoe UI", Arial, sans-serif; color: #15201b; margin: 0; }
+  h1 { font-size: 20pt; color: #0D3B2A; margin: 0 0 2px; }
+  .sub { color: #5C6B64; font-size: 10pt; margin: 0 0 16px; }
+  h2 { font-size: 13pt; color: #0D3B2A; border-bottom: 2px solid #16A249; padding-bottom: 3px; margin: 22px 0 8px; page-break-after: avoid; }
+  p { margin: 7px 0; }
+  ul, ol { margin: 6px 0 6px 0; padding-left: 20px; }
+  li { margin: 3px 0; }
+  .lead { background: #F2F7F4; border-left: 3px solid #16A249; padding: 10px 12px; border-radius: 4px; }
+  .must li::marker { color: #16A249; font-weight: bold; }
+  strong { color: #0D3B2A; }
+  .tag { display: inline-block; font-size: 8.5pt; font-weight: 600; padding: 1px 7px; border-radius: 10px; }
+  .req { background: #E3F2EA; color: #0D3B2A; }
+  .opt { background: #FFF3DD; color: #8A5A00; }
+  .no  { background: #FCE8E8; color: #9B2C2C; }
+  ol.gates { counter-reset: g; list-style: none; padding-left: 0; }
+  ol.gates > li { counter-increment: g; padding-left: 34px; position: relative; margin: 6px 0; }
+  ol.gates > li::before { content: "G" counter(g); position: absolute; left: 0; top: 0; font-weight: 700; color: #fff; background: #0D3B2A; border-radius: 4px; font-size: 8.5pt; padding: 2px 6px; }
+  table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: 10pt; }
+  td, th { border: 1px solid #CBD8D1; padding: 5px 8px; text-align: left; vertical-align: top; }
+  th { background: #0D3B2A; color: #fff; font-weight: 600; }
+  .note { color: #5C6B64; font-size: 9.5pt; }
+  .foot { margin-top: 24px; border-top: 1px solid #CBD8D1; padding-top: 10px; color: #5C6B64; font-size: 9.5pt; }
+</style>
+</head>
+<body>
+
+<h1>Biometric Terminal — ODM RFQ / Sourcing Brief</h1>
+<p class="sub">Request for quotation &middot; face + fingerprint access terminal &middot; buyer runs its own firmware</p>
+
+<p class="lead"><strong>Purpose.</strong> We buy an integrated <strong>face + fingerprint</strong> access terminal and run <strong>our own firmware</strong> on it. We own the application and cloud layer; we need you to supply the biometric hardware + engine and a <strong>Linux base we can root, reflash, and run fully offline</strong>. Please answer every item in Sections&nbsp;2 and 3 — those decide whether we can qualify your unit, not just its price.</p>
+
+<h2>1. Required SKU</h2>
+<p><span class="tag req">MUST-HAVE</span></p>
+<ul class="must">
+  <li><strong>Face recognition</strong>, on-device, <strong>with liveness / anti-spoofing</strong> (dual visible + IR camera).</li>
+  <li><strong>Fingerprint</strong> (capacitive or optical) with local matching.</li>
+  <li><strong>Wi-Fi</strong> (2.4&nbsp;GHz minimum, dual-band preferred) <strong>and Ethernet</strong> (state if PoE).</li>
+  <li>Baseline: display, speaker/mic, <strong>door relay (dry contact)</strong>, 12&nbsp;V or PoE power, indoor mount.</li>
+</ul>
+<p><span class="tag opt">QUOTE AS OPTIONS</span> QR scanner, RFID/NFC card reader, Wiegand/RS485, outdoor/IP-rated enclosure, touch screen, battery/UPS.</p>
+<p><span class="tag no">NOT NEEDED</span> palm-vein, vendor cloud/app integration, your management platform.</p>
+
+<h2>2. Firmware / OS requirements — the dealbreakers</h2>
+<p>We flash and maintain our own rootfs. A unit that fails any of these we cannot use at any price. Please answer each explicitly:</p>
+<ol class="gates">
+  <li><strong>OS + kernel version</strong> (e.g. Linux 4.x/5.x), libc (glibc/musl), and <strong>CPU arch/ABI</strong> (e.g. ARMv7 <code>arm</code>, ARM64 <code>aarch64</code>) so we can cross-compile.</li>
+  <li><strong>Root access</strong> on shipped units — serial-console pinout + how to obtain a root shell (documented). Required for evaluation.</li>
+  <li><strong>Rootfs reflash path</strong> — at least one of: a factory <strong>USB flasher</strong> (tool + <strong>documented package format</strong>) and/or <strong>in-device partition reflash</strong> (MTD/eMMC/UBI). Describe the <strong>partition layout</strong> (bootloader / kernel / dtb / rootfs / recovery / userdata).</li>
+  <li><strong>Secure boot / signature verification</strong> — is a <strong>modified rootfs</strong> allowed to boot? If signing is enforced, is there a documented way to enroll our own key?</li>
+  <li><strong>Recovery / brick recovery</strong> — is there a recovery image and a mask-ROM/USB recovery so a bad flash is recoverable?</li>
+  <li><strong>Writable persistent partition</strong> (<code>/data</code>-style) that <strong>survives a rootfs reflash</strong> (holds our config + enrolled templates).</li>
+  <li><strong>Offline operation</strong> — face match, fingerprint match, and door-open must work with <strong>no internet and no vendor cloud</strong>. Please confirm.</li>
+  <li><strong>Golden firmware</strong> — will you provide the <strong>stock firmware package</strong> (full image) as our restore baseline?</li>
+</ol>
+
+<h2>3. Biometric engine &amp; data — cost, licensing, integration</h2>
+<ol>
+  <li><strong>Face SDK</strong> — which engine, and <strong>per-device license cost</strong>: is it <strong>included</strong> in the unit price or billed separately/recurring?</li>
+  <li><strong>Fingerprint</strong> — sensor model + matching SDK; same licensing question.</li>
+  <li><strong>Local API</strong> — how does an on-device app call enroll / match / liveness <strong>without the vendor cloud</strong> (IPC / C SDK / local HTTP)? We need this documented to integrate our firmware.</li>
+  <li><strong>Liveness method</strong> — 2D-IR vs structured-light vs ToF, and the anti-spoof claim (printed photo / screen / mask). Anti-spoof strength matters for our use case.</li>
+  <li><strong>Template storage</strong> — where templates live on-device, their <strong>format</strong>, and whether they can be <strong>exported/imported</strong> (we manage the roster server-side and sync enrollments across units).</li>
+  <li><strong>Camera spec</strong> — visible + IR module, resolution, FOV, minimum illumination.</li>
+</ol>
+
+<h2>4. Hardware baseline (please fill in)</h2>
+<table>
+  <tr><th style="width:34%">Item</th><th>Your spec</th></tr>
+  <tr><td>SoC + NPU (TOPS)</td><td></td></tr>
+  <tr><td>RAM / flash (type, size)</td><td></td></tr>
+  <tr><td>Display (size, resolution, touch?)</td><td></td></tr>
+  <tr><td>Camera (visible + IR, resolution, liveness)</td><td></td></tr>
+  <tr><td>Ethernet (speed, PoE?) / Wi-Fi (bands) / BLE?</td><td></td></tr>
+  <tr><td>I/O (relay, Wiegand, RS485, GPIO)</td><td></td></tr>
+  <tr><td>Power input</td><td></td></tr>
+  <tr><td>Enclosure (material, IP rating, mount)</td><td></td></tr>
+  <tr><td>Certifications (CE / FCC / RoHS; other)</td><td></td></tr>
+</table>
+
+<h2>5. Commercial</h2>
+<ul>
+  <li><strong>Unit price at MOQ tiers:</strong> 100 / 500 / 1,000 / 5,000.</li>
+  <li><strong>NRE</strong>, if any (we do our own UI/branding; mainly SKU/feature variants).</li>
+  <li><strong>Lead time, warranty,</strong> and <strong>SoC/SKU longevity</strong> (how long will you supply this exact unit).</li>
+  <li><strong>Eval samples:</strong> price + lead time for <strong>2–3 units delivered with root access, the flashing tool, the partition-layout doc, the biometric local-API doc, and the golden firmware</strong> (Sections 2–3).</li>
+</ul>
+
+<h2>6. What we do once we have a qualifying unit</h2>
+<p>Our firmware is a thin, portable layer: a few static ARM binaries + a small web UI + our backend integration. Per unit we only cross-compile for your ABI, adapt the boot/init hooks, reflash the rootfs, and call your biometric local API. We do <strong>not</strong> need you to build software — we need <strong>root, a documented reflash path, no blocking secure boot, and a documented offline biometric API.</strong> Those four are what we compare across quotes.</p>
+
+<div class="foot">Please return answers on the accompanying response form so we can compare suppliers side by side. Thank you.</div>
+
+</body>
+</html>
