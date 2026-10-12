@@ -22,6 +22,13 @@ deploy_webroot() {
     # Deploy whenever the deployed content differs from the bundle. Consequence: a
     # webflash UI hotfix does NOT survive a reboot -- the flashed image's UI wins.
     if [ "$(cat "$DST/.uiver" 2>/dev/null)" = "$NEWVER" ]; then
+        # Content is current, so no swap. But .uilabel (the build version string) is NOT
+        # part of the content hash, so a label-only bump (same UI, new prod-x.y.z) would
+        # otherwise leave the old label in /data -- refresh just that one file.
+        if [ -f "$SRC/.uilabel" ] && [ "$(cat "$DST/.uilabel" 2>/dev/null)" != "$(cat "$SRC/.uilabel" 2>/dev/null)" ]; then
+            cp -f "$SRC/.uilabel" "$DST/.uilabel" 2>/dev/null
+            echo "refreshed .uilabel -> $(cat "$SRC/.uilabel" 2>/dev/null)" >> "$LOG" 2>/dev/null
+        fi
         echo "$NEWVER" > "$STAMP" 2>/dev/null
         return 0
     fi
