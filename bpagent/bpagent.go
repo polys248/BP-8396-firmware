@@ -215,6 +215,19 @@ func httpClient() *http.Client {
 	}}
 }
 
+// wsHTTPClient is for the long-lived control websocket and the per-session relays. It must
+// NOT carry an http.Client.Timeout: that timer keeps running after the handshake and
+// interrupts the body, which on a hijacked websocket tears the connection down mid-transfer
+// — truncating large responses (small files finish first, big ones get cut). Liveness on the
+// control socket is handled by ping/pong; a session lasts exactly as long as its transfer.
+func wsHTTPClient() *http.Client {
+	pool := x509.NewCertPool()
+	pool.AppendCertsFromPEM(caPEM)
+	return &http.Client{Transport: &http.Transport{
+		TLSClientConfig: &tls.Config{RootCAs: pool, MinVersion: tls.VersionTLS12},
+	}}
+}
+
 // only Authorization: Bearer + Content-Type (no extra headers).
 func postJSON(cl *http.Client, u, bearer string, body map[string]string) (int, []byte, error) {
 	b, _ := json.Marshal(body)
@@ -340,7 +353,8 @@ func runServe() {
 		debug.SetMemoryLimit(int64(mib) * 1024 * 1024)
 	}
 	debug.SetGCPercent(20)
-	cl := httpClient()
+	cl := httpClient()    // bounded: claim/enroll POSTs
+	wcl := wsHTTPClient() // unbounded: control + session websockets (no http timeout)
 
 	for deviceToken() == "" {
 		if readTrim(claimFaultPath) != "" {
@@ -377,7 +391,7 @@ func runServe() {
 			// transient enroll failure with a cached token falls through: connect degraded
 			// using the persisted allowlist until the next successful enroll.
 		}
-		reEnroll, err := runControl(cl, sn, tun)
+		reEnroll, err := runControl(wcl, sn, tun)
 		if err != nil {
 			logln("control:", err)
 		}
@@ -586,7 +600,16 @@ func handleSession(client *http.Client, sn, tun, id string, port int, sendCtl fu
 		openFailed("session ws dial failed: " + err.Error())
 		return
 	}
-	defer ws.CloseNow() // backstop; the clean close is nc.Close() below
+	// Abrupt backstop for an unexpected early return only. The happy path does a graceful
+	// close below and sets cleanClose, so this does NOT fire and race it — an abrupt
+	// CloseNow after the graceful close can drop bytes still queued in the send buffer
+	// (the gap between what the agent read and what the hub received).
+	cleanClose := false
+	defer func() {
+		if !cleanClose {
+			ws.CloseNow()
+		}
+	}()
 	ws.SetReadLimit(-1)
 	nc := websocket.NetConn(ctx, ws, websocket.MessageBinary)
 
@@ -606,10 +629,12 @@ func handleSession(client *http.Client, sn, tun, id string, port int, sendCtl fu
 	// the proxy before we close.
 	n, cerr := io.Copy(nc, tcp)
 
-	// Device closed: close the tunnel session cleanly (proper close frame, not CloseNow)
-	// so the proxy sees the close and the length is honoured. This also unblocks the
-	// request goroutine's read above, so it exits without leaking.
+	// Graceful close: send the close frame and complete the close handshake, which drains
+	// the send queue so every byte already written reaches the hub before teardown. Mark
+	// cleanClose so the deferred CloseNow backstop does NOT run and abort this. Also
+	// unblocks the request goroutine's read above, so it exits without leaking.
 	nc.Close()
+	cleanClose = true
 	// Per-session timing so a stall can be correlated with the hub logs (is the device
 	// leg — loopback connect or TLS handshake — slow, or the relay?). copyErr is the
 	// response-relay error (was dropped): if respBytes is short AND copyErr is set, the
