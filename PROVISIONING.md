@@ -36,9 +36,14 @@ sudo bash build_prod_image.sh /root/prod_fleet_token prod-YYYYMMDD
 shred -u /root/prod_fleet_token                       # remove the plaintext token after
 ```
 
-Output in `…/fw-v923/prod/`: `n7v9_p1-<version>-<md5>.zip` containing a top-level `.fwver`
-(the version). **Register the release** on the backend's OTA form — it auto-reads `.fwver`
-(or parses the filename); record the md5 as the release id. This is what fielded units OTA to.
+Output in `…/fw-v923/prod/`: two artifacts from one build —
+- **`n7v9_p1-<version>-<md5>.zip`** — recovery.zip (OTA / on-device recovery path), carrying a
+  top-level `.fwver`. **Register this** on the backend's OTA form (it auto-reads `.fwver` or
+  parses the filename); the md5 is the release id. This is what fielded units OTA to.
+- **`n7v9_p2-<version>-<md5>.pkg`** — the PkgBurnPro USB package for from-carton bootstrap
+  (Phase 1). Same rootfs, vendor container.
+
+Both carry the baked fleet token, so handle them as secrets.
 
 ---
 
@@ -46,18 +51,33 @@ Output in `…/fw-v923/prod/`: `n7v9_p1-<version>-<md5>.zip` containing a top-le
 
 A from-carton unit has none of our tooling, so the first flash can't use webflash/OTA — it's
 the vendor factory path: **PkgBurnPro over USB download mode** (`vendor/PkgBurnPro_v2.3.1/`,
-see its PDF guide).
+see `fw-v923/PkgBurnPro_guide.pdf`).
 
-⚠️ **Open item to confirm once:** `build_prod_image.sh` emits a `recovery.zip` (for the
-on-device recovery path), **not** a PkgBurnPro USB package. The hardened rootfs is the
-`root_sq` partition image inside that zip (`rootfs_squashfs.img`). To USB-flash it you need
-that image in PkgBurnPro's package format — in practice, take the vendor's original full
-firmware package and swap in our `rootfs_squashfs.img` for the `root_sq` partition, then burn.
-Confirm the exact package layout against the vendor tool / PDF (or share the vendor package and
-I'll script the swap). **This does not flash `/data`** — the writable partition (and its
-`user.db`) is preserved, which is why the aio repoint happens at runtime, not in the image.
+**The USB package is now produced by the build.** `build_prod_image.sh` (Phase 0) emits, next to
+the recovery.zip, a hardened **`n7v9_p2-<version>-<md5>.pkg`** — the vendor ' PK ' container with
+*only* the `root_sq` rootfs swapped for ours (`pkg_repack.py`). Every SoC binary (SPL/U-Boot/
+kernel/DTB/recovery) stays byte-for-byte; offsets and the PK checksum are recomputed. Secure boot
+is not enforced on this unit, so the swapped image boots. (If the vendor `.pkg` isn't on the build
+machine, that step is skipped with a note — set `VENDOR_PKG=` to point at it.)
 
-After the burn completes, the unit reboots into the hardened rootfs.
+Flash it:
+1. Install the vendor USB driver (`驱动文件.rar` in the firmware folder) if not already present.
+2. Put the unit in USB download mode and connect it (per the PkgBurnPro PDF).
+3. Open **PkgBurnPro.exe**, load `n7v9_p2-<version>-<md5>.pkg`, and burn.
+
+This flashes the firmware partitions (incl. `root_sq`) but **not `/data`** — the writable
+partition (and its `user.db`) is preserved, which is why the aio repoint happens at runtime
+(Phase 2), not in the image. After the burn, the unit reboots into the hardened rootfs.
+
+> ⚠️ **Brick-safety / validation status.** The PK format, the rootfs swap, and the checksum are
+> validated (round-trips byte-identical; a swapped `.pkg` re-parses correctly), and secure boot is
+> off — but a PkgBurnPro **USB flash of a swapped `.pkg` has not yet been proven on hardware**
+> (the test unit was provisioned via the in-device `mtd8` reflash / `/data` path, not PkgBurnPro).
+> Before relying on it for a fleet: do the **first burn on a unit you can recover**, keep the
+> original vendor `n7v9_p2-…v9.23.pkg` as the golden restore image, and confirm PkgBurnPro's own
+> USB-recovery works on that hardware. The device also has a `recovery` partition (mtd7) as a
+> second net. Size note: our rootfs is ~46 MB against the 52 MB `root_sq` partition (~88% full) —
+> watch headroom as the UI/binaries grow.
 
 ---
 

@@ -30,6 +30,10 @@ BP_ENABLED="${BP_ENABLED:-1}"              # export BP_ENABLED=0 to ship the rem
 T=/mnt/c/Users/Isaac/fw-tools
 STOCK=/mnt/c/Users/Isaac/fw-v923/extract/root_sq__rootfs_squashfs.img
 OUTDIR=/mnt/c/Users/Isaac/fw-v923/prod
+# Vendor ' PK ' full package (what PkgBurnPro burns over USB). If present, we also emit a
+# hardened USB .pkg for from-carton bootstrap; if absent, that step is skipped (the
+# recovery.zip for OTA/recovery is produced regardless). Override with VENDOR_PKG=...
+VENDOR_PKG="${VENDOR_PKG:-/mnt/c/Users/Isaac/fw-v923/A3-8396 firmware v_9.23/n7v9_p2-2026-08-28_8396_v9.23.pkg}"
 mkdir -p "$OUTDIR"
 
 [ -s "$TOKFILE" ] || { echo "ERROR: fleet token file '$TOKFILE' missing/empty"; exit 1; }
@@ -118,6 +122,25 @@ print(f"\nPROD recovery.zip: {os.path.basename(final)}")
 print(f"  size {len(d):,}  md5 {md5}")
 print(f"  version '{ver}' -> .fwver (form reads it) + filename; md5 = release id")
 PY
+
+# ---- also emit a PkgBurnPro-flashable USB package (for from-carton bootstrap) ----
+# Swap our hardened rootfs into the vendor ' PK ' container's root_sq item; every SoC
+# binary (SPL/U-Boot/kernel/DTB/recovery) stays byte-for-byte. pkg_repack recomputes
+# offsets + the PK checksum. Secure boot is not enforced, so the swapped image boots.
+# This .pkg carries the baked fleet token (same rootfs), so treat it like the recovery.zip.
+if [ -f "$VENDOR_PKG" ]; then
+  echo "building USB .pkg (PkgBurnPro) from vendor container..."
+  SAFEVER=$(printf '%s' "$FW_VERSION" | tr -c 'A-Za-z0-9._-' '_')
+  PKGTMP="$OUTDIR/.n7v9_p2_tmp.pkg"
+  python3 "$T/pkg_repack.py" replace "$VENDOR_PKG" root_sq "$PWD/rootfs_prod.img" "$PKGTMP"
+  PKGMD5=$(md5sum "$PKGTMP" | cut -d' ' -f1)
+  PKGFINAL="$OUTDIR/n7v9_p2-$SAFEVER-$PKGMD5.pkg"
+  mv -f "$PKGTMP" "$PKGFINAL"
+  echo "  USB package: $(basename "$PKGFINAL")  size $(stat -c%s "$PKGFINAL")  md5 $PKGMD5"
+  echo "  -> flash a FROM-CARTON unit with PkgBurnPro (USB). recovery.zip is for OTA/recovery."
+else
+  echo "NOTE: vendor .pkg not at '$VENDOR_PKG' -> skipped USB .pkg (set VENDOR_PKG= to enable)."
+fi
 
 echo
 echo "DONE. Output in $OUTDIR"
