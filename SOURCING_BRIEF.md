@@ -81,3 +81,63 @@ integration. Per unit we only: cross-compile for your ABI, adapt the boot/init h
 rootfs, and call your biometric local API. We do **not** need you to build software — we need
 **root, a documented reflash path, no blocking secure boot, and a documented offline biometric
 API.** Those four are what we compare across quotes.
+
+---
+
+# Scoring sheet (internal — rank ODM responses)
+
+Use in two passes. **Pass 1 is pass/fail: any single NO disqualifies the ODM regardless of price
+or score.** Only ODMs that clear all gates go to Pass 2.
+
+## Pass 1 — Gates (from §2/§3). Mark Y / N / "unclear"
+| # | Gate | ODM A | ODM B | ODM C |
+|---|------|:--:|:--:|:--:|
+| G1 | Root shell on shipped units (serial + login documented) | | | |
+| G2 | Documented rootfs reflash path (USB flasher *or* in-device MTD/eMMC) + partition layout | | | |
+| G3 | Modified/custom rootfs is allowed to boot (secure boot off, or our key enrollable) | | | |
+| G4 | Writable persistent partition that survives a rootfs reflash | | | |
+| G5 | Face + fingerprint + door-open work fully **offline** (no vendor cloud) | | | |
+| G6 | Offline **biometric local API** documented (enroll / match / liveness) | | | |
+| G7 | Golden stock firmware provided as restore baseline | | | |
+| G8 | Recovery path for a bad flash (recovery partition and/or mask-ROM USB recovery) | | | |
+
+> Any `N` or unresolved `unclear` on **G1–G6 = disqualified.** G7/G8 are strongly-preferred;
+> a `N` there is a risk flag, not an automatic out.
+
+## Pass 2 — Weighted scorecard (survivors only)
+Score each **1–5** (see key). **Weighted = weight × score.** Rank by the weighted total.
+
+| Criterion | Weight | ODM A | ODM B | ODM C |
+|---|:--:|:--:|:--:|:--:|
+| Unit price at our target MOQ (5 = cheapest) | 5 | | | |
+| Liveness / anti-spoof strength (payments) | 5 | | | |
+| Biometric SDK licensing (5 = included, no recurring) | 4 | | | |
+| Template export/import for server-side roster sync | 4 | | | |
+| Quality of §2/§3 answers (docs, directness) | 4 | | | |
+| SoC/SKU longevity + lead time | 3 | | | |
+| Brick-safety depth (recovery + USB recovery proven) | 3 | | | |
+| Fingerprint sensor + SDK quality | 3 | | | |
+| HW headroom (RAM / flash / NPU vs our needs) | 2 | | | |
+| Connectivity completeness (PoE, dual-band, BLE) | 2 | | | |
+| Certifications (CE/FCC/RoHS; payment-relevant) | 2 | | | |
+| **Weighted total** (Σ weight×score) | | | | |
+
+## Scoring key (the judgment calls)
+- **Price (w5):** 5 = clearly cheapest viable; 3 = mid; 1 = highest. Normalize across the three.
+- **Liveness (w5):** 5 = structured-light/ToF or proven 3D with a spoof-resistance claim;
+  3 = 2D-IR dual-cam with basic anti-spoof; 1 = RGB-only / no real liveness. *For payments, treat
+  a 1–2 here as a near-gate.*
+- **SDK licensing (w4):** 5 = engine included in unit price, perpetual; 3 = modest one-time
+  per-device fee; 1 = recurring/opaque licensing or cloud-gated.
+- **Template export (w4):** 5 = documented export/import, portable format; 3 = possible but
+  undocumented; 1 = locked to device.
+- **Answer quality (w4):** 5 = answered all of §2/§3 precisely with docs; 1 = vague/evasive —
+  a strong proxy for how painful integration and support will be.
+
+## Decision rule
+1. Drop every ODM that fails a G1–G6 gate.
+2. Among survivors, take the highest weighted total.
+3. If the top two are within ~10%, **pick the one with the better §2/§3 (G-gates + answer
+   quality)** — firmware-ownability and support outlast a small price delta.
+4. Before committing volume, buy eval samples from the top **two** and run the on-hardware checks
+   (root, reflash, custom-rootfs boot, offline match, USB recovery) — don't rank on the quote alone.
